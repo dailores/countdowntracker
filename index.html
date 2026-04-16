@@ -7,459 +7,217 @@
 <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,700;1,400&family=Nunito:wght@400;500;600;700&display=swap" rel="stylesheet">
 <style>
   :root {
-    --pink-deep: #c2185b;
-    --pink-mid: #e91e8c;
-    --pink-soft: #f48fb1;
-    --pink-light: #fce4ec;
-    --pink-pale: #fff0f5;
-    --pink-blush: #ffd6e7;
-    --gold: #f7c59f;
-    --text-dark: #4a0e2a;
-    --text-mid: #7b2d4e;
-    --text-soft: #b06080;
-    --white: #ffffff;
-    --card-bg: rgba(255,255,255,0.75);
+    --pink-deep: #c2185b; --pink-mid: #e91e8c; --pink-soft: #f48fb1;
+    --pink-light: #fce4ec; --pink-pale: #fff0f5; --pink-blush: #ffd6e7;
+    --text-dark: #4a0e2a; --text-soft: #b06080;
+    --white: #ffffff; --card-bg: rgba(255,255,255,0.75);
     --shadow: 0 4px 24px rgba(194,24,91,0.10);
   }
-
   * { box-sizing: border-box; margin: 0; padding: 0; }
+  body { font-family: 'Nunito', sans-serif; background: var(--pink-pale); color: var(--text-dark); min-height: 100vh; position: relative; overflow-x: hidden; }
+  body::before { content:''; position:fixed; inset:0; background: radial-gradient(ellipse at 10% 20%, #ffc2d4 0%, transparent 50%), radial-gradient(ellipse at 90% 80%, #f8a5c2 0%, transparent 50%), radial-gradient(ellipse at 50% 50%, #fff0f5 0%, #fce4ec 100%); z-index:0; }
+  .hearts-bg { position:fixed; inset:0; pointer-events:none; z-index:0; overflow:hidden; }
+  .hrt { position:absolute; opacity:0.08; animation:floatUp linear infinite; }
+  @keyframes floatUp { 0%{transform:translateY(110vh) rotate(0deg);opacity:0} 10%{opacity:0.08} 90%{opacity:0.08} 100%{transform:translateY(-10vh) rotate(360deg);opacity:0} }
 
-  body {
-    font-family: 'Nunito', sans-serif;
-    background: var(--pink-pale);
-    color: var(--text-dark);
-    min-height: 100vh;
-    position: relative;
-    overflow-x: hidden;
-  }
+  /* NAME PICKER */
+  .name-screen { position:fixed; inset:0; z-index:100; display:flex; align-items:center; justify-content:center; background:radial-gradient(ellipse at 50% 50%, #fff0f5 0%, #fce4ec 100%); }
+  .name-box { background:white; border:2px solid var(--pink-soft); border-radius:28px; padding:2.5rem 2rem; text-align:center; max-width:360px; width:90%; box-shadow:0 8px 40px rgba(194,24,91,0.15); }
+  .name-box h2 { font-family:'Playfair Display',serif; font-size:24px; color:var(--pink-deep); font-style:italic; margin-bottom:0.5rem; }
+  .name-box p { font-size:13px; color:var(--text-soft); margin-bottom:1.5rem; line-height:1.6; }
+  .name-btns { display:flex; gap:12px; justify-content:center; flex-wrap:wrap; }
+  .name-btn { font-family:'Nunito',sans-serif; font-weight:700; font-size:16px; padding:14px 32px; border:none; border-radius:14px; cursor:pointer; transition:transform 0.15s; }
+  .name-btn-mia { background:linear-gradient(135deg,var(--pink-mid),var(--pink-deep)); color:white; box-shadow:0 3px 12px rgba(194,24,91,0.3); }
+  .name-btn-dad { background:var(--pink-light); color:var(--pink-deep); border:2px solid var(--pink-soft); }
+  .name-btn:hover { transform:translateY(-2px); }
 
-  body::before {
-    content: '';
-    position: fixed;
-    inset: 0;
-    background:
-      radial-gradient(ellipse at 10% 20%, #ffc2d4 0%, transparent 50%),
-      radial-gradient(ellipse at 90% 80%, #f8a5c2 0%, transparent 50%),
-      radial-gradient(ellipse at 50% 50%, #fff0f5 0%, #fce4ec 100%);
-    z-index: 0;
-  }
+  .wrapper { position:relative; z-index:1; max-width:760px; margin:0 auto; padding:2rem 1rem 4rem; }
 
-  /* floating hearts background */
-  .hearts-bg {
-    position: fixed;
-    inset: 0;
-    pointer-events: none;
-    z-index: 0;
-    overflow: hidden;
-  }
-  .hrt {
-    position: absolute;
-    font-size: 20px;
-    opacity: 0.08;
-    animation: floatUp linear infinite;
-  }
+  .poster-bar { display:flex; align-items:center; justify-content:space-between; background:white; border:1.5px solid var(--pink-soft); border-radius:16px; padding:10px 16px; margin-bottom:1.5rem; box-shadow:var(--shadow); }
+  .poster-label { font-size:12px; color:var(--text-soft); }
+  .poster-name { font-size:15px; font-weight:700; color:var(--pink-deep); }
+  .bar-right { display:flex; align-items:center; gap:10px; }
+  .sync-status { display:flex; align-items:center; gap:5px; font-size:11px; color:var(--text-soft); }
+  .sync-dot { width:8px; height:8px; border-radius:50%; background:#ccc; flex-shrink:0; transition:background 0.4s; }
+  .sync-dot.live { background:#4caf50; }
+  .sync-dot.saving { background:#ff9800; animation:blink 0.6s ease-in-out infinite; }
+  @keyframes blink { 0%,100%{opacity:1} 50%{opacity:0.3} }
+  .switch-btn { font-family:'Nunito',sans-serif; font-size:12px; color:var(--text-soft); background:var(--pink-light); border:1px solid var(--pink-soft); border-radius:8px; padding:4px 10px; cursor:pointer; }
+  .switch-btn:hover { color:var(--pink-deep); }
 
-  @keyframes floatUp {
-    0% { transform: translateY(110vh) rotate(0deg); opacity: 0; }
-    10% { opacity: 0.08; }
-    90% { opacity: 0.08; }
-    100% { transform: translateY(-10vh) rotate(360deg); opacity: 0; }
-  }
-
-  .wrapper {
-    position: relative;
-    z-index: 1;
-    max-width: 760px;
-    margin: 0 auto;
-    padding: 2rem 1rem 4rem;
-  }
-
-  /* HERO */
-  .hero {
-    text-align: center;
-    margin-bottom: 2rem;
-    animation: fadeDown 0.8s ease both;
-  }
-  @keyframes fadeDown {
-    from { opacity: 0; transform: translateY(-20px); }
-    to { opacity: 1; transform: translateY(0); }
-  }
-
-  .hero-crown { font-size: 36px; margin-bottom: 0.5rem; display: block; animation: bounce 2s ease-in-out infinite; }
+  .hero { text-align:center; margin-bottom:2rem; animation:fadeDown 0.8s ease both; }
+  @keyframes fadeDown { from{opacity:0;transform:translateY(-20px)} to{opacity:1;transform:translateY(0)} }
+  .hero-crown { font-size:36px; margin-bottom:0.5rem; display:block; animation:bounce 2s ease-in-out infinite; }
   @keyframes bounce { 0%,100%{transform:translateY(0)} 50%{transform:translateY(-8px)} }
+  .hero h1 { font-family:'Playfair Display',serif; font-size:clamp(28px,6vw,44px); color:var(--pink-deep); font-style:italic; margin-bottom:0.25rem; text-shadow:0 2px 12px rgba(194,24,91,0.15); }
+  .hero-sub { font-size:14px; color:var(--text-soft); letter-spacing:0.05em; margin-bottom:2rem; }
 
-  .hero h1 {
-    font-family: 'Playfair Display', serif;
-    font-size: clamp(28px, 6vw, 44px);
-    color: var(--pink-deep);
-    font-style: italic;
-    margin-bottom: 0.25rem;
-    text-shadow: 0 2px 12px rgba(194,24,91,0.15);
-  }
-  .hero-sub {
-    font-size: 14px;
-    color: var(--text-soft);
-    letter-spacing: 0.05em;
-    margin-bottom: 2rem;
-  }
+  .countdown-row { display:flex; justify-content:center; gap:12px; flex-wrap:wrap; margin-bottom:1.25rem; }
+  .cbox { background:var(--white); border:2px solid var(--pink-soft); border-radius:18px; padding:14px 18px; min-width:80px; text-align:center; box-shadow:var(--shadow); transition:transform 0.2s; }
+  .cbox:hover { transform:translateY(-3px); }
+  .cbox-num { font-family:'Playfair Display',serif; font-size:36px; font-weight:700; color:var(--pink-deep); line-height:1; display:block; }
+  .cbox-label { font-size:10px; color:var(--text-soft); text-transform:uppercase; letter-spacing:1.5px; margin-top:4px; display:block; }
 
-  /* COUNTDOWN BOXES */
-  .countdown-row {
-    display: flex;
-    justify-content: center;
-    gap: 12px;
-    flex-wrap: wrap;
-    margin-bottom: 1.25rem;
-  }
-  .cbox {
-    background: var(--white);
-    border: 2px solid var(--pink-soft);
-    border-radius: 18px;
-    padding: 14px 18px;
-    min-width: 80px;
-    text-align: center;
-    box-shadow: var(--shadow), inset 0 1px 0 rgba(255,255,255,0.8);
-    transition: transform 0.2s;
-  }
-  .cbox:hover { transform: translateY(-3px); }
-  .cbox-num {
-    font-family: 'Playfair Display', serif;
-    font-size: 36px;
-    font-weight: 700;
-    color: var(--pink-deep);
-    line-height: 1;
-    display: block;
-  }
-  .cbox-label {
-    font-size: 10px;
-    color: var(--text-soft);
-    text-transform: uppercase;
-    letter-spacing: 1.5px;
-    margin-top: 4px;
-    display: block;
-  }
-
-  /* MILESTONE */
-  .milestone {
-    display: inline-block;
-    background: linear-gradient(135deg, var(--pink-deep), #e91e8c);
-    color: white;
-    font-size: 13px;
-    font-weight: 700;
-    border-radius: 30px;
-    padding: 6px 20px;
-    margin-bottom: 1.25rem;
-    box-shadow: 0 4px 16px rgba(194,24,91,0.3);
-    letter-spacing: 0.03em;
-    animation: pulse 3s ease-in-out infinite;
-  }
+  .milestone { display:inline-block; background:linear-gradient(135deg,var(--pink-deep),#e91e8c); color:white; font-size:13px; font-weight:700; border-radius:30px; padding:6px 20px; margin-bottom:1.25rem; box-shadow:0 4px 16px rgba(194,24,91,0.3); animation:pulse 3s ease-in-out infinite; }
   @keyframes pulse { 0%,100%{box-shadow:0 4px 16px rgba(194,24,91,0.3)} 50%{box-shadow:0 4px 28px rgba(194,24,91,0.55)} }
 
-  /* PROGRESS */
-  .progress-section { padding: 0 0.5rem; }
-  .progress-wrap {
-    background: var(--pink-blush);
-    border-radius: 30px;
-    height: 16px;
-    overflow: hidden;
-    margin-bottom: 6px;
-    border: 1px solid var(--pink-soft);
-  }
-  .progress-fill {
-    height: 100%;
-    border-radius: 30px;
-    background: linear-gradient(90deg, #f48fb1, #e91e8c, #c2185b);
-    background-size: 200% 100%;
-    animation: shimmer 2s linear infinite;
-    transition: width 1.5s ease;
-    position: relative;
-  }
-  .progress-fill::after {
-    content: '✈';
-    position: absolute;
-    right: -2px;
-    top: 50%;
-    transform: translateY(-50%);
-    font-size: 14px;
-    filter: drop-shadow(0 1px 2px rgba(0,0,0,0.2));
-  }
+  .progress-section { padding:0 0.5rem; }
+  .progress-wrap { background:var(--pink-blush); border-radius:30px; height:16px; overflow:hidden; margin-bottom:6px; border:1px solid var(--pink-soft); }
+  .progress-fill { height:100%; border-radius:30px; background:linear-gradient(90deg,#f48fb1,#e91e8c,#c2185b); background-size:200% 100%; animation:shimmer 2s linear infinite; transition:width 1.5s ease; position:relative; }
+  .progress-fill::after { content:'✈'; position:absolute; right:-2px; top:50%; transform:translateY(-50%); font-size:14px; }
   @keyframes shimmer { 0%{background-position:100% 0} 100%{background-position:-100% 0} }
-  .progress-label { font-size: 12px; color: var(--text-soft); text-align: right; }
+  .progress-label { font-size:12px; color:var(--text-soft); text-align:right; }
 
-  /* SECTION CARDS */
-  .card {
-    background: var(--card-bg);
-    backdrop-filter: blur(8px);
-    border: 1.5px solid rgba(244,143,177,0.35);
-    border-radius: 24px;
-    padding: 1.5rem;
-    margin-bottom: 1.25rem;
-    box-shadow: var(--shadow);
-    animation: fadeUp 0.6s ease both;
-  }
-  @keyframes fadeUp {
-    from { opacity:0; transform: translateY(16px); }
-    to { opacity:1; transform: translateY(0); }
-  }
-  .card:nth-child(2) { animation-delay: 0.05s; }
-  .card:nth-child(3) { animation-delay: 0.10s; }
-  .card:nth-child(4) { animation-delay: 0.15s; }
-  .card:nth-child(5) { animation-delay: 0.20s; }
-  .card:nth-child(6) { animation-delay: 0.25s; }
+  .card { background:var(--card-bg); backdrop-filter:blur(8px); border:1.5px solid rgba(244,143,177,0.35); border-radius:24px; padding:1.5rem; margin-bottom:1.25rem; box-shadow:var(--shadow); }
+  .card-header { display:flex; align-items:center; gap:10px; margin-bottom:1.1rem; padding-bottom:0.75rem; border-bottom:1.5px dashed var(--pink-blush); }
+  .card-icon { font-size:22px; }
+  .card-title { font-family:'Playfair Display',serif; font-size:18px; color:var(--pink-deep); font-style:italic; }
 
-  .card-header {
-    display: flex;
-    align-items: center;
-    gap: 10px;
-    margin-bottom: 1.1rem;
-    padding-bottom: 0.75rem;
-    border-bottom: 1.5px dashed var(--pink-blush);
-  }
-  .card-icon { font-size: 22px; }
-  .card-title {
-    font-family: 'Playfair Display', serif;
-    font-size: 18px;
-    color: var(--pink-deep);
-    font-style: italic;
-  }
+  .input-row { display:flex; gap:8px; flex-wrap:wrap; margin-bottom:0.75rem; }
+  input[type="text"], select, textarea { font-family:'Nunito',sans-serif; font-size:13px; padding:9px 13px; border:1.5px solid var(--pink-soft); border-radius:12px; background:var(--pink-pale); color:var(--text-dark); outline:none; transition:border-color 0.2s,box-shadow 0.2s; }
+  input[type="text"]:focus, select:focus, textarea:focus { border-color:var(--pink-deep); box-shadow:0 0 0 3px rgba(194,24,91,0.12); }
+  input[type="text"] { flex:1; min-width:140px; }
+  select { min-width:130px; cursor:pointer; }
+  textarea { width:100%; min-height:80px; resize:vertical; margin-bottom:0.5rem; }
 
-  /* INPUTS */
-  .input-row { display: flex; gap: 8px; flex-wrap: wrap; margin-bottom: 0.75rem; }
-  input[type="text"], select, textarea {
-    font-family: 'Nunito', sans-serif;
-    font-size: 13px;
-    padding: 9px 13px;
-    border: 1.5px solid var(--pink-soft);
-    border-radius: 12px;
-    background: var(--pink-pale);
-    color: var(--text-dark);
-    outline: none;
-    transition: border-color 0.2s, box-shadow 0.2s;
-  }
-  input[type="text"]:focus, select:focus, textarea:focus {
-    border-color: var(--pink-deep);
-    box-shadow: 0 0 0 3px rgba(194,24,91,0.12);
-  }
-  input[type="text"] { flex: 1; min-width: 140px; }
-  select { min-width: 130px; cursor: pointer; }
-  textarea {
-    width: 100%;
-    min-height: 80px;
-    resize: vertical;
-    margin-bottom: 0.5rem;
-  }
+  .btn { font-family:'Nunito',sans-serif; font-weight:700; font-size:13px; padding:9px 18px; border:none; border-radius:12px; cursor:pointer; transition:transform 0.15s,box-shadow 0.15s; white-space:nowrap; }
+  .btn-pink { background:linear-gradient(135deg,var(--pink-mid),var(--pink-deep)); color:white; box-shadow:0 3px 12px rgba(194,24,91,0.3); }
+  .btn-pink:hover { transform:translateY(-2px); box-shadow:0 6px 18px rgba(194,24,91,0.4); }
 
-  .btn {
-    font-family: 'Nunito', sans-serif;
-    font-weight: 700;
-    font-size: 13px;
-    padding: 9px 18px;
-    border: none;
-    border-radius: 12px;
-    cursor: pointer;
-    transition: transform 0.15s, box-shadow 0.15s;
-    white-space: nowrap;
-  }
-  .btn-pink {
-    background: linear-gradient(135deg, var(--pink-mid), var(--pink-deep));
-    color: white;
-    box-shadow: 0 3px 12px rgba(194,24,91,0.3);
-  }
-  .btn-pink:hover { transform: translateY(-2px); box-shadow: 0 6px 18px rgba(194,24,91,0.4); }
-  .btn-pink:active { transform: scale(0.97); }
+  .item-list { display:flex; flex-direction:column; gap:7px; }
+  .item-chip { display:flex; align-items:center; justify-content:space-between; background:var(--pink-light); border:1px solid rgba(244,143,177,0.4); border-radius:12px; padding:9px 13px; font-size:13px; color:var(--text-dark); }
+  .chip-left { display:flex; align-items:center; gap:7px; flex:1; min-width:0; flex-wrap:wrap; }
+  .chip-text { overflow:hidden; text-overflow:ellipsis; white-space:nowrap; max-width:240px; }
+  .tag { font-size:10px; background:var(--pink-deep); color:white; border-radius:8px; padding:2px 8px; white-space:nowrap; flex-shrink:0; }
+  .who-tag { font-size:10px; background:var(--pink-blush); color:var(--pink-deep); border:1px solid var(--pink-soft); border-radius:8px; padding:2px 8px; white-space:nowrap; flex-shrink:0; }
+  .del-btn { background:none; border:none; color:var(--pink-soft); cursor:pointer; font-size:18px; line-height:1; padding:0 0 0 6px; flex-shrink:0; }
+  .del-btn:hover { color:var(--pink-deep); }
 
-  /* LIST ITEMS */
-  .item-list { display: flex; flex-direction: column; gap: 7px; }
-  .item-chip {
-    display: flex;
-    align-items: center;
-    justify-content: space-between;
-    background: var(--pink-light);
-    border: 1px solid rgba(244,143,177,0.4);
-    border-radius: 12px;
-    padding: 9px 13px;
-    font-size: 13px;
-    color: var(--text-dark);
-    animation: popIn 0.25s ease;
-  }
-  @keyframes popIn { from{opacity:0;transform:scale(0.95)} to{opacity:1;transform:scale(1)} }
+  .note-entry { background:var(--pink-light); border:1px solid rgba(244,143,177,0.4); border-radius:14px; padding:11px 14px; }
+  .note-text { font-size:13px; color:var(--text-dark); line-height:1.6; white-space:pre-wrap; word-break:break-word; }
+  .note-footer { display:flex; justify-content:space-between; align-items:center; margin-top:6px; flex-wrap:wrap; gap:4px; }
+  .note-meta { font-size:11px; color:var(--text-soft); }
+  .note-author { font-weight:700; color:var(--pink-deep); }
+  .note-del { background:none; border:none; font-size:11px; color:var(--pink-soft); cursor:pointer; font-family:'Nunito',sans-serif; }
+  .note-del:hover { color:var(--pink-deep); }
 
-  .chip-left { display: flex; align-items: center; gap: 8px; flex: 1; min-width: 0; }
-  .chip-text { overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
-  .tag {
-    font-size: 10px;
-    background: var(--pink-deep);
-    color: white;
-    border-radius: 8px;
-    padding: 2px 8px;
-    white-space: nowrap;
-    flex-shrink: 0;
-  }
-  .del-btn {
-    background: none;
-    border: none;
-    color: var(--pink-soft);
-    cursor: pointer;
-    font-size: 18px;
-    line-height: 1;
-    padding: 0 0 0 8px;
-    flex-shrink: 0;
-    transition: color 0.15s;
-  }
-  .del-btn:hover { color: var(--pink-deep); }
+  .empty { font-size:13px; color:var(--text-soft); font-style:italic; text-align:center; padding:0.5rem; }
+  .loading-msg { font-size:13px; color:var(--pink-soft); text-align:center; padding:0.5rem; }
 
-  .note-entry {
-    background: var(--pink-light);
-    border: 1px solid rgba(244,143,177,0.4);
-    border-radius: 14px;
-    padding: 11px 14px;
-    animation: popIn 0.25s ease;
-  }
-  .note-text { font-size: 13px; color: var(--text-dark); line-height: 1.6; white-space: pre-wrap; word-break: break-word; }
-  .note-footer { display: flex; justify-content: space-between; align-items: center; margin-top: 6px; }
-  .note-date { font-size: 11px; color: var(--text-soft); }
-  .note-del { background: none; border: none; font-size: 11px; color: var(--pink-soft); cursor: pointer; font-family: 'Nunito', sans-serif; }
-  .note-del:hover { color: var(--pink-deep); }
+  .setup-banner { background:#fff8e1; border:1.5px solid #ffe082; border-radius:14px; padding:14px 16px; margin-bottom:1.25rem; font-size:13px; color:#6d4c00; line-height:1.7; }
+  .setup-banner strong { display:block; font-size:14px; margin-bottom:4px; }
 
-  .empty { font-size: 13px; color: var(--text-soft); font-style: italic; text-align: center; padding: 0.5rem; }
-
-  /* FACT BOX */
-  .fact-box {
-    background: linear-gradient(135deg, #fff0f5, #fce4ec);
-    border: 2px solid var(--pink-soft);
-    border-radius: 18px;
-    padding: 1.5rem;
-    text-align: center;
-  }
-  .fact-emoji { font-size: 36px; display: block; margin-bottom: 0.75rem; animation: wiggle 3s ease-in-out infinite; }
+  .fact-box { background:linear-gradient(135deg,#fff0f5,#fce4ec); border:2px solid var(--pink-soft); border-radius:18px; padding:1.5rem; text-align:center; }
+  .fact-emoji { font-size:36px; display:block; margin-bottom:0.75rem; animation:wiggle 3s ease-in-out infinite; }
   @keyframes wiggle { 0%,100%{transform:rotate(-5deg)} 50%{transform:rotate(5deg)} }
-  .fact-text { font-size: 15px; color: var(--text-dark); line-height: 1.7; font-weight: 600; }
-  .fact-day { font-size: 11px; color: var(--text-soft); margin-top: 8px; }
-  .btn-refresh {
-    margin-top: 1rem;
-    background: var(--pink-light);
-    border: 1.5px solid var(--pink-soft);
-    color: var(--pink-deep);
-    font-family: 'Nunito', sans-serif;
-    font-weight: 700;
-    font-size: 13px;
-    padding: 8px 18px;
-    border-radius: 12px;
-    cursor: pointer;
-    transition: background 0.2s;
-  }
-  .btn-refresh:hover { background: var(--pink-blush); }
+  .fact-text { font-size:15px; color:var(--text-dark); line-height:1.7; font-weight:600; }
+  .fact-day { font-size:11px; color:var(--text-soft); margin-top:8px; }
+  .btn-refresh { margin-top:1rem; background:var(--pink-light); border:1.5px solid var(--pink-soft); color:var(--pink-deep); font-family:'Nunito',sans-serif; font-weight:700; font-size:13px; padding:8px 18px; border-radius:12px; cursor:pointer; }
+  .btn-refresh:hover { background:var(--pink-blush); }
 
-  /* FOOTER */
-  .footer {
-    text-align: center;
-    font-size: 12px;
-    color: var(--text-soft);
-    margin-top: 2rem;
-    font-style: italic;
-  }
+  .footer { text-align:center; font-size:12px; color:var(--text-soft); margin-top:2rem; font-style:italic; }
 
-  @media (max-width: 480px) {
-    .cbox { min-width: 68px; padding: 10px 12px; }
-    .cbox-num { font-size: 28px; }
-    .input-row { flex-direction: column; }
-    input[type="text"], select { min-width: 100%; }
+  @media (max-width:480px) {
+    .cbox { min-width:68px; padding:10px 12px; } .cbox-num { font-size:28px; }
+    .input-row { flex-direction:column; } input[type="text"], select { min-width:100%; }
   }
 </style>
 </head>
 <body>
 
+<div class="name-screen" id="name-screen">
+  <div class="name-box">
+    <span style="font-size:40px;display:block;margin-bottom:0.75rem">💕</span>
+    <h2>Who's visiting today?</h2>
+    <p>Your name will show on everything you post so you can see each other's messages 🩷</p>
+    <div class="name-btns">
+      <button class="name-btn name-btn-mia" onclick="setUser('Mia')">I'm Mia 🌸</button>
+      <button class="name-btn name-btn-dad" onclick="setUser('Daddy')">I'm Daddy ✈️</button>
+    </div>
+  </div>
+</div>
+
 <div class="hearts-bg" id="hearts-bg"></div>
 
-<div class="wrapper">
+<div class="wrapper" id="main-wrapper" style="display:none">
 
-  <!-- HERO -->
+  <div class="poster-bar">
+    <div>
+      <div class="poster-label">Posting as</div>
+      <div class="poster-name" id="poster-name"></div>
+    </div>
+    <div class="bar-right">
+      <div class="sync-status">
+        <span class="sync-dot" id="sync-dot"></span>
+        <span id="sync-label">Connecting...</span>
+      </div>
+      <button class="switch-btn" onclick="switchUser()">Switch 🔄</button>
+    </div>
+  </div>
+
+  <div class="setup-banner" id="setup-banner" style="display:none">
+    <strong>⚙️ One more step to connect Mia and Daddy!</strong>
+    Open this HTML file in a text editor (like Notepad or TextEdit). Find the section near the bottom of the page that says <em>PASTE YOUR FIREBASE CONFIG HERE</em> and replace the placeholder values with your real Firebase config. Full instructions are below the download! Until then, notes save locally on this device only.
+  </div>
+
   <div class="hero">
     <span class="hero-crown">👑💕✈️💕👑</span>
     <h1>Daddy's Coming Home!</h1>
     <p class="hero-sub">October 31, 2026 &nbsp;·&nbsp; The best Halloween ever</p>
-
     <div class="countdown-row">
       <div class="cbox"><span class="cbox-num" id="cd-days">---</span><span class="cbox-label">Days</span></div>
       <div class="cbox"><span class="cbox-num" id="cd-hours">--</span><span class="cbox-label">Hours</span></div>
       <div class="cbox"><span class="cbox-num" id="cd-mins">--</span><span class="cbox-label">Minutes</span></div>
       <div class="cbox"><span class="cbox-num" id="cd-secs">--</span><span class="cbox-label">Seconds</span></div>
     </div>
-
     <div><span class="milestone" id="milestone-msg">Loading...</span></div>
-
     <div class="progress-section" style="margin-top:1rem">
-      <div class="progress-wrap">
-        <div class="progress-fill" id="prog-bar" style="width:0%"></div>
-      </div>
+      <div class="progress-wrap"><div class="progress-fill" id="prog-bar" style="width:0%"></div></div>
       <div class="progress-label" id="prog-label"></div>
     </div>
   </div>
 
-  <!-- WISHLIST -->
   <div class="card">
-    <div class="card-header">
-      <span class="card-icon">🌸</span>
-      <span class="card-title">Things to do together</span>
-    </div>
+    <div class="card-header"><span class="card-icon">🌸</span><span class="card-title">Things to do together</span></div>
     <div class="input-row">
       <select id="wish-cat">
-        <option>Movie Night 🎬</option>
-        <option>Restaurant 🍕</option>
-        <option>Weekend Date 🎡</option>
-        <option>Activity 🎮</option>
-        <option>Other 💕</option>
+        <option>Movie Night 🎬</option><option>Restaurant 🍕</option>
+        <option>Weekend Date 🎡</option><option>Activity 🎮</option><option>Other 💕</option>
       </select>
       <input type="text" id="wish-input" placeholder="e.g. watch Moana, go to Olive Garden..." />
       <button class="btn btn-pink" onclick="addWish()">Add ✨</button>
     </div>
-    <div class="item-list" id="wish-list"><div class="empty">Add your first wish!</div></div>
+    <div class="item-list" id="wish-list"><div class="loading-msg">Loading... 💕</div></div>
   </div>
 
-  <!-- MESSAGE VAULT -->
   <div class="card">
-    <div class="card-header">
-      <span class="card-icon">💌</span>
-      <span class="card-title">Message vault — notes to each other</span>
-    </div>
-    <textarea id="msg-input" placeholder="Mia or Daddy — write a note for each other here 💕"></textarea>
+    <div class="card-header"><span class="card-icon">💌</span><span class="card-title">Message vault — notes to each other</span></div>
+    <textarea id="msg-input" placeholder="Mia or Daddy — write a note here for each other 💕"></textarea>
     <div style="text-align:right"><button class="btn btn-pink" onclick="addMessage()">Save note 💕</button></div>
-    <div class="item-list" id="msg-list" style="margin-top:0.75rem"><div class="empty">No notes yet — write your first one!</div></div>
+    <div class="item-list" id="msg-list" style="margin-top:0.75rem"><div class="loading-msg">Loading... 💕</div></div>
   </div>
 
-  <!-- SONGS FOR DADDY -->
   <div class="card">
-    <div class="card-header">
-      <span class="card-icon">🎵</span>
-      <span class="card-title">Our playlist — songs for the reunion</span>
-    </div>
+    <div class="card-header"><span class="card-icon">🎵</span><span class="card-title">Our playlist — songs for the reunion</span></div>
     <div class="input-row">
       <input type="text" id="song-artist" placeholder="Artist name" style="max-width:220px" />
-      <input type="text" id="song-title" placeholder="Song title" />
+      <input type="text" id="song-title-input" placeholder="Song title" />
       <button class="btn btn-pink" onclick="addSong()">Add 🎶</button>
     </div>
-    <div class="item-list" id="song-list"><div class="empty">Build your playlist!</div></div>
+    <div class="item-list" id="song-list"><div class="loading-msg">Loading... 💕</div></div>
   </div>
 
-  <!-- REASONS WE MISS YOU -->
   <div class="card">
-    <div class="card-header">
-      <span class="card-icon">💞</span>
-      <span class="card-title">Reasons we miss each other</span>
-    </div>
+    <div class="card-header"><span class="card-icon">💞</span><span class="card-title">Reasons we miss each other</span></div>
     <div class="input-row">
       <input type="text" id="miss-input" placeholder="We miss you because... / I miss you because..." />
       <button class="btn btn-pink" onclick="addMiss()">Add 💗</button>
     </div>
-    <div class="item-list" id="miss-list"><div class="empty">Add a reason!</div></div>
+    <div class="item-list" id="miss-list"><div class="loading-msg">Loading... 💕</div></div>
   </div>
 
-  <!-- DAILY FACT -->
   <div class="card">
-    <div class="card-header">
-      <span class="card-icon">🤣</span>
-      <span class="card-title">Today's fun fact & joke</span>
-    </div>
+    <div class="card-header"><span class="card-icon">🤣</span><span class="card-title">Today's fun fact & joke</span></div>
     <div class="fact-box">
       <span class="fact-emoji" id="fact-emoji">😄</span>
       <p class="fact-text" id="fact-text">Loading your daily laugh...</p>
@@ -469,429 +227,237 @@
   </div>
 
   <div class="footer">Made with 💕 for Mia & Daddy — counting down together</div>
-
 </div>
 
-<script>
-// ── Floating hearts ──────────────────────────────────────────────────
-const heartSymbols = ['💕','💗','💖','💓','🌸','✨','💝','🩷'];
-const bg = document.getElementById('hearts-bg');
-for (let i = 0; i < 22; i++) {
-  const h = document.createElement('div');
-  h.className = 'hrt';
-  h.textContent = heartSymbols[Math.floor(Math.random() * heartSymbols.length)];
-  h.style.left = Math.random() * 100 + 'vw';
-  h.style.fontSize = (14 + Math.random() * 20) + 'px';
-  h.style.animationDuration = (12 + Math.random() * 20) + 's';
-  h.style.animationDelay = (-Math.random() * 20) + 's';
-  bg.appendChild(h);
-}
+<script type="module">
+// ════════════════════════════════════════════
+//  PASTE YOUR FIREBASE CONFIG HERE
+//  Get this from Firebase Console →
+//  Project Settings → Your Apps → Config
+// ════════════════════════════════════════════
+const firebaseConfig = {
+  apiKey:            "AIzaSyBNP7dr3BamIHF2QPLJnWauVohamX285Q0",
+  authDomain:        "daddy-countdown.firebaseapp.com",
+  databaseURL:       "https://daddy-countdown-default-rtdb.firebaseio.com",
+  projectId:         "daddy-countdown",
+  storageBucket:     "daddy-countdown.firebasestorage.app",
+  messagingSenderId: "594735941602",
+  appId:             "1:594735941602:web:e6a5d027a88060bf695bbb"
+};
+// ════════════════════════════════════════════
 
-// ── Countdown ────────────────────────────────────────────────────────
-const START = new Date('2026-04-07T00:00:00');
-const END   = new Date('2026-10-31T23:59:59');
-const TOTAL_MS = END - START;
+import { initializeApp }                          from "https://www.gstatic.com/firebasejs/10.12.0/firebase-app.js";
+import { getDatabase, ref, push, onValue, remove } from "https://www.gstatic.com/firebasejs/10.12.0/firebase-database.js";
 
-function pad(n) { return String(n).padStart(2, '0'); }
+const IS_CONFIGURED = true;
+let db = null;
 
-function updateCountdown() {
-  const now  = new Date();
-  const diff = END - now;
-
-  if (diff <= 0) {
-    ['cd-days','cd-hours','cd-mins','cd-secs'].forEach(id => document.getElementById(id).textContent = '0');
-    document.getElementById('milestone-msg').textContent = '🎉 DADDY IS HOME! 🎉';
-    document.getElementById('prog-bar').style.width = '100%';
-    document.getElementById('prog-label').textContent = '100% — Welcome home!';
-    return;
+if (IS_CONFIGURED) {
+  try {
+    const app = initializeApp(firebaseConfig);
+    db = getDatabase(app);
+    setSync('live', 'Live & synced 💕');
+  } catch(e) {
+    setSync('off', 'Error — local only');
+    document.getElementById('setup-banner').style.display = 'block';
   }
-
-  const days  = Math.floor(diff / 86400000);
-  const hours = Math.floor((diff % 86400000) / 3600000);
-  const mins  = Math.floor((diff % 3600000)  / 60000);
-  const secs  = Math.floor((diff % 60000)    / 1000);
-
-  document.getElementById('cd-days').textContent  = days;
-  document.getElementById('cd-hours').textContent = pad(hours);
-  document.getElementById('cd-mins').textContent  = pad(mins);
-  document.getElementById('cd-secs').textContent  = pad(secs);
-
-  const elapsed = now - START;
-  const pct     = Math.min(100, Math.max(0, (elapsed / TOTAL_MS) * 100));
-  document.getElementById('prog-bar').style.width = pct.toFixed(1) + '%';
-  document.getElementById('prog-label').textContent = pct.toFixed(1) + '% of the way there 💕';
-
-  let msg = '💕 Only ' + days + ' more days until Daddy is home!';
-  if (pct < 5)                     msg = '🚀 The journey has just begun — you\'ve totally got this!';
-  else if (Math.abs(pct-25) < 2)   msg = '🎊 25% done — you\'re crushing it!';
-  else if (Math.abs(pct-50) < 1.5) msg = '🎉 HALFWAY THERE! You are incredible!';
-  else if (Math.abs(pct-75) < 1.5) msg = '✨ 75% done — the finish line is in sight!';
-  else if (days <= 7)              msg = '🚨 ONE WEEK LEFT! Get the banner ready!';
-  else if (days <= 14)             msg = '🌟 Less than 2 weeks — so close!';
-  else if (days <= 30)             msg = '🌸 Less than one month left!';
-  else if (days <= 60)             msg = '💫 Less than 2 months to go!';
-  else if (days <= 100)            msg = '🎊 Less than 100 days!';
-  else if (days <= 180)            msg = '🌻 Less than 6 months — getting so close!';
-  else if (days <= 365)            msg = '📅 Less than a year left — you\'re amazing!';
-  document.getElementById('milestone-msg').textContent = msg;
+} else {
+  document.getElementById('setup-banner').style.display = 'block';
+  setSync('off', 'Local only');
 }
 
-updateCountdown();
-setInterval(updateCountdown, 1000);
-
-// ── Storage helpers ──────────────────────────────────────────────────
-function save(key, data) {
-  try { localStorage.setItem(key, JSON.stringify(data)); } catch(e) {}
-}
-function load(key, fallback) {
-  try { const d = localStorage.getItem(key); return d ? JSON.parse(d) : fallback; } catch(e) { return fallback; }
+function setSync(state, label) {
+  const dot = document.getElementById('sync-dot');
+  dot.className = 'sync-dot' + (state === 'live' ? ' live' : state === 'saving' ? ' saving' : '');
+  document.getElementById('sync-label').textContent = label;
 }
 
-// ── WISHLIST ─────────────────────────────────────────────────────────
-let wishes = load('dd_wishes', []);
+// ── USER ─────────────────────────────────────
+let currentUser = sessionStorage.getItem('dd_user') || '';
 
-function renderWishes() {
-  const el = document.getElementById('wish-list');
-  if (!wishes.length) { el.innerHTML = '<div class="empty">Add your first wish!</div>'; return; }
-  el.innerHTML = wishes.map((w, i) => `
-    <div class="item-chip">
-      <div class="chip-left">
-        <span class="chip-text">${esc(w.val)}</span>
-        <span class="tag">${esc(w.cat)}</span>
-      </div>
-      <button class="del-btn" onclick="delWish(${i})">×</button>
-    </div>`).join('');
+window.setUser = function(name) {
+  currentUser = name;
+  sessionStorage.setItem('dd_user', name);
+  document.getElementById('poster-name').textContent = name + (name === 'Mia' ? ' 🌸' : ' ✈️');
+  document.getElementById('name-screen').style.display = 'none';
+  document.getElementById('main-wrapper').style.display = 'block';
+  IS_CONFIGURED && db ? initListeners() : loadLocal();
+};
+
+window.switchUser = function() {
+  sessionStorage.removeItem('dd_user');
+  document.getElementById('name-screen').style.display = 'flex';
+  document.getElementById('main-wrapper').style.display = 'none';
+};
+
+if (currentUser) {
+  document.getElementById('poster-name').textContent = currentUser + (currentUser === 'Mia' ? ' 🌸' : ' ✈️');
+  document.getElementById('name-screen').style.display = 'none';
+  document.getElementById('main-wrapper').style.display = 'block';
+  IS_CONFIGURED && db ? initListeners() : loadLocal();
 }
 
-function addWish() {
+// ── FIREBASE ─────────────────────────────────
+function initListeners() {
+  listen('dd_wishes',   'wish-list',  renderWish);
+  listen('dd_messages', 'msg-list',   renderMsg);
+  listen('dd_songs',    'song-list',  renderSong);
+  listen('dd_misses',   'miss-list',  renderMiss);
+}
+
+function listen(path, elId, renderer) {
+  onValue(ref(db, path), snap => {
+    const el = document.getElementById(elId);
+    const data = snap.val();
+    if (!data) { el.innerHTML = '<div class="empty">Nothing yet — add something!</div>'; return; }
+    el.innerHTML = Object.entries(data).sort((a,b)=>(b[1].ts||0)-(a[1].ts||0)).map(([k,v]) => renderer(k, v)).join('');
+  });
+}
+
+function fbAdd(path, data) {
+  setSync('saving','Saving...');
+  push(ref(db, path), { ...data, ts: Date.now() }).then(() => setSync('live','Live & synced 💕'));
+}
+
+window.fbDel = function(path, key) {
+  setSync('saving','Saving...');
+  remove(ref(db, path + '/' + key)).then(() => setSync('live','Live & synced 💕'));
+};
+
+// ── RENDERERS ─────────────────────────────────
+function renderWish(k, v) {
+  return `<div class="item-chip"><div class="chip-left"><span class="chip-text">${esc(v.val)}</span><span class="tag">${esc(v.cat)}</span><span class="who-tag">${esc(v.who)}</span></div><button class="del-btn" onclick="fbDel('dd_wishes','${k}')">×</button></div>`;
+}
+function renderMsg(k, v) {
+  return `<div class="note-entry"><p class="note-text">${esc(v.text)}</p><div class="note-footer"><div class="note-meta"><span class="note-author">${esc(v.who)}</span> · ${esc(v.date)}</div><button class="note-del" onclick="fbDel('dd_messages','${k}')">delete</button></div></div>`;
+}
+function renderSong(k, v) {
+  return `<div class="item-chip"><div class="chip-left"><span>🎵</span><span class="chip-text"><strong>${esc(v.title)}</strong> — ${esc(v.artist)}</span><span class="who-tag">${esc(v.who)}</span></div><button class="del-btn" onclick="fbDel('dd_songs','${k}')">×</button></div>`;
+}
+function renderMiss(k, v) {
+  return `<div class="item-chip"><div class="chip-left"><span>💗</span><span class="chip-text">${esc(v.text)}</span><span class="who-tag">${esc(v.who)}</span></div><button class="del-btn" onclick="fbDel('dd_misses','${k}')">×</button></div>`;
+}
+
+// ── ADD FUNCTIONS ─────────────────────────────
+window.addWish = function() {
   const val = document.getElementById('wish-input').value.trim();
   const cat = document.getElementById('wish-cat').value;
   if (!val) return flash('wish-input');
-  wishes.push({ val, cat });
-  save('dd_wishes', wishes);
+  const data = { val, cat, who: currentUser };
+  IS_CONFIGURED && db ? fbAdd('dd_wishes', data) : localAdd('dd_wishes', data, 'wish-list', renderWish);
   document.getElementById('wish-input').value = '';
-  renderWishes();
-}
-
-function delWish(i) { wishes.splice(i, 1); save('dd_wishes', wishes); renderWishes(); }
-renderWishes();
-
-// ── MESSAGE VAULT ────────────────────────────────────────────────────
-let messages = load('dd_messages', []);
-
-function renderMessages() {
-  const el = document.getElementById('msg-list');
-  if (!messages.length) { el.innerHTML = '<div class="empty">No notes yet — write your first one!</div>'; return; }
-  el.innerHTML = messages.map((m, i) => `
-    <div class="note-entry">
-      <p class="note-text">${esc(m.text)}</p>
-      <div class="note-footer">
-        <span class="note-date">Written on ${m.date} 💕</span>
-        <button class="note-del" onclick="delMsg(${i})">delete</button>
-      </div>
-    </div>`).join('');
-}
-
-function addMessage() {
-  const val = document.getElementById('msg-input').value.trim();
-  if (!val) return flash('msg-input');
-  const date = new Date().toLocaleDateString('en-US', { month:'long', day:'numeric', year:'numeric' });
-  messages.unshift({ text: val, date });
-  save('dd_messages', messages);
+};
+window.addMessage = function() {
+  const text = document.getElementById('msg-input').value.trim();
+  if (!text) return flash('msg-input');
+  const date = new Date().toLocaleDateString('en-US',{month:'long',day:'numeric',year:'numeric'});
+  const data = { text, date, who: currentUser };
+  IS_CONFIGURED && db ? fbAdd('dd_messages', data) : localAdd('dd_messages', data, 'msg-list', renderMsg);
   document.getElementById('msg-input').value = '';
-  renderMessages();
-}
-
-function delMsg(i) { messages.splice(i, 1); save('dd_messages', messages); renderMessages(); }
-renderMessages();
-
-// ── SONGS ────────────────────────────────────────────────────────────
-let songs = load('dd_songs', []);
-
-function renderSongs() {
-  const el = document.getElementById('song-list');
-  if (!songs.length) { el.innerHTML = '<div class="empty">Build your playlist!</div>'; return; }
-  el.innerHTML = songs.map((s, i) => `
-    <div class="item-chip">
-      <div class="chip-left">
-        <span>🎵</span>
-        <span class="chip-text"><strong>${esc(s.title)}</strong> — ${esc(s.artist)}</span>
-      </div>
-      <button class="del-btn" onclick="delSong(${i})">×</button>
-    </div>`).join('');
-}
-
-function addSong() {
+};
+window.addSong = function() {
   const artist = document.getElementById('song-artist').value.trim();
-  const title  = document.getElementById('song-title').value.trim();
+  const title  = document.getElementById('song-title-input').value.trim();
   if (!artist || !title) return;
-  songs.push({ artist, title });
-  save('dd_songs', songs);
+  const data = { artist, title, who: currentUser };
+  IS_CONFIGURED && db ? fbAdd('dd_songs', data) : localAdd('dd_songs', data, 'song-list', renderSong);
   document.getElementById('song-artist').value = '';
-  document.getElementById('song-title').value = '';
-  renderSongs();
-}
-
-function delSong(i) { songs.splice(i, 1); save('dd_songs', songs); renderSongs(); }
-renderSongs();
-
-// ── REASONS WE MISS YOU ──────────────────────────────────────────────
-let misses = load('dd_misses', []);
-
-function renderMisses() {
-  const el = document.getElementById('miss-list');
-  if (!misses.length) { el.innerHTML = '<div class="empty">Add a reason!</div>'; return; }
-  el.innerHTML = misses.map((m, i) => `
-    <div class="item-chip">
-      <div class="chip-left"><span>💗</span><span class="chip-text">${esc(m)}</span></div>
-      <button class="del-btn" onclick="delMiss(${i})">×</button>
-    </div>`).join('');
-}
-
-function addMiss() {
-  const val = document.getElementById('miss-input').value.trim();
-  if (!val) return flash('miss-input');
-  misses.push(val);
-  save('dd_misses', misses);
+  document.getElementById('song-title-input').value = '';
+};
+window.addMiss = function() {
+  const text = document.getElementById('miss-input').value.trim();
+  if (!text) return flash('miss-input');
+  const data = { text, who: currentUser };
+  IS_CONFIGURED && db ? fbAdd('dd_misses', data) : localAdd('dd_misses', data, 'miss-list', renderMiss);
   document.getElementById('miss-input').value = '';
-  renderMisses();
+};
+
+// ── LOCAL STORAGE FALLBACK ────────────────────
+function localAdd(key, data, elId, renderer) {
+  const list = JSON.parse(localStorage.getItem(key)||'[]');
+  list.unshift({ id: Date.now().toString(), ...data });
+  localStorage.setItem(key, JSON.stringify(list));
+  renderLocalList(key, elId, renderer);
+}
+function renderLocalList(key, elId, renderer) {
+  const el = document.getElementById(elId);
+  const list = JSON.parse(localStorage.getItem(key)||'[]');
+  if (!list.length) { el.innerHTML = '<div class="empty">Nothing yet — add something!</div>'; return; }
+  el.innerHTML = list.map(item => renderer(item.id, item)).join('');
+}
+function loadLocal() {
+  renderLocalList('dd_wishes','wish-list',renderWish);
+  renderLocalList('dd_messages','msg-list',renderMsg);
+  renderLocalList('dd_songs','song-list',renderSong);
+  renderLocalList('dd_misses','miss-list',renderMiss);
 }
 
-function delMiss(i) { misses.splice(i, 1); save('dd_misses', misses); renderMisses(); }
-renderMisses();
+// Override fbDel to also handle local
+const _fbDel = window.fbDel;
+window.fbDel = function(path, key) {
+  if (IS_CONFIGURED && db) { _fbDel(path, key); return; }
+  const list = JSON.parse(localStorage.getItem(path)||'[]').filter(i => i.id !== key);
+  localStorage.setItem(path, JSON.stringify(list));
+  const map = {dd_wishes:['wish-list',renderWish],dd_messages:['msg-list',renderMsg],dd_songs:['song-list',renderSong],dd_misses:['miss-list',renderMiss]};
+  if (map[path]) renderLocalList(path, map[path][0], map[path][1]);
+};
 
-// ── DAILY FACT / JOKE ────────────────────────────────────────────────
-const facts = [
-  { e:'🐙', t:"Octopuses have three hearts and blue blood — they're basically underwater aliens!" },
-  { e:'😂', t:"Why don't scientists trust atoms? Because they make up everything!" },
-  { e:'🌍', t:"A day on Venus is longer than a year on Venus. Time is genuinely weird out there." },
-  { e:'🦷', t:"Why did the tooth go to school? It wanted to get a little filling!" },
-  { e:'🐴', t:"Horses literally cannot burp. Imagine holding in every single burp — forever." },
-  { e:'😆', t:"What do you call a fish without eyes? A fsh! (Say it out loud!)" },
-  { e:'🦈', t:"Sharks are older than trees. The ocean really said 'I had this handled.'" },
-  { e:'🤡', t:"Why did the scarecrow win an award? He was outstanding in his field!" },
-  { e:'🐝', t:"Bees can recognize human faces. So next time you see one... wave hello!" },
-  { e:'🌙', t:"The moon is drifting away from Earth at the same speed your fingernails grow. Slow goodbye!" },
-  { e:'🦩', t:"A group of flamingos is called a flamboyance. Honestly, iconic." },
-  { e:'🎤', t:"Why can't Elsa have a balloon? Because she'll let it go!" },
-  { e:'🧲', t:"There are more possible chess games than atoms in the entire observable universe. Big brain!" },
-  { e:'🐌', t:"Snails can sleep for up to 3 years. Wish we could use that excuse for homework." },
-  { e:'🍕', t:"Why did the pizza go to therapy? It had too many issues with its crust." },
-  { e:'🌊', t:"We've explored more of the surface of Mars than the bottom of our own oceans. Spooky!" },
-  { e:'🐧', t:"Penguins propose with a pebble. Fancier than some humans, honestly." },
-  { e:'🧬', t:"You share 50% of your DNA with a banana. Technically, you're half fruity." },
-  { e:'😹', t:"What do you call a sleeping dinosaur? A dino-snore!" },
-  { e:'🌈', t:"A group of cats is called a clowder. A group of kittens is a kindle. You're welcome." },
-  { e:'🦋', t:"Butterflies taste with their feet. Every landing is basically a taste test." },
-  { e:'😄', t:"Why did the teddy bear say no to dessert? She was already stuffed!" },
-  { e:'🐳', t:"A blue whale's heart is so big, a small child could crawl through its arteries. Wild!" },
-  { e:'🤣', t:"What do you call a pile of cats? A meow-ntain!" },
-  { e:'🌺', t:"Cleopatra lived closer in time to the Moon landing than to the building of the Great Pyramid. Mind = blown." },
-  { e:'🐠', t:"Clownfish can change gender. So Nemo's dad could technically become his mom. Pixar, we have notes." },
-  { e:'🎈', t:"Hot air balloons were first tested on a sheep, a duck, and a rooster. The original test pilots!" },
-  { e:'🦉', t:"A group of owls is called a parliament. They do look pretty wise." },
-  { e:'😜', t:"Why did the math book look so sad? It had too many problems!" },
-  { e:'🪐', t:"Saturn's rings are mostly ice and rock — and only about as thick as a 10-story building." },
-  { e:'🐨', t:"Koalas sleep up to 22 hours a day. Absolute legends." },
-  { e:'😂', t:"Why did the bicycle fall over? Because it was two-tired!" },
-  { e:'🦒', t:"Giraffes have the same number of neck bones as humans — just MUCH bigger ones." },
-  { e:'🍦', t:"Why did the ice cream truck break down? Because of the rocky road!" },
-  { e:'🐘', t:"Elephants are the only animals that can't jump. They make up for it by being absolutely massive." },
-  { e:'🤓', t:"Why was the computer cold? Because it left its Windows open!" },
-  { e:'🦜', t:"African grey parrots can learn over 1,000 words. Some can even understand what they mean." },
-  { e:'😆', t:"What do you call a fake noodle? An impasta!" },
-  { e:'🐢', t:"Some turtles can breathe through their butts in winter. Science is wild." },
-  { e:'🍩', t:"Why did the donut go to the dentist? It needed a filling!" },
-  { e:'🌵', t:"A saguaro cactus can live over 150 years and doesn't grow its first arm until it's 75. Late bloomer!" },
-  { e:'😂', t:"What do you call a bear with no teeth? A gummy bear!" },
-  { e:'🦑', t:"The giant squid has eyes the size of basketballs. It can see predators from really, really far away." },
-  { e:'🧀', t:"Why didn't the cheese want to be sliced? It had grater plans!" },
-  { e:'🐿️', t:"Squirrels forget where they hid about half their nuts. Those forgotten nuts often grow into trees. Accidental gardeners!" },
-  { e:'😄', t:"What do elves learn in school? The elf-abet!" },
-  { e:'🌸', t:"Japan has a whole season dedicated to celebrating cherry blossoms. Cherry blossom viewing is called hanami!" },
-  { e:'🤣', t:"Why can't you trust stairs? They're always up to something!" },
-  { e:'🐬', t:"Dolphins have names for each other — they use unique whistle signatures to call friends." },
-  { e:'🍔', t:"Why did the hamburger go to the gym? To get better buns!" },
-  { e:'🦊', t:"A fox's bushy tail is called a brush. Fancy name for a very fluffy tail." },
-  { e:'😂', t:"What do you call a shoe made from a banana? A slipper!" },
-  { e:'🐦', t:"Crows are so smart they can recognize human faces and hold grudges. Be nice to crows." },
-  { e:'🎃', t:"Pumpkins are technically a fruit. Halloween is basically a fruit festival." },
-  { e:'🤡', t:"Why did the golfer bring extra pants? In case he got a hole in one!" },
-  { e:'🦝', t:"Raccoons wash their food before eating. Little germaphobes, honestly." },
-  { e:'🍭', t:"Why did the lollipop go to school? It wanted to be a smartie!" },
-  { e:'🐻', t:"Polar bears have black skin under their white fur. Their fur is also actually transparent. Fashion AND function!" },
-  { e:'😜', t:"What do you call a lazy kangaroo? A pouch potato!" },
-  { e:'🌮', t:"Why did the taco go to the bank? To get some extra chips!" },
-  { e:'🦘', t:"A baby kangaroo is called a joey and is only the size of a grape when it's born. Tiny!" },
-  { e:'😂', t:"Why did the cookie go to the doctor? Because it was feeling crummy!" },
-  { e:'🐡', t:"The pufferfish is one of the most poisonous creatures on Earth — and people still eat it as a delicacy. Brave." },
-  { e:'🎵', t:"Why did the music teacher need a ladder? To reach the high notes!" },
-  { e:'🐺', t:"Wolves can hear other wolves howling from up to 10 miles away. Long-distance communication done right." },
-  { e:'🍎', t:"Apples float in water because 25% of their volume is air. Basically little fruit balloons." },
-  { e:'😹', t:"What do you call a dog magician? A labra-cadabra-dor!" },
-  { e:'🦔', t:"A group of hedgehogs is called a prickle. A group of porcupines is called a prickle too. Spiky squad!" },
-  { e:'🌟', t:"There are more stars in the universe than grains of sand on all of Earth's beaches. Space is enormous." },
-  { e:'😆', t:"Why did the tomato turn red? Because it saw the salad dressing!" },
-  { e:'🦚', t:"A peacock's tail is called a train. When it fans out, it can be over 6 feet wide. Showoff!" },
-  { e:'🍰', t:"Why did the birthday cake go to school? Because it wanted to be a layer!" },
-  { e:'🐣', t:"A chicken and a half lays an egg and a half in a day and a half. If you can figure that out, you're a math genius!" },
-  { e:'😂', t:"What do you call a sleeping T-Rex? A dino-snore! (Yes, this one is too good to only use once.)" },
-  { e:'🌙', t:"On the moon, your footprints will last millions of years because there's no wind or rain to erase them." },
-  { e:'🤣', t:"Why did the girl put sugar under her pillow? So she could have sweet dreams!" },
-  { e:'🦭', t:"Sea otters hold hands while sleeping so they don't drift apart. The sweetest thing in nature." },
-  { e:'🎨', t:"Why did the artist go to jail? Because she was framed!" },
-  { e:'🐻‍❄️', t:"A polar bear's fur isn't actually white — it's colorless and hollow. It just looks white because of how light bounces off it." },
-  { e:'😄', t:"What do you call a fish that wears a crown? King of the sea-bass!" },
-  { e:'🌺', t:"Flowers can communicate with bees using electrical signals. They basically have a 'OPEN FOR BUSINESS' sign." },
-  { e:'🤓', t:"Why did the student eat his homework? Because the teacher told him it was a piece of cake!" },
-  { e:'🦋', t:"A monarch butterfly migrates up to 3,000 miles every year. Tiny wings, massive journey." },
-  { e:'🍟', t:"Why did the french fry win the race? Because it was on a roll!" },
-  { e:'🐊', t:"Crocodiles can't stick out their tongues. Rude, but also kind of impressive." },
-  { e:'😂', t:"Why did the astronaut break up with his girlfriend? Because he needed some space!" },
-  { e:'🌊', t:"The Pacific Ocean is bigger than all of Earth's land combined. We really live on a water planet." },
-  { e:'🤣', t:"What do you call a cold dog? A chilly dog!" },
-  { e:'🦁', t:"Lions sleep up to 20 hours a day. King of the jungle? More like king of napping." },
-  { e:'🍀', t:"Why did the gardener win an award? Because she was outstanding in her field!" },
-  { e:'🐙', t:"An octopus can change its color AND texture in less than a second. Ultimate camouflage queen." },
-  { e:'😜', t:"What do you call a cow that plays guitar? A moo-sician!" },
-  { e:'🌍', t:"There's a place in Norway where the sun doesn't set for 76 days straight in summer. Imagine never needing a nightlight!" },
-  { e:'😂', t:"Why did the skeleton go to the party alone? Because he had no body to go with!" },
-  { e:'🦋', t:"Caterpillars completely dissolve into liquid inside their chrysalis before rebuilding as a butterfly. Gross AND amazing." },
-  { e:'🍫', t:"Why did the chocolate chip cookie go to the doctor? Because it was feeling crumbly!" },
-  { e:'🐬', t:"Dolphins sleep with one eye open, literally. Half their brain stays awake to keep them safe." },
-  { e:'😆', t:"What do you call a pig that does karate? A pork chop!" },
-  { e:'🌸', t:"There are over 10,000 different species of birds on Earth. That's a lot of tweets." },
-  { e:'🤣', t:"Why did the music note go to school? To improve its score!" },
-  { e:'🦀', t:"Crabs walk sideways because their legs bend that way. They didn't choose the sidewalk life — it chose them." },
-  { e:'🎯', t:"Why did the archer win everything? Because she was always on target!" },
-  { e:'🐸', t:"A frog can jump up to 20 times its own body length. That's like you jumping the length of a school bus!" },
-  { e:'😹', t:"What do you call a cat that gets everything it wants? Purrr-suasive!" },
-  { e:'🌠', t:"Every atom in your body was forged inside a star that exploded billions of years ago. You are literally made of stardust." },
-  { e:'😂', t:"Why was the broom late? It swept in!" },
-  { e:'🦜', t:"A parrot named Alex could identify colors, shapes, and numbers up to 6. He said 'I love you' to his researcher every night." },
-  { e:'🍩', t:"Why was the donut sad? Because it was feeling empty inside — ring any bells?" },
-  { e:'🐋', t:"Humpback whales create the most complex songs in the animal kingdom, and the songs spread across entire oceans." },
-  { e:'🤡', t:"Why did the clown lose his job? Because he kept cracking up!" },
-  { e:'🦩', t:"Flamingos are born gray — they turn pink from the shrimp and algae they eat. You literally are what you eat." },
-  { e:'🎮', t:"Why did the video game go to therapy? It had too many issues!" },
-  { e:'🐝', t:"Honey never goes bad. Archaeologists found 3,000-year-old honey in Egyptian tombs — still perfectly edible." },
-  { e:'😜', t:"What do you call a ghost's true love? His ghoul-friend!" },
-  { e:'🌋', t:"Hawaii is getting closer to Japan by about 4 inches every year. The plates keep moving!" },
-  { e:'😂', t:"Why don't oysters share? Because they're shellfish!" },
-  { e:'🦒', t:"Giraffes only sleep about 30 minutes a day — in short naps. They basically run on caffeine (minus the coffee)." },
-  { e:'🍪', t:"What did the cookie say to the milk? 'You complete me.'" },
-  { e:'🐼', t:"Baby pandas are born pink, hairless, and about the size of a stick of butter. They grow up fast!" },
-  { e:'😄', t:"Why did the calendar break up with the clock? Because its days were numbered!" },
-  { e:'🌻', t:"Sunflowers turn to face the sun as they grow — and when it's cloudy they turn to face each other. Teamwork!" },
-  { e:'🤣', t:"What do you call a snowman with a six-pack? An abdominal snowman!" },
-  { e:'🦠', t:"Your body has more bacteria cells than human cells. You're basically a walking ecosystem. Cool and slightly gross." },
-  { e:'🎭', t:"Why was the actor always calm? Because she knew how to play it cool!" },
-  { e:'🐦', t:"The bar-tailed godwit flies 7,500 miles nonstop from Alaska to New Zealand. No breaks. No food. Just flying. Absolute legend." },
-  { e:'😂', t:"What do you call a sad strawberry? A blueberry!" },
-  { e:'🌈', t:"A rainbow is actually a full circle — you just can't see the bottom half from the ground. Planes can see the whole thing!" },
-  { e:'🤓', t:"Why did the computer go to the doctor? Because it had a virus!" },
-  { e:'🦕', t:"The T-Rex lived closer in time to us than it did to the Stegosaurus. Dinos had a longer era than we think!" },
-  { e:'🍉', t:"Why did the watermelon go to school? Because it wanted to be a little seedy!" },
-  { e:'🐘', t:"Elephants can recognize themselves in mirrors, feel emotions like grief, and even 'mourn' their dead. Big hearts to match." },
-  { e:'😆', t:"What do you call a sleeping computer? A hard drive!" },
-  { e:'🌮', t:"The word 'taco' originally meant 'plug' in Spanish mining — miners used paper filled with gunpowder as explosive plugs. Explosive history!" },
-  { e:'🤣', t:"Why did the orange stop rolling down the hill? Because it ran out of juice!" },
-  { e:'🦈', t:"Great white sharks can detect a single drop of blood in 25 gallons of water. Best nose in the ocean." },
-  { e:'🍋', t:"What did one wall say to the other? 'I'll meet you at the corner!'" },
-  { e:'🐳', t:"A narwhal's spiral tusk is actually a giant tooth that grows through its lip. Nature is wild and sometimes weird." },
-  { e:'😄', t:"Why did the girl bring a ladder to school? Because she wanted to go to high school!" },
-  { e:'🌟', t:"Light from the sun takes 8 minutes to reach Earth. So the sunlight you feel right now left the sun 8 minutes ago." },
-  { e:'😂', t:"What do you call a bear in the rain? A drizzly bear!" },
-  { e:'🦋', t:"Some butterflies migrate, like monarchs — but each individual only makes part of the journey. Their grandkids finish the trip." },
-  { e:'🍦', t:"Why did the ice cream go to school? To get a little smarter — it was already pretty cool!" },
-  { e:'🐙', t:"Octopuses have three hearts AND nine brains — one main brain and one in each arm. Multi-tasking legends." },
-  { e:'🤡', t:"Why did the silly kid throw a clock out the window? To see time fly!" },
-  { e:'🦭', t:"Otters have a favorite rock they keep in a special pocket of skin under their arm. Their own little rock collection!" },
-  { e:'🎪', t:"Why was the circus lion always tired? Because he worked in a flea circus before!" },
-  { e:'🌙', t:"If you could drive to the moon at highway speed it would take about 6 months. Worth it, probably." },
-  { e:'😹', t:"What's a cat's favorite color? Purrr-ple!" },
-  { e:'🐝', t:"A single honeybee will make only 1/12 of a teaspoon of honey in its entire lifetime. Appreciate every drop!" },
-  { e:'😂', t:"Why did the student eat her pencil? Because the teacher told her to draw a conclusion!" },
-  { e:'🦁', t:"A lion's roar can be heard from 5 miles away. Impressive. Also, do not test this." },
-  { e:'🍿', t:"Why did the popcorn go to the movies? Because it wanted to see itself on the big screen!" },
-  { e:'🐠', t:"Fish don't have eyelids, so they literally can never close their eyes. They sleep with their eyes open — like a little creep." },
-  { e:'🤣', t:"Why don't eggs tell jokes? Because they'd crack up!" },
-  { e:'🌺', t:"The rafflesia flower can grow up to 3 feet wide and smells like rotting meat. The world's biggest and stinkiest flower. Yikes." },
-  { e:'😄', t:"What do you call a factory that makes okay products? A satisfactory!" },
-  { e:'🦊', t:"Foxes use the Earth's magnetic field to hunt. They align north-south before pouncing. Built-in compass!" },
-  { e:'🍰', t:"Why was the birthday cake so good at sports? Because it was on a roll!" },
-  { e:'🐻', t:"Bears are technically not true hibernators — they can wake up during winter. So don't count on them staying asleep!" },
-  { e:'😂', t:"Why did the astronaut break up with gravity? Because she was tired of being pulled down!" },
-  { e:'🌊', t:"There is a river under the Amazon River — underground, twice as wide, flowing the opposite direction. Wild subterranean world." },
-  { e:'🤓', t:"Why did the kid put her report card in the freezer? Because she wanted cool grades!" },
-  { e:'🦀', t:"Lobsters taste with their legs and hear with their antennae. Basically built backwards compared to us." },
-  { e:'🎈', t:"Why did the balloon go near the needle? Because it wanted to be a little prick (of excitement)!" },
-  { e:'🐺', t:"Wolf pups are born blind and deaf. They depend completely on their pack. Family first, always." },
-  { e:'😜', t:"What do you call a fish that wears glasses? A see-fish!" },
-  { e:'🌸', t:"Cherry blossom trees in Japan can live for over 1,000 years. That's a lot of springs." },
-  { e:'😂', t:"Why did the student take a ruler to bed? To see how long she slept!" },
-  { e:'🦔', t:"When hedgehogs are happy they make little purring sounds. Tiny, prickly, adorable purring machines." },
-  { e:'🍭', t:"Why did the candy go to school? Because it wanted to be a smartie!" },
-  { e:'🐊', t:"Crocodiles have been around for 200 million years. They survived whatever wiped out the dinosaurs. Respect." },
-  { e:'🤣', t:"Why did the tree go to the dentist? To get a root canal!" },
-  { e:'🌍', t:"Russia is so big that it spans 11 time zones. When it's Monday morning in one part, it's already Tuesday in another!" },
-  { e:'😹', t:"What do you call a cat who loves swimming? A catfish!" },
-  { e:'🦚', t:"Male peacocks actually scream, not just display feathers. They can be heard a mile away. Beauty AND brains." },
-  { e:'🍫', t:"White chocolate isn't actually chocolate — it contains no cocoa solids. Delicious imposter!" },
-  { e:'🐡', t:"A group of jellyfish is called a smack. That's the best collective noun in nature, hands down." },
-  { e:'😂', t:"Why did the music teacher go to jail? Because she got caught with too many sharp objects (notes)!" },
-  { e:'🌵', t:"Cactus spines are actually modified leaves. The cactus said 'leaves are overrated' and just went pointy." },
-  { e:'🤡', t:"Why was the stadium so cool? Because it was full of fans!" },
-  { e:'🦋', t:"The blue morpho butterfly's wings aren't actually blue — they have tiny scales that reflect light to look blue. Optical illusion queen." },
-  { e:'🍕', t:"In Italy it's considered very rude to add pineapple to pizza. Some hills are worth dying on." },
-  { e:'🐣', t:"An ostrich's eye is bigger than its brain. It can outrun a horse though, so maybe it doesn't need a big brain." },
-  { e:'😄', t:"What do you call a knight who is afraid of the dark? Sir Renders-a-lot!" },
-  { e:'🌠', t:"The Milky Way galaxy takes 225 million years to complete one rotation. Earth is currently on lap... we don't even know." },
-  { e:'😂', t:"Why did the lamp go to school? To get a little brighter!" },
-];
-
-
-// Pick fact by day-of-year so it changes daily but is consistent all day
-let manualOffset = 0;
-
-function getDailyFact() {
-  const now  = new Date();
-  const start = new Date(now.getFullYear(), 0, 0);
-  const dayOfYear = Math.floor((now - start) / 86400000);
-  return (dayOfYear + manualOffset) % facts.length;
+// ── FLOATING HEARTS ───────────────────────────
+const symbols = ['💕','💗','💖','💓','🌸','✨','💝','🩷'];
+const bgEl = document.getElementById('hearts-bg');
+for (let i = 0; i < 22; i++) {
+  const h = document.createElement('div'); h.className = 'hrt';
+  h.textContent = symbols[Math.floor(Math.random()*symbols.length)];
+  h.style.cssText = `left:${Math.random()*100}vw;font-size:${14+Math.random()*20}px;animation-duration:${12+Math.random()*20}s;animation-delay:${-Math.random()*20}s`;
+  bgEl.appendChild(h);
 }
 
-function showFact(idx) {
-  const f = facts[idx];
-  document.getElementById('fact-emoji').textContent = f.e;
-  document.getElementById('fact-text').textContent  = f.t;
-  const days = ['Sunday','Monday','Tuesday','Wednesday','Thursday','Friday','Saturday'];
-  const now = new Date();
-  document.getElementById('fact-day').textContent = 'Your ' + days[now.getDay()] + ' laugh 💕';
+// ── COUNTDOWN ─────────────────────────────────
+const START = new Date('2026-04-07T00:00:00'), END = new Date('2026-10-31T23:59:59');
+const TOTAL_MS = END - START;
+function pad(n){return String(n).padStart(2,'0')}
+function tick() {
+  const now=new Date(), diff=END-now;
+  if(diff<=0){['cd-days','cd-hours','cd-mins','cd-secs'].forEach(id=>document.getElementById(id).textContent='0');document.getElementById('milestone-msg').textContent='🎉 DADDY IS HOME! 🎉';document.getElementById('prog-bar').style.width='100%';return;}
+  document.getElementById('cd-days').textContent=Math.floor(diff/86400000);
+  document.getElementById('cd-hours').textContent=pad(Math.floor((diff%86400000)/3600000));
+  document.getElementById('cd-mins').textContent=pad(Math.floor((diff%3600000)/60000));
+  document.getElementById('cd-secs').textContent=pad(Math.floor((diff%60000)/1000));
+  const pct=Math.min(100,Math.max(0,((now-START)/TOTAL_MS)*100));
+  document.getElementById('prog-bar').style.width=pct.toFixed(1)+'%';
+  document.getElementById('prog-label').textContent=pct.toFixed(1)+'% of the way there 💕';
+  const days=Math.floor(diff/86400000);
+  let msg='💕 Only '+days+' more days until Daddy is home!';
+  if(pct<5)msg="🚀 The journey has just begun — you've totally got this!";
+  else if(Math.abs(pct-25)<2)msg='🎊 25% done — you\'re crushing it!';
+  else if(Math.abs(pct-50)<1.5)msg='🎉 HALFWAY THERE! You are incredible!';
+  else if(Math.abs(pct-75)<1.5)msg='✨ 75% done — the finish line is in sight!';
+  else if(days<=7)msg='🚨 ONE WEEK LEFT! Get the banner ready!';
+  else if(days<=14)msg='🌟 Less than 2 weeks — so close!';
+  else if(days<=30)msg='🌸 Less than one month left!';
+  else if(days<=60)msg='💫 Less than 2 months to go!';
+  else if(days<=100)msg='🎊 Less than 100 days!';
+  else if(days<=180)msg='🌻 Less than 6 months — getting so close!';
+  document.getElementById('milestone-msg').textContent=msg;
 }
+tick(); setInterval(tick,1000);
 
-function nextFact() {
-  manualOffset = (manualOffset + 1) % facts.length;
-  showFact(getDailyFact());
-}
+// ── FACTS ─────────────────────────────────────
+const facts=[{e:'🐙',t:"Octopuses have three hearts and blue blood — they're basically underwater aliens!"},{e:'😂',t:"Why don't scientists trust atoms? Because they make up everything!"},{e:'🌍',t:"A day on Venus is longer than a year on Venus. Time is genuinely weird out there."},{e:'🦷',t:"Why did the tooth go to school? It wanted to get a little filling!"},{e:'🐴',t:"Horses literally cannot burp. Imagine holding in every single burp — forever."},{e:'😆',t:"What do you call a fish without eyes? A fsh! (Say it out loud!)"},{e:'🦈',t:"Sharks are older than trees. The ocean really said 'I had this handled.'"},{e:'🤡',t:"Why did the scarecrow win an award? He was outstanding in his field!"},{e:'🐝',t:"Bees can recognize human faces. So next time you see one... wave hello!"},{e:'🌙',t:"The moon is drifting away from Earth at the same speed your fingernails grow. Slow goodbye!"},{e:'🦩',t:"A group of flamingos is called a flamboyance. Honestly, iconic."},{e:'🎤',t:"Why can't Elsa have a balloon? Because she'll let it go!"},{e:'🧲',t:"There are more possible chess games than atoms in the entire observable universe. Big brain!"},{e:'🐌',t:"Snails can sleep for up to 3 years. Wish we could use that excuse for homework."},{e:'🍕',t:"Why did the pizza go to therapy? It had too many issues with its crust."},{e:'🌊',t:"We've explored more of the surface of Mars than the bottom of our own oceans. Spooky!"},{e:'🐧',t:"Penguins propose with a pebble. Fancier than some humans, honestly."},{e:'🧬',t:"You share 50% of your DNA with a banana. Technically, you're half fruity."},{e:'😹',t:"What do you call a sleeping dinosaur? A dino-snore!"},{e:'🌈',t:"A group of cats is called a clowder. A group of kittens is a kindle. You're welcome."},{e:'🦋',t:"Butterflies taste with their feet. Every landing is basically a taste test."},{e:'😄',t:"Why did the teddy bear say no to dessert? She was already stuffed!"},{e:'🐳',t:"A blue whale's heart is so big, a small child could crawl through its arteries. Wild!"},{e:'🤣',t:"What do you call a pile of cats? A meow-ntain!"},{e:'🌺',t:"Cleopatra lived closer in time to the Moon landing than to the building of the Great Pyramid. Mind = blown."},{e:'🐠',t:"Clownfish can change gender. So Nemo's dad could technically become his mom. Pixar, we have notes."},{e:'🎈',t:"Hot air balloons were first tested on a sheep, a duck, and a rooster. The original test pilots!"},{e:'🦉',t:"A group of owls is called a parliament. They do look pretty wise."},{e:'😜',t:"Why did the math book look so sad? It had too many problems!"},{e:'🪐',t:"Saturn's rings are mostly ice and rock — only about as thick as a 10-story building."},{e:'🐨',t:"Koalas sleep up to 22 hours a day. Absolute legends."},{e:'😂',t:"Why did the bicycle fall over? Because it was two-tired!"},{e:'🦒',t:"Giraffes have the same number of neck bones as humans — just MUCH bigger ones."},{e:'🍦',t:"Why did the ice cream truck break down? Because of the rocky road!"},{e:'🐘',t:"Elephants are the only animals that can't jump. They make up for it by being absolutely massive."},{e:'🤓',t:"Why was the computer cold? Because it left its Windows open!"},{e:'🦜',t:"African grey parrots can learn over 1,000 words. Some can even understand what they mean."},{e:'😆',t:"What do you call a fake noodle? An impasta!"},{e:'🐢',t:"Some turtles can breathe through their butts in winter. Science is wild."},{e:'🍩',t:"Why did the donut go to the dentist? It needed a filling!"},{e:'🌵',t:"A saguaro cactus can live over 150 years and doesn't grow its first arm until it's 75. Late bloomer!"},{e:'😂',t:"What do you call a bear with no teeth? A gummy bear!"},{e:'🦑',t:"The giant squid has eyes the size of basketballs. It can see predators from really, really far away."},{e:'🧀',t:"Why didn't the cheese want to be sliced? It had grater plans!"},{e:'🐿️',t:"Squirrels forget where they hid about half their nuts. Those forgotten nuts often grow into trees. Accidental gardeners!"},{e:'😄',t:"What do elves learn in school? The elf-abet!"},{e:'🌸',t:"Japan has a whole season dedicated to celebrating cherry blossoms called hanami!"},{e:'🤣',t:"Why can't you trust stairs? They're always up to something!"},{e:'🐬',t:"Dolphins have names for each other — they use unique whistle signatures to call friends."},{e:'🍔',t:"Why did the hamburger go to the gym? To get better buns!"},{e:'🦊',t:"A fox's bushy tail is called a brush. Fancy name for a very fluffy tail."},{e:'😂',t:"What do you call a shoe made from a banana? A slipper!"},{e:'🐦',t:"Crows can recognize human faces and hold grudges. Be nice to crows."},{e:'🎃',t:"Pumpkins are technically a fruit. Halloween is basically a fruit festival."},{e:'🤡',t:"Why did the golfer bring extra pants? In case he got a hole in one!"},{e:'🦝',t:"Raccoons wash their food before eating. Little germaphobes, honestly."},{e:'🍭',t:"Why did the lollipop go to school? It wanted to be a smartie!"},{e:'🐻',t:"Polar bears have black skin under their white fur. Their fur is also transparent. Fashion AND function!"},{e:'😜',t:"What do you call a lazy kangaroo? A pouch potato!"},{e:'🌮',t:"Why did the taco go to the bank? To get some extra chips!"},{e:'🦘',t:"A baby kangaroo is only the size of a grape when it's born. Tiny!"},{e:'😂',t:"Why did the cookie go to the doctor? Because it was feeling crummy!"},{e:'🎵',t:"Why did the music teacher need a ladder? To reach the high notes!"},{e:'🐺',t:"Wolves can hear each other howling from up to 10 miles away. Long-distance communication done right."},{e:'🍎',t:"Apples float in water because 25% of their volume is air. Basically little fruit balloons."},{e:'😹',t:"What do you call a dog magician? A labra-cadabra-dor!"},{e:'🦔',t:"When hedgehogs are happy they make little purring sounds. Tiny, prickly, adorable purring machines."},{e:'🌟',t:"There are more stars in the universe than grains of sand on all of Earth's beaches."},{e:'😆',t:"Why did the tomato turn red? Because it saw the salad dressing!"},{e:'🦚',t:"A peacock's tail is called a train. When it fans out it can be over 6 feet wide. Showoff!"},{e:'😂',t:"What do you call a sleeping T-Rex? A dino-snore! (Yes, this one is too good to only use once.)"},{e:'🌙',t:"On the moon, your footprints will last millions of years because there's no wind or rain to erase them."},{e:'🤣',t:"Why did the girl put sugar under her pillow? So she could have sweet dreams!"},{e:'🦭',t:"Sea otters hold hands while sleeping so they don't drift apart. The sweetest thing in nature."},{e:'🎨',t:"Why did the artist go to jail? Because she was framed!"},{e:'😄',t:"What do you call a fish that wears a crown? King of the sea-bass!"},{e:'🤓',t:"Why did the student eat his homework? Because the teacher told him it was a piece of cake!"},{e:'🦋',t:"A monarch butterfly migrates up to 3,000 miles every year. Tiny wings, massive journey."},{e:'🍟',t:"Why did the french fry win the race? Because it was on a roll!"},{e:'🐊',t:"Crocodiles can't stick out their tongues. Rude, but also kind of impressive."},{e:'😂',t:"Why did the astronaut break up with his girlfriend? Because he needed some space!"},{e:'🤣',t:"What do you call a cold dog? A chilly dog!"},{e:'🦁',t:"Lions sleep up to 20 hours a day. King of the jungle? More like king of napping."},{e:'🍀',t:"Why did the gardener win an award? Because she was outstanding in her field!"},{e:'🐙',t:"An octopus can change its color AND texture in less than a second. Ultimate camouflage queen."},{e:'😜',t:"What do you call a cow that plays guitar? A moo-sician!"},{e:'🌍',t:"Russia spans 11 time zones. When it's Monday morning in one part, it's already Tuesday in another!"},{e:'😂',t:"Why did the skeleton go to the party alone? Because he had no body to go with!"},{e:'🦋',t:"Caterpillars completely dissolve into liquid inside their chrysalis before rebuilding as a butterfly."},{e:'🍫',t:"Why did the chocolate chip cookie go to the doctor? Because it was feeling crumbly!"},{e:'🐬',t:"Dolphins sleep with one eye open. Half their brain stays awake to keep them safe."},{e:'😆',t:"What do you call a pig that does karate? A pork chop!"},{e:'🤣',t:"Why did the music note go to school? To improve its score!"},{e:'🦀',t:"Crabs walk sideways because their legs bend that way. They didn't choose the sidewalk life — it chose them."},{e:'🐸',t:"A frog can jump up to 20 times its own body length. That's like you jumping the length of a school bus!"},{e:'😹',t:"What do you call a cat that gets everything it wants? Purrr-suasive!"},{e:'🌠',t:"Every atom in your body was forged inside a star that exploded billions of years ago. You are literally made of stardust."},{e:'😂',t:"Why was the broom late? It swept in!"},{e:'🦜',t:"A parrot named Alex could identify colors, shapes, and numbers up to 6. He said 'I love you' to his researcher every night."},{e:'🍩',t:"Why was the donut sad? Because it was feeling empty inside — ring any bells?"},{e:'🐋',t:"Humpback whales create the most complex songs in the animal kingdom, spreading across entire oceans."},{e:'🤡',t:"Why did the clown lose his job? Because he kept cracking up!"},{e:'🦩',t:"Flamingos are born gray — they turn pink from the shrimp and algae they eat. You literally are what you eat."},{e:'🐝',t:"Honey never goes bad. Archaeologists found 3,000-year-old honey in Egyptian tombs — still edible."},{e:'😜',t:"What do you call a ghost's true love? His ghoul-friend!"},{e:'🌋',t:"Hawaii is getting closer to Japan by about 4 inches every year. The plates keep moving!"},{e:'😂',t:"Why don't oysters share? Because they're shellfish!"},{e:'🦒',t:"Giraffes only sleep about 30 minutes a day — in short naps."},{e:'🍪',t:"What did the cookie say to the milk? 'You complete me.'"},{e:'🐼',t:"Baby pandas are born pink and about the size of a stick of butter. They grow up fast!"},{e:'😄',t:"Why did the calendar break up with the clock? Because its days were numbered!"},{e:'🌻',t:"Sunflowers turn to face each other on cloudy days. Teamwork!"},{e:'🤣',t:"What do you call a snowman with a six-pack? An abdominal snowman!"},{e:'🐦',t:"The bar-tailed godwit flies 7,500 miles nonstop from Alaska to New Zealand. Absolute legend."},{e:'😂',t:"What do you call a sad strawberry? A blueberry!"},{e:'🌈',t:"A rainbow is actually a full circle — you just can't see the bottom half from the ground."},{e:'🦕',t:"The T-Rex lived closer in time to us than it did to the Stegosaurus. Mind = blown."},{e:'🍉',t:"Why did the watermelon go to school? Because it wanted to be a little seedy!"},{e:'🐘',t:"Elephants can recognize themselves in mirrors and feel emotions like grief. Big hearts to match."},{e:'😆',t:"What do you call a sleeping computer? A hard drive!"},{e:'🤣',t:"Why did the orange stop rolling down the hill? Because it ran out of juice!"},{e:'🦈',t:"Great white sharks can detect a single drop of blood in 25 gallons of water. Best nose in the ocean."},{e:'🐳',t:"A narwhal's spiral tusk is actually a giant tooth that grows through its lip. Nature is wild."},{e:'😄',t:"Why did the girl bring a ladder to school? Because she wanted to go to high school!"},{e:'🌟',t:"Light from the sun takes 8 minutes to reach Earth. The sunlight you feel right now left the sun 8 minutes ago."},{e:'😂',t:"What do you call a bear in the rain? A drizzly bear!"},{e:'🍦',t:"Why did the ice cream go to school? To get a little smarter — it was already pretty cool!"},{e:'🤡',t:"Why did the silly kid throw a clock out the window? To see time fly!"},{e:'🦭',t:"Otters have a favorite rock they keep in a special pocket of skin under their arm. Their own rock collection!"},{e:'🌙',t:"If you could drive to the moon at highway speed it would take about 6 months. Worth it, probably."},{e:'😹',t:"What's a cat's favorite color? Purrr-ple!"},{e:'🐝',t:"A single honeybee makes only 1/12 of a teaspoon of honey in its entire lifetime. Appreciate every drop!"},{e:'😂',t:"Why did the student eat her pencil? Because the teacher told her to draw a conclusion!"},{e:'🦁',t:"A lion's roar can be heard from 5 miles away. Impressive. Also, do not test this."},{e:'🍿',t:"Why did the popcorn go to the movies? Because it wanted to see itself on the big screen!"},{e:'🤣',t:"Why don't eggs tell jokes? Because they'd crack up!"},{e:'😄',t:"What do you call a factory that makes okay products? A satisfactory!"},{e:'🦊',t:"Foxes use the Earth's magnetic field to hunt. They align north-south before pouncing. Built-in compass!"},{e:'🐻',t:"Bears can wake up during hibernation — don't count on them staying asleep!"},{e:'😂',t:"Why did the astronaut break up with gravity? Because she was tired of being pulled down!"},{e:'🌊',t:"There is a river under the Amazon River — underground, twice as wide, flowing the opposite direction."},{e:'🤓',t:"Why did the kid put her report card in the freezer? Because she wanted cool grades!"},{e:'🦀',t:"Lobsters taste with their legs and hear with their antennae. Basically built backwards compared to us."},{e:'🐺',t:"Wolf pups are born blind and deaf. They depend completely on their pack. Family first, always."},{e:'😜',t:"What do you call a fish that wears glasses? A see-fish!"},{e:'🌸',t:"Cherry blossom trees in Japan can live over 1,000 years. That's a lot of springs."},{e:'😂',t:"Why did the student take a ruler to bed? To see how long she slept!"},{e:'🐊',t:"Crocodiles have been around 200 million years. They survived whatever wiped out the dinosaurs. Respect."},{e:'😹',t:"What do you call a cat who loves swimming? A catfish!"},{e:'🦚',t:"Male peacocks actually scream — not just fan feathers. They can be heard a mile away."},{e:'🍫',t:"White chocolate isn't actually chocolate — it contains no cocoa solids. Delicious imposter!"},{e:'🐡',t:"A group of jellyfish is called a smack. Best collective noun in nature, hands down."},{e:'🌵',t:"Cactus spines are actually modified leaves. The cactus said 'leaves are overrated' and just went pointy."},{e:'🤡',t:"Why was the stadium so cool? Because it was full of fans!"},{e:'🦋',t:"The blue morpho butterfly's wings aren't actually blue — tiny scales reflect light to look blue. Optical illusion queen."},{e:'🍕',t:"In Italy it's considered very rude to add pineapple to pizza. Some hills are worth dying on."},{e:'🐣',t:"An ostrich's eye is bigger than its brain. It can outrun a horse though, so maybe that's fine."},{e:'😄',t:"What do you call a knight who is afraid of the dark? Sir Renders-a-lot!"},{e:'🌠',t:"The Milky Way galaxy takes 225 million years to complete one rotation. Earth is on lap... we don't even know."},{e:'😂',t:"Why did the lamp go to school? To get a little brighter!"}];
 
+let offset=0;
+function getDailyFact(){const now=new Date();const day=Math.floor((now-new Date(now.getFullYear(),0,0))/86400000);return(day+offset)%facts.length;}
+function showFact(i){const f=facts[i];document.getElementById('fact-emoji').textContent=f.e;document.getElementById('fact-text').textContent=f.t;const d=['Sunday','Monday','Tuesday','Wednesday','Thursday','Friday','Saturday'];document.getElementById('fact-day').textContent='Your '+d[new Date().getDay()]+' laugh 💕';}
+window.nextFact=function(){offset=(offset+1)%facts.length;showFact(getDailyFact());};
 showFact(getDailyFact());
 
-// ── Helpers ───────────────────────────────────────────────────────────
-function esc(str) {
-  return String(str).replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;');
-}
-function flash(id) {
-  const el = document.getElementById(id);
-  el.style.borderColor = '#e91e8c';
-  el.style.boxShadow   = '0 0 0 3px rgba(233,30,140,0.25)';
-  setTimeout(() => { el.style.borderColor=''; el.style.boxShadow=''; }, 800);
-}
+// ── HELPERS ───────────────────────────────────
+function esc(s){return String(s).replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;');}
+function flash(id){const el=document.getElementById(id);el.style.borderColor='#e91e8c';el.style.boxShadow='0 0 0 3px rgba(233,30,140,0.25)';setTimeout(()=>{el.style.borderColor='';el.style.boxShadow='';},800);}
 
-// Enter key support
-document.getElementById('wish-input').addEventListener('keydown', e => { if(e.key==='Enter') addWish(); });
-document.getElementById('miss-input').addEventListener('keydown', e => { if(e.key==='Enter') addMiss(); });
-document.getElementById('song-title').addEventListener('keydown', e => { if(e.key==='Enter') addSong(); });
+document.getElementById('wish-input').addEventListener('keydown',e=>{if(e.key==='Enter')window.addWish();});
+document.getElementById('miss-input').addEventListener('keydown',e=>{if(e.key==='Enter')window.addMiss();});
+document.getElementById('song-title-input').addEventListener('keydown',e=>{if(e.key==='Enter')window.addSong();});
 </script>
 </body>
 </html>
