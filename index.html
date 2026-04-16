@@ -282,15 +282,34 @@
   <!-- LETTERS TO OPEN WHEN -->
   <div class="card">
     <div class="card-header"><span class="card-icon">💝</span><span class="card-title">Letters to open when...</span></div>
-    <p style="font-size:13px;color:var(--text-soft);margin-bottom:1rem;">Write a letter for a special moment. The other person taps to reveal it when the time is right 💌</p>
-    <div style="display:flex;flex-direction:column;gap:8px;margin-bottom:0.75rem">
-      <input type="text" id="letter-when" placeholder='e.g. when you miss me most / when you need a laugh' />
-      <textarea id="letter-body" placeholder="Write your letter here... pour your heart out 💕" style="min-height:100px;width:100%;font-family:Nunito,sans-serif;font-size:13px;padding:9px 13px;border:1.5px solid var(--pink-soft);border-radius:12px;background:var(--pink-pale);color:var(--text-dark);outline:none;resize:vertical;margin-bottom:0"></textarea>
-      <div style="text-align:right"><button class="btn btn-pink" onclick="addLetter()">Seal this letter 💝</button></div>
+
+    <!-- INBOX -->
+    <div style="margin-bottom:1.25rem">
+      <div style="display:flex;align-items:center;gap:8px;margin-bottom:0.75rem">
+        <span style="font-size:16px">📬</span>
+        <span style="font-family:'Playfair Display',serif;font-size:15px;color:var(--pink-deep);font-style:italic">Letters waiting for you</span>
+      </div>
+      <div id="letter-list" style="display:flex;flex-direction:column;gap:10px"><div class="loading-msg">Loading... 💕</div></div>
     </div>
-    <p style="font-size:12px;color:var(--text-soft);margin-bottom:8px">Or tap a prompt to get started:</p>
-    <div id="prompt-chips" style="display:flex;flex-wrap:wrap;gap:6px;margin-bottom:1rem"></div>
-    <div id="letter-list" style="display:flex;flex-direction:column;gap:10px"><div class="loading-msg">Loading... 💕</div></div>
+
+    <!-- DIVIDER -->
+    <div style="border-top:1.5px dashed var(--pink-blush);margin-bottom:1.25rem"></div>
+
+    <!-- COMPOSE -->
+    <div>
+      <div style="display:flex;align-items:center;gap:8px;margin-bottom:0.75rem">
+        <span style="font-size:16px">✍️</span>
+        <span style="font-family:'Playfair Display',serif;font-size:15px;color:var(--pink-deep);font-style:italic">Write a new letter</span>
+      </div>
+      <p style="font-size:13px;color:var(--text-soft);margin-bottom:0.75rem;">The other person taps to reveal it when the moment is right 💌</p>
+      <p style="font-size:12px;color:var(--text-soft);margin-bottom:8px">Tap a prompt to get started:</p>
+      <div id="prompt-chips" style="display:flex;flex-wrap:wrap;gap:6px;margin-bottom:0.85rem"></div>
+      <div style="display:flex;flex-direction:column;gap:8px">
+        <input type="text" id="letter-when" placeholder='e.g. when you miss me most / when you need a laugh' />
+        <textarea id="letter-body" placeholder="Write your letter here... pour your heart out 💕" style="min-height:100px;width:100%;font-family:Nunito,sans-serif;font-size:13px;padding:9px 13px;border:1.5px solid var(--pink-soft);border-radius:12px;background:var(--pink-pale);color:var(--text-dark);outline:none;resize:vertical;margin-bottom:0"></textarea>
+        <div style="text-align:right"><button class="btn btn-pink" onclick="addLetter()">Seal this letter 💝</button></div>
+      </div>
+    </div>
   </div>
 
   <div class="footer">Made with 💕 for Mia & Daddy — counting down together</div>
