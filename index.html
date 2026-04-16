@@ -368,7 +368,9 @@ function renderMsg(k, v) {
   return `<div class="note-entry"><p class="note-text">${esc(v.text)}</p><div class="note-footer"><div class="note-meta"><span class="note-author">${esc(v.who)}</span> · ${esc(v.date)}</div><button class="note-del" onclick="fbDel('dd_messages','${k}')">delete</button></div></div>`;
 }
 function renderSong(k, v) {
-  return `<div class="item-chip"><div class="chip-left"><span>🎵</span><span class="chip-text"><strong>${esc(v.title)}</strong> — ${esc(v.artist)}</span><span class="who-tag">${esc(v.who)}</span></div><button class="del-btn" onclick="fbDel('dd_songs','${k}')">×</button></div>`;
+  const query = encodeURIComponent(v.title + ' ' + v.artist);
+  const spotifyUrl = `https://open.spotify.com/search/${query}`;
+  return `<div class="item-chip"><div class="chip-left"><span>🎵</span><span class="chip-text"><strong>${esc(v.title)}</strong> — ${esc(v.artist)}</span><span class="who-tag">${esc(v.who)}</span><a href="${spotifyUrl}" target="_blank" style="font-size:11px;background:#1db954;color:white;border-radius:8px;padding:2px 8px;text-decoration:none;white-space:nowrap;flex-shrink:0;font-weight:700;">▶ Spotify</a></div><button class="del-btn" onclick="fbDel('dd_songs','${k}')">×</button></div>`;
 }
 function renderMiss(k, v) {
   return `<div class="item-chip"><div class="chip-left"><span>💗</span><span class="chip-text">${esc(v.text)}</span><span class="who-tag">${esc(v.who)}</span></div><button class="del-btn" onclick="fbDel('dd_misses','${k}')">×</button></div>`;
