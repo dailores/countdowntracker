@@ -117,6 +117,34 @@
   .btn-refresh { margin-top:1rem; background:var(--pink-light); border:1.5px solid var(--pink-soft); color:var(--pink-deep); font-family:'Nunito',sans-serif; font-weight:700; font-size:13px; padding:8px 18px; border-radius:12px; cursor:pointer; }
   .btn-refresh:hover { background:var(--pink-blush); }
 
+
+  /* WOULD YOU RATHER */
+  .wyr-box { background:linear-gradient(135deg,#fff0f5,#fce4ec); border:2px solid var(--pink-soft); border-radius:18px; padding:1.25rem; text-align:center; }
+  .wyr-question { font-family:'Playfair Display',serif; font-size:17px; color:var(--text-dark); font-style:italic; margin-bottom:1.25rem; line-height:1.5; }
+  .wyr-buttons { display:flex; align-items:center; gap:10px; flex-wrap:wrap; justify-content:center; }
+  .wyr-btn { flex:1; min-width:120px; max-width:220px; font-family:'Nunito',sans-serif; font-weight:700; font-size:13px; padding:12px 10px; border:2px solid var(--pink-soft); border-radius:14px; background:white; color:var(--pink-deep); cursor:pointer; transition:all 0.2s; line-height:1.4; }
+  .wyr-btn:hover { background:var(--pink-deep); color:white; border-color:var(--pink-deep); transform:translateY(-2px); }
+  .wyr-btn.voted { background:var(--pink-deep); color:white; border-color:var(--pink-deep); }
+  .wyr-or { font-weight:700; font-size:13px; color:var(--text-soft); flex-shrink:0; }
+  .wyr-bar-wrap { display:flex; border-radius:12px; overflow:hidden; height:28px; margin:1rem 0 0.5rem; border:1px solid var(--pink-soft); }
+  .wyr-bar-a { background:var(--pink-deep); height:100%; transition:width 0.6s ease; display:flex; align-items:center; justify-content:center; font-size:11px; font-weight:700; color:white; }
+  .wyr-bar-b { background:var(--pink-soft); height:100%; transition:width 0.6s ease; display:flex; align-items:center; justify-content:center; font-size:11px; font-weight:700; color:white; }
+  .wyr-votes { font-size:12px; color:var(--text-soft); margin-top:4px; }
+
+  /* LETTERS */
+  .letter-sealed { background:var(--pink-light); border:2px dashed var(--pink-soft); border-radius:16px; padding:14px 16px; }
+  .letter-when { font-family:'Playfair Display',serif; font-size:15px; color:var(--pink-deep); font-style:italic; margin-bottom:8px; }
+  .letter-from { font-size:11px; color:var(--text-soft); margin-bottom:10px; }
+  .open-btn { font-family:'Nunito',sans-serif; font-weight:700; font-size:13px; padding:8px 18px; background:linear-gradient(135deg,var(--pink-mid),var(--pink-deep)); color:white; border:none; border-radius:10px; cursor:pointer; box-shadow:0 3px 10px rgba(194,24,91,0.25); transition:transform 0.15s; }
+  .open-btn:hover { transform:translateY(-2px); }
+  .letter-open { background:white; border:1.5px solid var(--pink-soft); border-radius:16px; padding:16px; }
+  .letter-text { font-size:13px; color:var(--text-dark); line-height:1.8; white-space:pre-wrap; word-break:break-word; margin-bottom:10px; }
+  .letter-footer { display:flex; justify-content:space-between; align-items:center; flex-wrap:wrap; gap:6px; }
+  .letter-meta { font-size:11px; color:var(--text-soft); }
+  .letter-del { background:none; border:none; font-size:11px; color:var(--pink-soft); cursor:pointer; font-family:'Nunito',sans-serif; }
+  .letter-del:hover { color:var(--pink-deep); }
+  .prompt-chip { font-size:12px; background:white; border:1.5px solid var(--pink-soft); color:var(--pink-deep); border-radius:20px; padding:5px 12px; cursor:pointer; font-family:'Nunito',sans-serif; font-weight:600; transition:all 0.15s; white-space:nowrap; }
+  .prompt-chip:hover { background:var(--pink-deep); color:white; border-color:var(--pink-deep); }
   .footer { text-align:center; font-size:12px; color:var(--text-soft); margin-top:2rem; font-style:italic; }
 
   @media (max-width:480px) {
@@ -226,6 +254,43 @@
       <p class="fact-day" id="fact-day"></p>
       <button class="btn-refresh" onclick="nextFact()">Give me another one! 🎲</button>
     </div>
+  </div>
+
+
+  <!-- WOULD YOU RATHER -->
+  <div class="card">
+    <div class="card-header"><span class="card-icon">🤔</span><span class="card-title">Would you rather?</span></div>
+    <p style="font-size:13px;color:var(--text-soft);margin-bottom:1rem;">A new question every day — see if you pick the same thing! 💕</p>
+    <div class="wyr-box">
+      <p class="wyr-question" id="wyr-question">Loading today's question...</p>
+      <div class="wyr-buttons">
+        <button class="wyr-btn" id="wyr-a" onclick="voteWYR('a')"></button>
+        <div class="wyr-or">OR</div>
+        <button class="wyr-btn" id="wyr-b" onclick="voteWYR('b')"></button>
+      </div>
+      <div class="wyr-result" id="wyr-result" style="display:none">
+        <div class="wyr-bar-wrap">
+          <div class="wyr-bar-a" id="wyr-bar-a"></div>
+          <div class="wyr-bar-b" id="wyr-bar-b"></div>
+        </div>
+        <p class="wyr-votes" id="wyr-votes"></p>
+      </div>
+      <button class="btn-refresh" onclick="newWYR()" style="margin-top:1rem">New question 🎲</button>
+    </div>
+  </div>
+
+  <!-- LETTERS TO OPEN WHEN -->
+  <div class="card">
+    <div class="card-header"><span class="card-icon">💝</span><span class="card-title">Letters to open when...</span></div>
+    <p style="font-size:13px;color:var(--text-soft);margin-bottom:1rem;">Write a letter for a special moment. The other person taps to reveal it when the time is right 💌</p>
+    <div style="display:flex;flex-direction:column;gap:8px;margin-bottom:0.75rem">
+      <input type="text" id="letter-when" placeholder='e.g. when you miss me most / when you need a laugh' />
+      <textarea id="letter-body" placeholder="Write your letter here... pour your heart out 💕" style="min-height:100px;width:100%;font-family:Nunito,sans-serif;font-size:13px;padding:9px 13px;border:1.5px solid var(--pink-soft);border-radius:12px;background:var(--pink-pale);color:var(--text-dark);outline:none;resize:vertical;margin-bottom:0"></textarea>
+      <div style="text-align:right"><button class="btn btn-pink" onclick="addLetter()">Seal this letter 💝</button></div>
+    </div>
+    <p style="font-size:12px;color:var(--text-soft);margin-bottom:8px">Or tap a prompt to get started:</p>
+    <div id="prompt-chips" style="display:flex;flex-wrap:wrap;gap:6px;margin-bottom:1rem"></div>
+    <div id="letter-list" style="display:flex;flex-direction:column;gap:10px"><div class="loading-msg">Loading... 💕</div></div>
   </div>
 
   <div class="footer">Made with 💕 for Mia & Daddy — counting down together</div>
@@ -490,6 +555,246 @@ function getDailyFact(){const now=new Date();const day=Math.floor((now-new Date(
 function showFact(i){const f=facts[i];document.getElementById('fact-emoji').textContent=f.e;document.getElementById('fact-text').textContent=f.t;const d=['Sunday','Monday','Tuesday','Wednesday','Thursday','Friday','Saturday'];document.getElementById('fact-day').textContent='Your '+d[new Date().getDay()]+' laugh 💕';}
 window.nextFact=function(){offset=(offset+1)%facts.length;showFact(getDailyFact());};
 showFact(getDailyFact());
+
+
+// ── WOULD YOU RATHER ─────────────────────────
+const wyrQuestions = [
+  {a:"Always have to sing instead of speak", b:"Always have to dance instead of walk"},
+  {a:"Eat pizza every day for a year", b:"Eat tacos every day for a year"},
+  {a:"Have a pet dragon", b:"Have a pet unicorn"},
+  {a:"Be able to fly", b:"Be able to breathe underwater"},
+  {a:"Live in a treehouse", b:"Live on a houseboat"},
+  {a:"Only eat sweet foods forever", b:"Only eat salty foods forever"},
+  {a:"Have super speed", b:"Have super strength"},
+  {a:"Go back in time", b:"Travel to the future"},
+  {a:"Be invisible for a day", b:"Be able to read minds for a day"},
+  {a:"Never have to sleep", b:"Never have to eat"},
+  {a:"Meet your favorite celebrity", b:"Be famous for something you love"},
+  {a:"It always be summer", b:"It always be winter"},
+  {a:"Have unlimited money", b:"Have unlimited free time"},
+  {a:"Be the funniest person in the room", b:"Be the smartest person in the room"},
+  {a:"Live without music", b:"Live without movies"},
+  {a:"Have a rewind button for your life", b:"Have a pause button for your life"},
+  {a:"Know every language in the world", b:"Be able to talk to animals"},
+  {a:"Never be cold again", b:"Never be hot again"},
+  {a:"Eat your favorite meal every day", b:"Try a new food every day"},
+  {a:"Have a robot do all your chores", b:"Have a robot do all your homework"},
+  {a:"Be able to teleport anywhere", b:"Be able to stop time"},
+  {a:"Win an Olympic gold medal", b:"Win a Grammy Award"},
+  {a:"Have a personal chef", b:"Have a personal chauffeur"},
+  {a:"Only be able to whisper", b:"Only be able to shout"},
+  {a:"Have no social media ever again", b:"Have no video games ever again"},
+  {a:"Be the first person on Mars", b:"Discover treasure at the bottom of the ocean"},
+  {a:"Have a photographic memory", b:"Be able to learn any skill in one day"},
+  {a:"Always know what time it is", b:"Always know where everything is"},
+  {a:"Never have bad hair again", b:"Never have a bad outfit again"},
+  {a:"Find out the ending of every story before you start", b:"Never be able to reread or rewatch anything"},
+  {a:"Be able to talk to your past self", b:"Be able to send a message to your future self"},
+  {a:"Have an extra hour every day", b:"Never need more than 4 hours of sleep"},
+  {a:"Always have perfect weather wherever you go", b:"Always find a perfect parking spot"},
+  {a:"Never be stuck in traffic again", b:"Never wait in a line again"},
+  {a:"Be able to see 10 minutes into the future", b:"Change one decision from your past"},
+  {a:"Be an amazing singer", b:"Be an amazing dancer"},
+  {a:"Only eat breakfast foods forever", b:"Only eat dessert foods forever"},
+  {a:"Explore outer space", b:"Explore the deep ocean"},
+  {a:"Have a talking cat", b:"Have a talking dog"},
+  {a:"Be in your favorite movie", b:"Be in your favorite book"},
+  {a:"Have hiccups for the rest of your life", b:"Always feel like you need to sneeze but can't"},
+  {a:"Know every answer on every test", b:"Win every game you ever play"},
+  {a:"Live with no internet for a month", b:"Live with no TV for a year"},
+  {a:"Always be early", b:"Always be exactly on time"},
+  {a:"Have a pool in your backyard", b:"Have a movie theater in your house"},
+  {a:"Be able to run as fast as a cheetah", b:"Be able to jump as high as a kangaroo"},
+  {a:"Only wear one color forever", b:"Have to wear a different crazy outfit every day"},
+  {a:"Have a lifetime supply of your favorite snack", b:"Never have to pay for food at restaurants again"},
+  {a:"Be the best in the world at something no one cares about", b:"Be average at the most admired thing in the world"},
+  {a:"Know the exact day you'll be happiest", b:"Know the exact day your biggest dream comes true"},
+];
+
+let wyrIndex = 0;
+let wyrVoted = false;
+
+function getWyrIndex() {
+  const now = new Date();
+  const day = Math.floor((now - new Date(now.getFullYear(), 0, 0)) / 86400000);
+  return (day + wyrIndex) % wyrQuestions.length;
+}
+
+function loadWYR() {
+  const idx = getWyrIndex();
+  const q = wyrQuestions[idx];
+  document.getElementById('wyr-question').textContent = 'Would you rather...';
+  document.getElementById('wyr-a').textContent = q.a;
+  document.getElementById('wyr-b').textContent = q.b;
+  document.getElementById('wyr-result').style.display = 'none';
+  document.getElementById('wyr-a').classList.remove('voted');
+  document.getElementById('wyr-b').classList.remove('voted');
+  wyrVoted = false;
+
+  // load existing votes
+  if (IS_CONFIGURED && db) {
+    onValue(ref(db, 'dd_wyr/' + idx), snap => {
+      const data = snap.val() || {a:0,b:0};
+      if ((data.a + data.b) > 0) showWyrResult(data.a, data.b);
+    }, {onlyOnce: false});
+  }
+}
+
+window.voteWYR = function(choice) {
+  if (wyrVoted) return;
+  wyrVoted = true;
+  document.getElementById('wyr-' + choice).classList.add('voted');
+  const idx = getWyrIndex();
+  if (IS_CONFIGURED && db) {
+    // read then increment
+    import("https://www.gstatic.com/firebasejs/10.12.0/firebase-database.js").then(({get, ref: dbRef, set}) => {
+      const vRef = ref(db, 'dd_wyr/' + idx);
+      get(vRef).then(snap => {
+        const data = snap.val() || {a:0, b:0};
+        data[choice] = (data[choice] || 0) + 1;
+        set(vRef, data);
+      });
+    });
+  } else {
+    showWyrResult(choice === 'a' ? 1 : 0, choice === 'b' ? 1 : 0);
+  }
+};
+
+function showWyrResult(aVotes, bVotes) {
+  const total = aVotes + bVotes;
+  if (total === 0) return;
+  const aPct = Math.round((aVotes / total) * 100);
+  const bPct = 100 - aPct;
+  document.getElementById('wyr-bar-a').style.width = aPct + '%';
+  document.getElementById('wyr-bar-a').textContent = aPct > 10 ? aPct + '%' : '';
+  document.getElementById('wyr-bar-b').style.width = bPct + '%';
+  document.getElementById('wyr-bar-b').textContent = bPct > 10 ? bPct + '%' : '';
+  const msg = aVotes === bVotes ? "You both picked the same! 💕" :
+    aVotes > bVotes ? `Option A is winning! (${aVotes} vs ${bVotes})` :
+    `Option B is winning! (${bVotes} vs ${aVotes})`;
+  document.getElementById('wyr-votes').textContent = msg;
+  document.getElementById('wyr-result').style.display = 'block';
+}
+
+window.newWYR = function() { wyrIndex = (wyrIndex + 1) % wyrQuestions.length; loadWYR(); };
+loadWYR();
+
+// ── LETTERS TO OPEN WHEN ──────────────────────
+const letterPrompts = [
+  "when you miss me most",
+  "when you're having a bad day",
+  "when you need a laugh",
+  "when you're proud of yourself",
+  "when you feel lonely",
+  "when you need a pep talk",
+  "when you can't sleep",
+  "when you're angry",
+  "when you accomplish something big",
+  "when you need to feel loved",
+  "when it's your birthday",
+  "when the countdown hits halfway",
+  "when you're bored",
+  "when you need courage",
+];
+
+// Render prompt chips
+const chipContainer = document.getElementById('prompt-chips');
+letterPrompts.forEach(p => {
+  const chip = document.createElement('button');
+  chip.className = 'prompt-chip';
+  chip.textContent = p;
+  chip.onclick = () => { document.getElementById('letter-when').value = p; document.getElementById('letter-body').focus(); };
+  chipContainer.appendChild(chip);
+});
+
+window.addLetter = function() {
+  const when = document.getElementById('letter-when').value.trim();
+  const body = document.getElementById('letter-body').value.trim();
+  if (!when || !body) { if (!when) flash('letter-when'); if (!body) flash('letter-body'); return; }
+  const date = new Date().toLocaleDateString('en-US',{month:'long',day:'numeric',year:'numeric'});
+  const data = { when, body, who: currentUser, date, sealed: true };
+  if (IS_CONFIGURED && db) {
+    setSync('saving','Saving...');
+    push(ref(db, 'dd_letters'), { ...data, ts: Date.now() }).then(() => setSync('live','Live & synced 💕'));
+  } else {
+    const list = JSON.parse(localStorage.getItem('dd_letters')||'[]');
+    list.unshift({ id: Date.now().toString(), ...data });
+    localStorage.setItem('dd_letters', JSON.stringify(list));
+    renderLettersLocal();
+  }
+  document.getElementById('letter-when').value = '';
+  document.getElementById('letter-body').value = '';
+};
+
+function renderLetterItem(k, v, isOpen) {
+  if (!isOpen) {
+    return `<div class="letter-sealed" id="lenv-${k}">
+      <p class="letter-when">Open when... ${esc(v.when)}</p>
+      <p class="letter-from">From ${esc(v.who)} · ${esc(v.date)}</p>
+      <button class="open-btn" onclick="openLetter('${k}')">Open this letter 💌</button>
+    </div>`;
+  } else {
+    return `<div class="letter-open" id="lenv-${k}">
+      <p class="letter-when" style="font-family:'Playfair Display',serif;font-size:15px;color:var(--pink-deep);font-style:italic;margin-bottom:8px;">Open when... ${esc(v.when)}</p>
+      <p class="letter-text">${esc(v.body)}</p>
+      <div class="letter-footer">
+        <span class="letter-meta">From <strong style="color:var(--pink-deep)">${esc(v.who)}</strong> · ${esc(v.date)}</span>
+        <button class="letter-del" onclick="delLetter('${k}')">delete</button>
+      </div>
+    </div>`;
+  }
+}
+
+const openedLetters = new Set();
+
+window.openLetter = function(k) {
+  openedLetters.add(k);
+  // re-render just that letter
+  if (IS_CONFIGURED && db) {
+    import("https://www.gstatic.com/firebasejs/10.12.0/firebase-database.js").then(({get, ref: dbRef}) => {
+      get(ref(db, 'dd_letters/' + k)).then(snap => {
+        const el = document.getElementById('lenv-' + k);
+        if (el && snap.val()) el.outerHTML = renderLetterItem(k, snap.val(), true);
+      });
+    });
+  } else {
+    const list = JSON.parse(localStorage.getItem('dd_letters')||'[]');
+    const item = list.find(i => i.id === k);
+    const el = document.getElementById('lenv-' + k);
+    if (el && item) el.outerHTML = renderLetterItem(k, item, true);
+  }
+};
+
+window.delLetter = function(k) {
+  if (IS_CONFIGURED && db) {
+    setSync('saving','Saving...');
+    remove(ref(db, 'dd_letters/' + k)).then(() => setSync('live','Live & synced 💕'));
+  } else {
+    const list = JSON.parse(localStorage.getItem('dd_letters')||'[]').filter(i => i.id !== k);
+    localStorage.setItem('dd_letters', JSON.stringify(list));
+    renderLettersLocal();
+  }
+};
+
+function renderLettersLocal() {
+  const el = document.getElementById('letter-list');
+  const list = JSON.parse(localStorage.getItem('dd_letters')||'[]');
+  if (!list.length) { el.innerHTML = '<div class="empty">No letters yet — write the first one! 💝</div>'; return; }
+  el.innerHTML = list.map(item => renderLetterItem(item.id, item, openedLetters.has(item.id))).join('');
+}
+
+// Firebase letters listener
+if (IS_CONFIGURED && db) {
+  onValue(ref(db, 'dd_letters'), snap => {
+    const el = document.getElementById('letter-list');
+    const data = snap.val();
+    if (!data) { el.innerHTML = '<div class="empty">No letters yet — write the first one! 💝</div>'; return; }
+    const items = Object.entries(data).sort((a,b)=>(b[1].ts||0)-(a[1].ts||0));
+    el.innerHTML = items.map(([k,v]) => renderLetterItem(k, v, openedLetters.has(k))).join('');
+  });
+} else {
+  renderLettersLocal();
+}
 
 // ── HELPERS ───────────────────────────────────
 function esc(s){return String(s).replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;');}
