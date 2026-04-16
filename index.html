@@ -87,7 +87,9 @@
   .item-list { display:flex; flex-direction:column; gap:7px; }
   .item-chip { display:flex; align-items:center; justify-content:space-between; background:var(--pink-light); border:1px solid rgba(244,143,177,0.4); border-radius:12px; padding:9px 13px; font-size:13px; color:var(--text-dark); }
   .chip-left { display:flex; align-items:center; gap:7px; flex:1; min-width:0; flex-wrap:wrap; }
-  .chip-text { overflow:hidden; text-overflow:ellipsis; white-space:nowrap; max-width:240px; }
+  .chip-text { word-break:break-word; white-space:normal; flex:1; min-width:0; }
+  .show-more-btn { display:block; width:100%; margin-top:8px; background:var(--pink-pale); border:1.5px dashed var(--pink-soft); color:var(--pink-deep); font-family:'Nunito',sans-serif; font-weight:700; font-size:12px; padding:7px; border-radius:10px; cursor:pointer; text-align:center; transition:background 0.2s; }
+  .show-more-btn:hover { background:var(--pink-blush); }
   .tag { font-size:10px; background:var(--pink-deep); color:white; border-radius:8px; padding:2px 8px; white-space:nowrap; flex-shrink:0; }
   .who-tag { font-size:10px; background:var(--pink-blush); color:var(--pink-deep); border:1px solid var(--pink-soft); border-radius:8px; padding:2px 8px; white-space:nowrap; flex-shrink:0; }
   .del-btn { background:none; border:none; color:var(--pink-soft); cursor:pointer; font-size:18px; line-height:1; padding:0 0 0 6px; flex-shrink:0; }
@@ -299,10 +301,21 @@ if (currentUser) {
 
 // ── FIREBASE ─────────────────────────────────
 function initListeners() {
-  listen('dd_wishes',   'wish-list',  renderWish);
-  listen('dd_messages', 'msg-list',   renderMsg);
-  listen('dd_songs',    'song-list',  renderSong);
-  listen('dd_misses',   'miss-list',  renderMiss);
+  listenAndCache('dd_wishes',   'wish-list',  renderWish);
+  listenAndCache('dd_messages', 'msg-list',   renderMsg);
+  listenAndCache('dd_songs',    'song-list',  renderSong);
+  listenAndCache('dd_misses',   'miss-list',  renderMiss);
+}
+
+function listenAndCache(path, elId, renderer) {
+  onValue(ref(db, path), snap => {
+    const el = document.getElementById(elId);
+    const data = snap.val();
+    if (!data) { el.innerHTML = '<div class="empty">Nothing yet — add something!</div>'; return; }
+    const items = Object.entries(data).sort((a,b)=>(b[1].ts||0)-(a[1].ts||0));
+    _listCache[path] = { items, renderer };
+    renderWithShowMore(el, items, renderer, path);
+  });
 }
 
 function listen(path, elId, renderer) {
@@ -310,9 +323,32 @@ function listen(path, elId, renderer) {
     const el = document.getElementById(elId);
     const data = snap.val();
     if (!data) { el.innerHTML = '<div class="empty">Nothing yet — add something!</div>'; return; }
-    el.innerHTML = Object.entries(data).sort((a,b)=>(b[1].ts||0)-(a[1].ts||0)).map(([k,v]) => renderer(k, v)).join('');
+    const items = Object.entries(data).sort((a,b)=>(b[1].ts||0)-(a[1].ts||0));
+    renderWithShowMore(el, items, renderer, path);
   });
 }
+
+function renderWithShowMore(el, items, renderer, path) {
+  const PREVIEW = 3;
+  const showing = el.dataset.expanded === 'true' ? items.length : Math.min(PREVIEW, items.length);
+  let html = items.slice(0, showing).map(([k,v]) => renderer(k, v)).join('');
+  if (items.length > PREVIEW) {
+    if (el.dataset.expanded === 'true') {
+      html += `<button class="show-more-btn" onclick="toggleList('${path}','${el.id}')">Show less ▲</button>`;
+    } else {
+      html += `<button class="show-more-btn" onclick="toggleList('${path}','${el.id}')">See all ${items.length} entries ▼</button>`;
+    }
+  }
+  el.innerHTML = html;
+}
+
+// store items per path for toggling
+const _listCache = {};
+window.toggleList = function(path, elId) {
+  const el = document.getElementById(elId);
+  el.dataset.expanded = el.dataset.expanded === 'true' ? 'false' : 'true';
+  if (_listCache[path]) renderWithShowMore(el, _listCache[path].items, _listCache[path].renderer, path);
+};
 
 function fbAdd(path, data) {
   setSync('saving','Saving...');
@@ -383,7 +419,9 @@ function renderLocalList(key, elId, renderer) {
   const el = document.getElementById(elId);
   const list = JSON.parse(localStorage.getItem(key)||'[]');
   if (!list.length) { el.innerHTML = '<div class="empty">Nothing yet — add something!</div>'; return; }
-  el.innerHTML = list.map(item => renderer(item.id, item)).join('');
+  const items = list.map(item => [item.id, item]);
+  _listCache[key] = { items, renderer };
+  renderWithShowMore(el, items, renderer, key);
 }
 function loadLocal() {
   renderLocalList('dd_wishes','wish-list',renderWish);
