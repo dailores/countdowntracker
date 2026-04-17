@@ -325,6 +325,24 @@
   <div class="footer">Made with 💕 for Mia & Daddy — counting down together</div>
 </div>
 
+<script>
+// Global bridge — makes module functions accessible from onclick attributes
+window.__bridge = {};
+function setUser(n) { window.__bridge.setUser && window.__bridge.setUser(n); }
+function switchUser() { window.__bridge.switchUser && window.__bridge.switchUser(); }
+function voteWYR(c) { window.__bridge.voteWYR && window.__bridge.voteWYR(c); }
+function newWYR() { window.__bridge.newWYR && window.__bridge.newWYR(); }
+function nextFact() { window.__bridge.nextFact && window.__bridge.nextFact(); }
+function addWish() { window.__bridge.addWish && window.__bridge.addWish(); }
+function addMessage() { window.__bridge.addMessage && window.__bridge.addMessage(); }
+function addSong() { window.__bridge.addSong && window.__bridge.addSong(); }
+function addMiss() { window.__bridge.addMiss && window.__bridge.addMiss(); }
+function addLetter() { window.__bridge.addLetter && window.__bridge.addLetter(); }
+function openLetter(k) { window.__bridge.openLetter && window.__bridge.openLetter(k); }
+function delLetter(k) { window.__bridge.delLetter && window.__bridge.delLetter(k); }
+function fbDel(p,k) { window.__bridge.fbDel && window.__bridge.fbDel(p,k); }
+function toggleList(p,e) { window.__bridge.toggleList && window.__bridge.toggleList(p,e); }
+</script>
 <script type="module">
 // ════════════════════════════════════════════
 //  PASTE YOUR FIREBASE CONFIG HERE
@@ -371,7 +389,7 @@ function setSync(state, label) {
 // ── USER ─────────────────────────────────────
 let currentUser = sessionStorage.getItem('dd_user') || '';
 
-window.setUser = function(name) {
+window.__bridge.setUser = function(name) {
   currentUser = name;
   sessionStorage.setItem('dd_user', name);
   document.getElementById('poster-name').textContent = name + (name === 'Mia' ? ' 🌸' : ' ✈️');
@@ -380,7 +398,7 @@ window.setUser = function(name) {
   IS_CONFIGURED && db ? initListeners() : loadLocal();
 };
 
-window.switchUser = function() {
+window.__bridge.switchUser = function() {
   sessionStorage.removeItem('dd_user');
   document.getElementById('name-screen').style.display = 'flex';
   document.getElementById('main-wrapper').style.display = 'none';
@@ -438,7 +456,7 @@ function renderWithShowMore(el, items, renderer, path) {
 
 // store items per path for toggling
 const _listCache = {};
-window.toggleList = function(path, elId) {
+window.__bridge.toggleList = function(path, elId) {
   const el = document.getElementById(elId);
   el.dataset.expanded = el.dataset.expanded === 'true' ? 'false' : 'true';
   if (_listCache[path]) renderWithShowMore(el, _listCache[path].items, _listCache[path].renderer, path);
@@ -449,7 +467,7 @@ function fbAdd(path, data) {
   push(ref(db, path), { ...data, ts: Date.now() }).then(() => setSync('live','Live & synced 💕'));
 }
 
-window.fbDel = function(path, key) {
+window.__bridge.fbDel = function(path, key) {
   setSync('saving','Saving...');
   remove(ref(db, path + '/' + key)).then(() => setSync('live','Live & synced 💕'));
 };
@@ -471,7 +489,7 @@ function renderMiss(k, v) {
 }
 
 // ── ADD FUNCTIONS ─────────────────────────────
-window.addWish = function() {
+window.__bridge.addWish = function() {
   const val = document.getElementById('wish-input').value.trim();
   const cat = document.getElementById('wish-cat').value;
   if (!val) return flash('wish-input');
@@ -479,7 +497,7 @@ window.addWish = function() {
   IS_CONFIGURED && db ? fbAdd('dd_wishes', data) : localAdd('dd_wishes', data, 'wish-list', renderWish);
   document.getElementById('wish-input').value = '';
 };
-window.addMessage = function() {
+window.__bridge.addMessage = function() {
   const text = document.getElementById('msg-input').value.trim();
   if (!text) return flash('msg-input');
   const date = new Date().toLocaleDateString('en-US',{month:'long',day:'numeric',year:'numeric'});
@@ -487,7 +505,7 @@ window.addMessage = function() {
   IS_CONFIGURED && db ? fbAdd('dd_messages', data) : localAdd('dd_messages', data, 'msg-list', renderMsg);
   document.getElementById('msg-input').value = '';
 };
-window.addSong = function() {
+window.__bridge.addSong = function() {
   const artist = document.getElementById('song-artist').value.trim();
   const title  = document.getElementById('song-title-input').value.trim();
   if (!artist || !title) return;
@@ -496,7 +514,7 @@ window.addSong = function() {
   document.getElementById('song-artist').value = '';
   document.getElementById('song-title-input').value = '';
 };
-window.addMiss = function() {
+window.__bridge.addMiss = function() {
   const text = document.getElementById('miss-input').value.trim();
   if (!text) return flash('miss-input');
   const data = { text, who: currentUser };
@@ -528,7 +546,7 @@ function loadLocal() {
 
 // Override fbDel to also handle local
 const _fbDel = window.fbDel;
-window.fbDel = function(path, key) {
+window.__bridge.fbDel = function(path, key) {
   if (IS_CONFIGURED && db) { _fbDel(path, key); return; }
   const list = JSON.parse(localStorage.getItem(path)||'[]').filter(i => i.id !== key);
   localStorage.setItem(path, JSON.stringify(list));
@@ -882,7 +900,7 @@ function loadWYR() {
   }
 }
 
-window.voteWYR = function(choice) {
+window.__bridge.voteWYR = function(choice) {
   if (wyrVoted) return;
   wyrVoted = true;
   document.getElementById('wyr-' + choice).classList.add('voted');
@@ -918,7 +936,7 @@ function showWyrResult(aVotes, bVotes) {
   document.getElementById('wyr-result').style.display = 'block';
 }
 
-window.newWYR = function() { wyrIndex = (wyrIndex + 1) % wyrQuestions.length; loadWYR(); };
+window.__bridge.newWYR = function() { wyrIndex = (wyrIndex + 1) % wyrQuestions.length; loadWYR(); };
 loadWYR();
 
 // ── LETTERS TO OPEN WHEN ──────────────────────
@@ -949,7 +967,7 @@ letterPrompts.forEach(p => {
   chipContainer.appendChild(chip);
 });
 
-window.addLetter = function() {
+window.__bridge.addLetter = function() {
   const when = document.getElementById('letter-when').value.trim();
   const body = document.getElementById('letter-body').value.trim();
   if (!when || !body) { if (!when) flash('letter-when'); if (!body) flash('letter-body'); return; }
@@ -989,7 +1007,7 @@ function renderLetterItem(k, v, isOpen) {
 
 const openedLetters = new Set();
 
-window.openLetter = function(k) {
+window.__bridge.openLetter = function(k) {
   openedLetters.add(k);
   // re-render just that letter
   if (IS_CONFIGURED && db) {
@@ -1007,7 +1025,7 @@ window.openLetter = function(k) {
   }
 };
 
-window.delLetter = function(k) {
+window.__bridge.delLetter = function(k) {
   if (IS_CONFIGURED && db) {
     setSync('saving','Saving...');
     remove(ref(db, 'dd_letters/' + k)).then(() => setSync('live','Live & synced 💕'));
