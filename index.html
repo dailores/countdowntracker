@@ -367,12 +367,13 @@ function initListeners() {
   listenList('dd_songs',    'song-list',  renderSong);
   listenList('dd_misses',   'miss-list',  renderMiss);
   listenLetters();
-  listenWYR();
+  loadWYR();
 }
 
 function listenList(path, elId, renderer) {
   db.ref(path).on('value', function(snap) {
     var el = document.getElementById(elId);
+    if (!el) return;
     var data = snap.val();
     if (!data) { el.innerHTML = '<div class="empty">Nothing yet — add something!</div>'; return; }
     var items = Object.entries(data).sort(function(a,b){ return (b[1].ts||0)-(a[1].ts||0); });
@@ -813,16 +814,18 @@ var openedLetters = {};
 function listenLetters() {
   db.ref('dd_letters').on('value', function(snap){
     var el = document.getElementById('letter-list');
+    if (!el) return;
     var data = snap.val();
     if (!data) { el.innerHTML = '<div class="empty">No letters yet — write the first one! 💝</div>'; return; }
     var items = Object.entries(data).sort(function(a,b){ return (b[1].ts||0)-(a[1].ts||0); });
-    el.innerHTML = items.map(function(entry){ return renderLetter(entry[0],entry[1]); }).join('');
+    el.innerHTML = items.filter(function(e){ return e[1] && e[1].when; }).map(function(entry){ return renderLetter(entry[0],entry[1]); }).join('');
   });
 }
 
 function renderLetter(k, v) {
+  if (!v || !v.when) return '';
   if (openedLetters[k]) {
-    return '<div class="letter-open" id="lenv-'+k+'"><p class="letter-when-label">Open when... '+esc(v.when)+'</p><p class="letter-text">'+esc(v.body)+'</p><div class="letter-footer"><span class="letter-meta">From <strong style="color:var(--pink-deep)">'+esc(v.who)+'</strong> · '+esc(v.date)+'</span><button class="letter-del" onclick="delLetter(\''+k+'\')">delete</button></div></div>';
+    return '<div class="letter-open" id="lenv-'+k+'"><p class="letter-when-label">Open when... '+esc(v.when)+'</p><p class="letter-text">'+esc(v.body||'')+'</p><div class="letter-footer"><span class="letter-meta">From <strong style="color:var(--pink-deep)">'+esc(v.who||'')+'</strong> · '+esc(v.date||'')+'</span><button class="letter-del" onclick="delLetter(\''+k+'\')">delete</button></div></div>';
   }
   return '<div class="letter-sealed" id="lenv-'+k+'"><p class="letter-when-label">Open when... '+esc(v.when)+'</p><p class="letter-from">From '+esc(v.who)+' · '+esc(v.date)+'</p><button class="open-btn" onclick="openLetter(\''+k+'\')">Open this letter 💌</button></div>';
 }
