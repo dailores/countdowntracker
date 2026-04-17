@@ -118,6 +118,12 @@
   .btn-refresh:hover { background:var(--pink-blush); }
 
 
+
+  /* DAY FACT */
+  .day-fact-box { background:rgba(255,255,255,0.7); border:1.5px solid var(--pink-soft); border-radius:16px; padding:12px 18px; display:flex; align-items:center; gap:10px; text-align:left; }
+  .day-fact-emoji { font-size:22px; flex-shrink:0; }
+  .day-fact-text { font-size:13px; color:var(--text-dark); line-height:1.6; }
+  .day-fact-text strong { color:var(--pink-deep); }
   /* WOULD YOU RATHER */
   .wyr-box { background:linear-gradient(135deg,#fff0f5,#fce4ec); border:2px solid var(--pink-soft); border-radius:18px; padding:1.25rem; text-align:center; }
   .wyr-question { font-family:'Playfair Display',serif; font-size:17px; color:var(--text-dark); font-style:italic; margin-bottom:1.25rem; line-height:1.5; }
@@ -204,6 +210,10 @@
     <div class="progress-section" style="margin-top:1rem">
       <div class="progress-wrap"><div class="progress-fill" id="prog-bar" style="width:0%"></div></div>
       <div class="progress-label" id="prog-label"></div>
+    </div>
+    <div class="day-fact-box" id="day-fact-box" style="margin-top:1rem;display:none">
+      <span class="day-fact-emoji" id="day-fact-emoji">🎉</span>
+      <p class="day-fact-text" id="day-fact-text"></p>
     </div>
   </div>
 
@@ -563,6 +573,7 @@ function tick() {
   else if(days<=100)msg='🎊 Less than 100 days!';
   else if(days<=180)msg='🌻 Less than 6 months — getting so close!';
   document.getElementById('milestone-msg').textContent=msg;
+  updateDayFact(days);
 }
 tick(); setInterval(tick,1000);
 
@@ -576,6 +587,218 @@ window.nextFact=function(){offset=(offset+1)%facts.length;showFact(getDailyFact(
 showFact(getDailyFact());
 
 
+
+// ── DAY FACTS ─────────────────────────────────
+const dayFacts = {
+  198: {e:'🛋️', t:'<strong>198 days</strong> — that's 4,752 hours of cartoon-watching potential. Use them wisely!'},
+  197: {e:'🍕', t:'<strong>197 days</strong> — if you ate a slice of pizza every day until Daddy gets home, you'd eat 197 slices. That's a lot of pizza.'},
+  196: {e:'🦋', t:'<strong>196 days</strong> — a monarch butterfly's entire migration takes about 120 days. You're waiting longer than a butterfly migration!'},
+  195: {e:'🌙', t:'<strong>195 days</strong> — that's almost 6.5 full moons from now until Daddy's home.'},
+  194: {e:'🐢', t:'<strong>194 days</strong> — a sea turtle egg takes about 60 days to hatch. You could hatch 3 sea turtles in this time!'},
+  193: {e:'🎬', t:'<strong>193 days</strong> — if you watched a movie every day, you'd see 193 movies before Daddy gets home. Time for a list!'},
+  192: {e:'🌸', t:'<strong>192 days</strong> — that's 27 and a half weeks. You've totally got this! 💕'},
+  191: {e:'🏃', t:'<strong>191 days</strong> — if you ran a mile every day, you'd have run 191 miles by the time Daddy lands!'},
+  190: {e:'🎂', t:'<strong>190 days</strong> — that's 190 chances to do something kind, brave, or fun before the big reunion!'},
+  189: {e:'🦁', t:'<strong>189 days</strong> — a lion cub grows big enough to hunt in about 180 days. You're stronger than a lion cub!'},
+  188: {e:'📚', t:'<strong>188 days</strong> — if you read 10 pages a day you'd finish a 1,880-page book. Or like, 10 normal books!'},
+  187: {e:'🌊', t:'<strong>187 days</strong> — the average wave in the ocean crashes every 10 seconds. That's 1,616,800 waves until Daddy's home!'},
+  186: {e:'🐝', t:'<strong>186 days</strong> — a honeybee visits about 2,000 flowers a day. That's 372,000 flowers' worth of waiting!'},
+  185: {e:'🚀', t:'<strong>185 days</strong> — the Space Shuttle took only 8 minutes to reach orbit. In 185 days it could orbit Earth about 2,900 times!'},
+  184: {e:'🌻', t:'<strong>184 days</strong> — sunflowers grow from seed to full bloom in about 80 days. You could grow two whole sunflowers waiting for Daddy!'},
+  183: {e:'🎵', t:'<strong>183 days</strong> — if a song is 3 minutes long, you could listen to 87,840 songs before Daddy gets home. Better start that playlist!'},
+  182: {e:'🎊', t:'<strong>182 days</strong> — that's exactly 26 weeks, or half a year! You are HALFWAY through the calendar wait. Go Mia! 🌟'},
+  181: {e:'🐠', t:'<strong>181 days</strong> — clownfish like Nemo live about 6-10 years. Daddy's deployment is just a tiny blip of a clownfish's life!'},
+  180: {e:'🌈', t:'<strong>180 days</strong> — less than 6 months! In school terms, that's almost one whole semester. You're practically already there!'},
+  179: {e:'🦒', t:'<strong>179 days</strong> — a baby giraffe learns to walk within hours of being born and runs within days. You've been running this race for weeks already!'},
+  178: {e:'⭐', t:'<strong>178 days</strong> — light from some nearby stars takes about 4 years to reach us. Waiting 178 days is practically nothing compared to starlight!'},
+  177: {e:'🍦', t:'<strong>177 days</strong> — if you had a scoop of ice cream every day you'd eat 177 scoops before Daddy's home. Dessert goals!'},
+  176: {e:'🐧', t:'<strong>176 days</strong> — emperor penguin dads stand on eggs for 65 days in Antarctica with no food. Daddy's deployment has nothing on penguin dads!'},
+  175: {e:'🎈', t:'<strong>175 days</strong> — a helium balloon floats for about 10 hours. You'd need 420 balloons end-to-end to mark every hour until Daddy's home!'},
+  174: {e:'🌍', t:'<strong>174 days</strong> — the Earth travels 1.6 million miles around the sun every day. In 174 days, Earth will have gone 278 million miles — all while you wait!'},
+  173: {e:'🦅', t:'<strong>173 days</strong> — a bald eagle egg hatches in 35 days. You could hatch nearly 5 bald eagles in the time you're waiting!'},
+  172: {e:'🍓', t:'<strong>172 days</strong> — strawberries take about 90 days to grow from planting to picking. You could grow fruit twice before Daddy gets home!'},
+  171: {e:'🎯', t:'<strong>171 days</strong> — that's 24 weeks and 3 days. Every single day you wake up, you're one day closer. That's a win!'},
+  170: {e:'🐬', t:'<strong>170 days</strong> — dolphins sleep with half their brain awake. You've been wide awake and brave through 170 whole days!'},
+  169: {e:'🏆', t:'<strong>169 days</strong> — the Super Bowl is played once a year. You're waiting almost half a year for something WAY better than any Super Bowl!'},
+  168: {e:'⏰', t:'<strong>168 days</strong> — that's exactly 24 weeks, or 4,032 hours. But who's counting? (We are. Obviously!)'},
+  167: {e:'🌺', t:'<strong>167 days</strong> — some orchids bloom for up to 4 months and then wait patiently. You're basically a rare orchid!'},
+  166: {e:'🦋', t:'<strong>166 days</strong> — a caterpillar spends about 2 weeks in its chrysalis before becoming a butterfly. You've been becoming more amazing every single day!'},
+  165: {e:'🎪', t:'<strong>165 days</strong> — that's 23 weeks and 4 days. Less than 6 months. The countdown is getting realer every day!'},
+  164: {e:'🐘', t:'<strong>164 days</strong> — elephants are pregnant for 22 months. You're only waiting 7ish months — way shorter than an elephant pregnancy!'},
+  163: {e:'🌙', t:'<strong>163 days</strong> — the moon completes a full cycle every 29.5 days. That's still about 5.5 more moon cycles until the big day!'},
+  162: {e:'🍩', t:'<strong>162 days</strong> — if each day were a donut, you'd have enough to fill 8 dozen donut boxes. That's a lot of sweet days ahead!'},
+  161: {e:'🎸', t:'<strong>161 days</strong> — Beethoven wrote his 9th Symphony while completely deaf. If he could do THAT, you can absolutely do 161 more days!'},
+  160: {e:'🚂', t:'<strong>160 days</strong> — a cross-country train takes about 3 days. In 160 days you could theoretically ride back and forth across America 26 times!'},
+  159: {e:'🌟', t:'<strong>159 days</strong> — you've already waited so many days. Every single one made you braver, stronger, and more ready for that hug!'},
+  158: {e:'🦜', t:'<strong>158 days</strong> — parrots can live for 80 years. This deployment is just 0.5% of a parrot's lifetime. Puts it in perspective!'},
+  157: {e:'🏖️', t:'<strong>157 days</strong> — there are about 372,000 miles of coastline on Earth. That's a lot of beach — but no beach is as good as the one you'll celebrate on when Daddy's home!'},
+  156: {e:'🍪', t:'<strong>156 days</strong> — that's 22 weeks. If you baked cookies every weekend until Daddy's home, you'd make 22 batches. Save him some!'},
+  155: {e:'🐼', t:'<strong>155 days</strong> — a baby panda is born the size of a stick of butter and grows into a 200-pound bear. You're growing stronger every day too!'},
+  154: {e:'🌊', t:'<strong>154 days</strong> — that's 22 weeks exactly. Every week that passes is another week you crushed it!'},
+  153: {e:'🎭', t:'<strong>153 days</strong> — Shakespeare wrote an average of 1.5 plays per year. In 153 days he'd have written about half a play. You're writing a whole story!'},
+  152: {e:'🚁', t:'<strong>152 days</strong> — a helicopter can fly about 150 mph. At that speed it would take just 20 hours to cross the US. Daddy feels closer every day!'},
+  151: {e:'🌸', t:'<strong>151 days</strong> — cherry blossoms only bloom for about 2 weeks a year. By the time they bloom again, Daddy might already be home!'},
+  150: {e:'🎊', t:'<strong>150 days</strong> — that's a big milestone! Less than 5 months. You are absolutely crushing this! 🌟'},
+  149: {e:'🦁', t:'<strong>149 days</strong> — lions in the wild roam up to 10 miles a day. In 149 days, a lion would cover 1,490 miles — all while you wait like a champ!'},
+  148: {e:'🍋', t:'<strong>148 days</strong> — a lemon tree takes 6-9 months to produce fruit. You're waiting less time than it takes to grow a lemon. And you're way sweeter!'},
+  147: {e:'🌙', t:'<strong>147 days</strong> — that's 21 weeks exactly! Three weeks away from being just 4 months out. The number keeps shrinking!'},
+  146: {e:'🐙', t:'<strong>146 days</strong> — an octopus guards her eggs for up to 4.5 years without eating. Your wait is nothing compared to mama octopus!'},
+  145: {e:'🎵', t:'<strong>145 days</strong> — the Beatles released their first album in 1963. It took them years to get there. Good things take time — and Daddy coming home is the best thing!'},
+  144: {e:'🌻', t:'<strong>144 days</strong> — that's 144 sunrises, 144 sunsets, and 144 nights of knowing Daddy loves you from wherever he is! 💕'},
+  143: {e:'💕', t:'<strong>143 days</strong> — 143 means "I Love You" (1 letter, 4 letters, 3 letters). How perfect is that?!'},
+  142: {e:'🏄', t:'<strong>142 days</strong> — the average wave takes 10 days to travel across the Pacific Ocean. In 142 days, 14 waves could cross the whole ocean!'},
+  141: {e:'🦊', t:'<strong>141 days</strong> — a fox kit grows up in about 6 months. By the time Daddy's home, a fox kit born today would be basically a grown fox!'},
+  140: {e:'🎯', t:'<strong>140 days</strong> — exactly 20 weeks! One third of a year. You've got this completely under control!'},
+  139: {e:'🍕', t:'<strong>139 days</strong> — Americans eat approximately 3 billion pizzas a year. That's about 8.2 million pizzas today alone. Someone is definitely having pizza right now!'},
+  138: {e:'🌈', t:'<strong>138 days</strong> — a rainbow requires both rain AND sunshine. You're getting through the rain — the sunshine is coming! ☀️'},
+  137: {e:'🐸', t:'<strong>137 days</strong> — tadpoles become frogs in 6-12 weeks. You could've watched a tadpole become a frog twice over while waiting!'},
+  136: {e:'🚀', t:'<strong>136 days</strong> — the Apollo 11 mission took only 8 days to get to the moon and back. In 136 days, you could do that journey 17 times!'},
+  135: {e:'🌺', t:'<strong>135 days</strong> — less than 20 weeks! You are in the single-digit weeks-away-from-under-100-days zone. Try saying that 5 times fast!'},
+  134: {e:'🎸', t:'<strong>134 days</strong> — Elvis Presley recorded his first song at 18. Whatever age you are, you're already braver than most!'},
+  133: {e:'🦋', t:'<strong>133 days</strong> — monarch butterflies travel up to 100 miles a day during migration. In 133 days they could go 13,300 miles. Daddy's never that far in your heart!'},
+  132: {e:'🍓', t:'<strong>132 days</strong> — that's 19 weeks exactly. Under 20 weeks. The numbers just keep getting better!'},
+  131: {e:'🌙', t:'<strong>131 days</strong> — there are 131 days left and 131 reasons you're amazing. We could list them all but we'd run out of room!'},
+  130: {e:'🐳', t:'<strong>130 days</strong> — blue whales can hold their breath for about 90 minutes. You've been holding it together for way longer than any whale!'},
+  129: {e:'⭐', t:'<strong>129 days</strong> — the North Star has guided sailors home for centuries. It's still up there, still pointing the way home. Just like you're pointing to October 31st!'},
+  128: {e:'🎂', t:'<strong>128 days</strong> — that's 18 weeks and 2 days. Under 130 days. You should absolutely celebrate this!'},
+  127: {e:'🐝', t:'<strong>127 days</strong> — a queen bee can live for 5 years and lays up to 2,000 eggs a day. You are the queen of this countdown!'},
+  126: {e:'🌊', t:'<strong>126 days</strong> — exactly 18 weeks! Less than 5 months. This is officially feeling very close!'},
+  125: {e:'🏆', t:'<strong>125 days</strong> — the original Olympic games in ancient Greece lasted 5 days. You've been competing in the patience Olympics for way longer — and you're winning!'},
+  124: {e:'🦒', t:'<strong>124 days</strong> — a giraffe's tongue is 18-20 inches long. That's a fun fact that has nothing to do with the countdown, but it cheered us up!'},
+  123: {e:'🎬', t:'<strong>123 days</strong> — 1, 2, 3 — easy as can be! 123 days and counting down!'},
+  122: {e:'🌸', t:'<strong>122 days</strong> — that's just over 17 weeks. Every week is a victory lap!'},
+  121: {e:'🍩', t:'<strong>121 days</strong> — 121 is 11 × 11. Mia is almost 12 — almost as perfect as this number!'},
+  120: {e:'🎊', t:'<strong>120 days</strong> — FOUR MONTHS from today! You can do four months standing on your head! 🌟'},
+  119: {e:'🌻', t:'<strong>119 days</strong> — under 120! The numbers are tumbling down so fast now!'},
+  118: {e:'🐬', t:'<strong>118 days</strong> — dolphins can swim 25 mph. At that speed, they'd circle the Earth in about 42 days. Daddy's heart has circled back to you every single day!'},
+  117: {e:'🎵', t:'<strong>117 days</strong> — that's 16 weeks and 5 days. Under 17 weeks. The playlist is growing and so is the excitement!'},
+  116: {e:'🦅', t:'<strong>116 days</strong> — bald eagles can live 20-30 years in the wild. This deployment is just a tiny chapter in a very long, very wonderful story!'},
+  115: {e:'🌙', t:'<strong>115 days</strong> — almost 4 months exactly. The moon will be full about 4 more times before Daddy's home!'},
+  114: {e:'🍪', t:'<strong>114 days</strong> — if counting days were cookies, you'd have eaten through a LOT of the jar. The sweet ones at the bottom are getting closer!'},
+  113: {e:'🚂', t:'<strong>113 days</strong> — the Trans-Siberian Railway is the world's longest train journey at about 6 days. In 113 days you could ride it nearly 19 times!'},
+  112: {e:'🌈', t:'<strong>112 days</strong> — exactly 16 weeks! Four months of Sundays. You have been SO strong!'},
+  111: {e:'🎯', t:'<strong>111 days</strong> — 111 looks the same upside down. Kind of like how Daddy's love for you never changes no matter how you look at it! 💕'},
+  110: {e:'🐧', t:'<strong>110 days</strong> — emperor penguins walk 70 miles to their breeding grounds. You've been on your own journey and you're doing amazing!'},
+  109: {e:'🌺', t:'<strong>109 days</strong> — just 9 days away from the big 100! The triple digits are almost behind you!'},
+  108: {e:'☀️', t:'<strong>108 days</strong> — the sun is 108 times the diameter of Earth. And Daddy's love for you is at least that big — probably bigger!'},
+  107: {e:'🦁', t:'<strong>107 days</strong> — a week away from 100! You can almost taste the double digits!'},
+  106: {e:'🎸', t:'<strong>106 days</strong> — just 6 days from triple digits to double digits! Get ready to celebrate!'},
+  105: {e:'🌟', t:'<strong>105 days</strong> — exactly 15 weeks! Five away from 100. The home stretch is getting very real!'},
+  104: {e:'🍦', t:'<strong>104 days</strong> — four days from 100! Can you feel it?!'},
+  103: {e:'🎊', t:'<strong>103 days</strong> — THREE days from 100! Almost there! 🎉'},
+  102: {e:'🎈', t:'<strong>102 days</strong> — TWO days from 100! Get your confetti ready!'},
+  101: {e:'🥁', t:'<strong>101 days</strong> — tomorrow you hit DOUBLE DIGITS! This is huge! 🥁🥁🥁'},
+  100: {e:'🎉', t:'<strong>100 DAYS!</strong> — YOU HIT THE TRIPLE DIGIT MILESTONE! Less than 100 days until Daddy is HOME! This is HUGE! 🎉🎊💕'},
+  99:  {e:'🌟', t:'<strong>99 days</strong> — DOUBLE DIGITS BABY! Under 100! This deserves a happy dance! 💃'},
+  98:  {e:'🎊', t:'<strong>98 days</strong> — 98 days is only 14 weeks. FOURTEEN! You've got this completely in the bag!'},
+  97:  {e:'🍕', t:'<strong>97 days</strong> — just over 3 months. Start planning the welcome home dinner menu! 🍽️'},
+  96:  {e:'🌸', t:'<strong>96 days</strong> — exactly 13 weeks and 5 days. Under 100 and shrinking fast!'},
+  95:  {e:'🚀', t:'<strong>95 days</strong> — a trip to the moon takes 3 days. In 95 days you could go to the moon and back 15 times. But you'd rather have Daddy home!'},
+  94:  {e:'🐼', t:'<strong>94 days</strong> — a baby panda opens its eyes for the first time at about 45 days old. Your eyes are wide open and fixed on October 31st!'},
+  93:  {e:'🌻', t:'<strong>93 days</strong> — just over 13 weeks. Every week the excitement gets one level higher!'},
+  92:  {e:'🎵', t:'<strong>92 days</strong> — if each day were a beat, you'd have a 92-beat drum solo. And the grand finale is coming! 🥁'},
+  91:  {e:'🎯', t:'<strong>91 days</strong> — exactly 13 weeks! Three more months-ish. The countdown clock is moving SO fast now!'},
+  90:  {e:'🎊', t:'<strong>90 days</strong> — THREE MONTHS! Just 90 sleeps! You could count them on your fingers... if you had 9 hands!'},
+  89:  {e:'🌙', t:'<strong>89 days</strong> — 89 is a prime number. Just like this moment in time — totally unique and unrepeatable!'},
+  88:  {e:'🎹', t:'<strong>88 days</strong> — a piano has 88 keys. Each day left is like one key — and together they're making the most beautiful song!'},
+  87:  {e:'🌊', t:'<strong>87 days</strong> — the Pacific Ocean is about 12,000 miles wide. Daddy's love crosses every mile every single day!'},
+  86:  {e:'☀️', t:'<strong>86 days</strong> — there are 86,400 seconds in a day. Every single second you're a little bit closer!'},
+  85:  {e:'🦋', t:'<strong>85 days</strong> — just 5 days from 80! The big numbers are disappearing fast!'},
+  84:  {e:'🍩', t:'<strong>84 days</strong> — exactly 12 weeks! THREE MONTHS from tomorrow! You are SO close!'},
+  83:  {e:'🌺', t:'<strong>83 days</strong> — under 12 weeks! The single-digit weeks are coming for you!'},
+  82:  {e:'🐬', t:'<strong>82 days</strong> — dolphins live in tight family groups called pods. Your family pod is about to be complete again! 💕'},
+  81:  {e:'🎸', t:'<strong>81 days</strong> — 81 = 9 × 9. You're basically at a perfect square of days left. Math is on your side!'},
+  80:  {e:'🎊', t:'<strong>80 days</strong> — Around the World in 80 Days is a whole novel! Daddy's coming home in the same number of days. This calls for a celebration! 🌍'},
+  79:  {e:'🌟', t:'<strong>79 days</strong> — under 80! Just 11 weeks and 2 days. The weeks are single digit territory soon!'},
+  78:  {e:'🎈', t:'<strong>78 days</strong> — just over 11 weeks. You can count the weeks on both hands now!'},
+  77:  {e:'🍀', t:'<strong>77 days</strong> — exactly 11 weeks! Lucky number 11! Eleven weeks until the best Halloween ever! 🎃'},
+  76:  {e:'🌙', t:'<strong>76 days</strong> — in Norway, the sun doesn't set for 76 days in summer. You've been shining just as bright every single day!'},
+  75:  {e:'🏆', t:'<strong>75 days</strong> — that's just 10 weeks and 5 days. You are IN the final quarter now! 🏆'},
+  74:  {e:'🦁', t:'<strong>74 days</strong> — under 75! You're lion-hearted and getting so close!'},
+  73:  {e:'🌸', t:'<strong>73 days</strong> — just over 10 weeks. Can you even believe you've made it this far?! Because we can! 💕'},
+  72:  {e:'⭐', t:'<strong>72 days</strong> — there are 72 hours in 3 days. And in 72 days there are 1,728 hours until Daddy's home. Still sounds like a lot but it's SO not!'},
+  71:  {e:'🎵', t:'<strong>71 days</strong> — under 72! Single-digit weeks are right around the corner!'},
+  70:  {e:'🎊', t:'<strong>70 days</strong> — TEN WEEKS from today! One hand of weeks and you run out of fingers!'},
+  69:  {e:'🌻', t:'<strong>69 days</strong> — under 70! The numbers are falling like dominoes now! 💕'},
+  68:  {e:'🚀', t:'<strong>68 days</strong> — less than 10 weeks exactly. SINGLE DIGIT WEEKS ARE COMING!'},
+  67:  {e:'🍕', t:'<strong>67 days</strong> — 9 weeks and 4 days. You are officially in the NINE WEEK ZONE!'},
+  66:  {e:'🎯', t:'<strong>66 days</strong> — it takes 66 days to form a new habit. By the time Daddy gets home, your new habit will be counting down!'},
+  65:  {e:'🐧', t:'<strong>65 days</strong> — emperor penguin dads stand on eggs for 65 days without eating. Today you match a penguin dad's patience! Respect! 🐧'},
+  64:  {e:'🎮', t:'<strong>64 days</strong> — the Nintendo 64 had 64-bit graphics. This countdown is way more high-definition than that!'},
+  63:  {e:'🌙', t:'<strong>63 days</strong> — exactly 9 weeks! NINE WEEKS! You're counting in single digits now! 🎉'},
+  62:  {e:'🌊', t:'<strong>62 days</strong> — under 9 weeks! The ocean between you and this moment is getting smaller every tide!'},
+  61:  {e:'🌟', t:'<strong>61 days</strong> — TWO MONTHS from tomorrow! You are SO incredibly close!'},
+  60:  {e:'🎊', t:'<strong>60 days</strong> — TWO MONTHS! Just 60 sleeps! You could count every single one on your fingers and toes twice! 🎉💕'},
+  59:  {e:'🎈', t:'<strong>59 days</strong> — under 60! Under two months! THIS IS HAPPENING! 🎊'},
+  58:  {e:'🦋', t:'<strong>58 days</strong> — 8 weeks and 2 days. You've transformed like a butterfly through this whole journey!'},
+  57:  {e:'🌺', t:'<strong>57 days</strong> — exactly 8 weeks and 1 day. The single-digit weeks feel SO close!'},
+  56:  {e:'🍩', t:'<strong>56 days</strong> — exactly 8 weeks! EIGHT WEEKS! You're counting weeks on one hand! 🙌'},
+  55:  {e:'🎵', t:'<strong>55 days</strong> — 7 weeks and 6 days — the last day of the 8-week club! Tomorrow: 7 weeks!'},
+  54:  {e:'🌸', t:'<strong>54 days</strong> — under 8 weeks officially. SEVEN WEEKS AND COUNTING! 💕'},
+  53:  {e:'🌙', t:'<strong>53 days</strong> — 7 weeks and 4 days. Start planning the welcome home party — for real this time!'},
+  52:  {e:'🎯', t:'<strong>52 days</strong> — there are 52 weeks in a year. You're counting in weeks and there are fewer weeks left than in a whole year! 🎊'},
+  51:  {e:'🌟', t:'<strong>51 days</strong> — 7 weeks and 2 days. Every morning you wake up it's one less sleep until the biggest hug! 💕'},
+  50:  {e:'🎊', t:'<strong>50 days</strong> — FIFTY DAYS! That's 7 weeks and 1 day! You are so incredibly close to the finish line! 🎉🎊💕'},
+  49:  {e:'🎉', t:'<strong>49 days</strong> — SEVEN WEEKS EXACTLY! You could count every remaining week on one hand! 🙌'},
+  48:  {e:'🌺', t:'<strong>48 days</strong> — under 7 weeks! That's 1,152 hours. But who's counting hours when weeks is SO much better?!'},
+  47:  {e:'🦁', t:'<strong>47 days</strong> — 6 weeks and 5 days! Almost in the SIX WEEK CLUB! You are a lion and you are ALMOST THERE!'},
+  46:  {e:'🌊', t:'<strong>46 days</strong> — 6 weeks and 4 days! The wave is building and it's about to crash in the best way! 🌊'},
+  45:  {e:'⭐', t:'<strong>45 days</strong> — six weeks and three days. Less than 7 weeks. The stars are aligning! ⭐'},
+  44:  {e:'🎸', t:'<strong>44 days</strong> — 6 weeks and 2 days. The reunion playlist is ready. The countdown is almost done! 🎵'},
+  43:  {e:'🌻', t:'<strong>43 days</strong> — 6 weeks and 1 day. A sunflower could grow from seed to bloom in this time! You're blooming too! 🌻'},
+  42:  {e:'🎊', t:'<strong>42 days</strong> — SIX WEEKS EXACTLY! The answer to life, the universe, and everything — and also the number of days until Daddy's home! 🎉'},
+  41:  {e:'🍕', t:'<strong>41 days</strong> — under 6 weeks! Start thinking about what you want for your welcome home dinner! 🍕'},
+  40:  {e:'🌟', t:'<strong>40 days</strong> — FIVE WEEKS AND FIVE DAYS! Under 6 weeks and under 40 days tomorrow! You are SO CLOSE! 💕'},
+  39:  {e:'🎈', t:'<strong>39 days</strong> — under 40! Five weeks and 4 days! Get the streamers ready! 🎊'},
+  38:  {e:'🌙', t:'<strong>38 days</strong> — 5 weeks and 3 days! The moon will only be full ONE more time before Daddy's home! 🌕'},
+  37:  {e:'🎉', t:'<strong>37 days</strong> — 5 weeks and 2 days! Can you even stand it?! IT'S SO CLOSE! 🎉'},
+  36:  {e:'🐬', t:'<strong>36 days</strong> — five weeks and 1 day. Dolphins would do about 36 acrobatic jumps in the time it takes to read this. You're flipping with excitement!'},
+  35:  {e:'🎊', t:'<strong>35 days</strong> — FIVE WEEKS EXACTLY! One hand of weeks! FIVE! Start making that welcome home banner! 🎊💕'},
+  34:  {e:'🌺', t:'<strong>34 days</strong> — under 5 weeks! 4 weeks and 6 days! The single-digit weeks are HERE! 🌟'},
+  33:  {e:'🦋', t:'<strong>33 days</strong> — 4 weeks and 5 days! Like a butterfly about to emerge — the big moment is SO close!'},
+  32:  {e:'🚀', t:'<strong>32 days</strong> — 4 weeks and 4 days! We are in the FINAL MONTH! This is actually happening! 🚀'},
+  31:  {e:'📅', t:'<strong>31 days</strong> — ONE MONTH FROM TODAY! 31 sleeps! One calendar page! You made it to the final month! 🎉🎊💕'},
+  30:  {e:'🎊', t:'<strong>30 days</strong> — THIRTY DAYS! ONE MONTH! 4 weeks and 2 days! START THE WELCOME HOME PLANNING! 🎉'},
+  29:  {e:'🌙', t:'<strong>29 days</strong> — less than 30 days! The moon completes a full cycle in 29.5 days — this is literally ONE moon cycle away! 🌕'},
+  28:  {e:'🌟', t:'<strong>28 days</strong> — FOUR WEEKS EXACTLY! Count them on one hand — four whole fingers! 🙌 IT'S SO CLOSE!'},
+  27:  {e:'🎈', t:'<strong>27 days</strong> — under 4 weeks! 3 weeks and 6 days! The last week of the 4-week era!'},
+  26:  {e:'🌸', t:'<strong>26 days</strong> — 3 weeks and 5 days! Start making your list of everything you want to say when you see Daddy! 💕'},
+  25:  {e:'🎉', t:'<strong>25 days</strong> — A QUARTER OF 100 DAYS LEFT! Just 3 weeks and 4 days! THIS IS WILD! 🎉'},
+  24:  {e:'⏰', t:'<strong>24 days</strong> — 24 hours in a day, 24 days to go! Every hour counts now! ⏰💕'},
+  23:  {e:'🌟', t:'<strong>23 days</strong> — 3 weeks and 2 days! The welcome home party is almost a TODAY thing! 🌟'},
+  22:  {e:'🎊', t:'<strong>22 days</strong> — THREE WEEKS AND ONE DAY! You can count the remaining weeks on THREE FINGERS! 🙌'},
+  21:  {e:'🎉', t:'<strong>21 days</strong> — THREE WEEKS EXACTLY! 21 sleeps! THREE! You could sleep through this on your hands! 🎉💕'},
+  20:  {e:'🚀', t:'<strong>20 days</strong> — TWENTY DAYS! TWO WEEKS AND SIX DAYS! We are in LAUNCH SEQUENCE territory! 🚀🎊'},
+  19:  {e:'🌺', t:'<strong>19 days</strong> — under 20! Less than 3 weeks! Are you READY?! 🌺💕'},
+  18:  {e:'💕', t:'<strong>18 days</strong> — TWO AND A HALF WEEKS! The excitement is UNCONTAINABLE! 💕🎊'},
+  17:  {e:'🌙', t:'<strong>17 days</strong> — 2 weeks and 3 days! Start picking out your outfit for homecoming day! 👗✨'},
+  16:  {e:'🎈', t:'<strong>16 days</strong> — TWO WEEKS AND TWO DAYS! Buy the balloons. Blow them up. Leave them deflated for now. The time is COMING! 🎈'},
+  15:  {e:'🌟', t:'<strong>15 days</strong> — TWO WEEKS AND ONE DAY! Half a month! You are SO incredibly close! 🌟💕'},
+  14:  {e:'🎊', t:'<strong>14 days</strong> — TWO WEEKS EXACTLY! 14 sleeps! Count them on your fingers — you have enough fingers! 🙌🎉'},
+  13:  {e:'🍀', t:'<strong>13 days</strong> — under two weeks! 1 week and 6 days! Lucky 13 — and you are SO lucky this day is almost here! 🍀'},
+  12:  {e:'🎉', t:'<strong>12 days</strong> — ONE WEEK AND FIVE DAYS! Like the 12 days of Christmas but SO much better! 🎉💕'},
+  11:  {e:'🌸', t:'<strong>11 days</strong> — ONE WEEK AND FOUR DAYS! The final countdown is HERE! You did it! You almost made it! 🌸💕'},
+  10:  {e:'🚀', t:'<strong>10 days</strong> — TEN DAYS! ONE WEEK AND THREE DAYS! T-MINUS TEN AND COUNTING! 🚀🎊'},
+  9:   {e:'🎊', t:'<strong>9 days</strong> — SINGLE DIGITS BABY! 9 DAYS! ONE WEEK AND TWO DAYS! This is ACTUALLY happening! 🎉'},
+  8:   {e:'🌟', t:'<strong>8 days</strong> — EIGHT DAYS! ONE WEEK AND ONE DAY! You can count every remaining day on your fingers! 🙌💕'},
+  7:   {e:'🎉', t:'<strong>7 days</strong> — ONE WEEK! SEVEN SLEEPS! The last week before the BEST DAY EVER! 🎉🎊💕'},
+  6:   {e:'💕', t:'<strong>6 days</strong> — SIX DAYS! Less than one week! Count them: 1, 2, 3, 4, 5, 6 — THAT'S IT! 💕🎊'},
+  5:   {e:'🌟', t:'<strong>5 days</strong> — FIVE DAYS! ONE HAND! YOU CAN COUNT THE DAYS ON ONE HAND! 🙌🎉💕'},
+  4:   {e:'🎊', t:'<strong>4 days</strong> — FOUR DAYS! Pull out the welcome home banner! 🎊🎉💕'},
+  3:   {e:'🎉', t:'<strong>3 days</strong> — THREE DAYS! THREE! The day after tomorrow's tomorrow! IT'S SO CLOSE! 🎉💕'},
+  2:   {e:'🚀', t:'<strong>2 days</strong> — TWO DAYS! TOMORROW'S TOMORROW! Get some sleep — the best day is almost here! 🚀💕'},
+  1:   {e:'💕', t:'<strong>1 day</strong> — TOMORROW IS THE DAY! ONE SLEEP! ONE SINGLE SLEEP! DADDY IS ALMOST HOME! 💕🎉🎊'},
+  0:   {e:'🎉', t:'<strong>TODAY IS THE DAY!</strong> — Daddy is HOME! 🎉💕🎊'},
+};
+
+function updateDayFact(days) {
+  const box = document.getElementById('day-fact-box');
+  const fact = dayFacts[days] || dayFacts[Math.min(198, days)];
+  if (!fact) { box.style.display = 'none'; return; }
+  document.getElementById('day-fact-emoji').textContent = fact.e;
+  document.getElementById('day-fact-text').innerHTML = fact.t;
+  box.style.display = 'flex';
+}
 // ── WOULD YOU RATHER ─────────────────────────
 const wyrQuestions = [
   {a:"Always have to sing instead of speak", b:"Always have to dance instead of walk"},
