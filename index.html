@@ -5,165 +5,164 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>Daddy's Coming Home 💕</title>
 <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,700;1,400&family=Nunito:wght@400;500;600;700&display=swap" rel="stylesheet">
+
+<!-- Firebase compat SDK (no import/module needed) -->
+<script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-app-compat.js"></script>
+<script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-database-compat.js"></script>
+
 <style>
-  :root {
-    --pink-deep: #c2185b; --pink-mid: #e91e8c; --pink-soft: #f48fb1;
-    --pink-light: #fce4ec; --pink-pale: #fff0f5; --pink-blush: #ffd6e7;
-    --text-dark: #4a0e2a; --text-soft: #b06080;
-    --white: #ffffff; --card-bg: rgba(255,255,255,0.75);
-    --shadow: 0 4px 24px rgba(194,24,91,0.10);
-  }
-  * { box-sizing: border-box; margin: 0; padding: 0; }
-  body { font-family: 'Nunito', sans-serif; background: var(--pink-pale); color: var(--text-dark); min-height: 100vh; position: relative; overflow-x: hidden; }
-  body::before { content:''; position:fixed; inset:0; background: radial-gradient(ellipse at 10% 20%, #ffc2d4 0%, transparent 50%), radial-gradient(ellipse at 90% 80%, #f8a5c2 0%, transparent 50%), radial-gradient(ellipse at 50% 50%, #fff0f5 0%, #fce4ec 100%); z-index:0; }
-  .hearts-bg { position:fixed; inset:0; pointer-events:none; z-index:0; overflow:hidden; }
-  .hrt { position:absolute; opacity:0.08; animation:floatUp linear infinite; }
-  @keyframes floatUp { 0%{transform:translateY(110vh) rotate(0deg);opacity:0} 10%{opacity:0.08} 90%{opacity:0.08} 100%{transform:translateY(-10vh) rotate(360deg);opacity:0} }
+:root {
+  --pink-deep:#c2185b; --pink-mid:#e91e8c; --pink-soft:#f48fb1;
+  --pink-light:#fce4ec; --pink-pale:#fff0f5; --pink-blush:#ffd6e7;
+  --text-dark:#4a0e2a; --text-soft:#b06080;
+  --white:#fff; --card-bg:rgba(255,255,255,0.78);
+  --shadow:0 4px 24px rgba(194,24,91,0.10);
+}
+*{box-sizing:border-box;margin:0;padding:0;}
+body{font-family:'Nunito',sans-serif;background:var(--pink-pale);color:var(--text-dark);min-height:100vh;overflow-x:hidden;position:relative;}
+body::before{content:'';position:fixed;inset:0;background:radial-gradient(ellipse at 10% 20%,#ffc2d4 0%,transparent 50%),radial-gradient(ellipse at 90% 80%,#f8a5c2 0%,transparent 50%),radial-gradient(ellipse at 50% 50%,#fff0f5 0%,#fce4ec 100%);z-index:0;}
+.hearts-bg{position:fixed;inset:0;pointer-events:none;z-index:0;overflow:hidden;}
+.hrt{position:absolute;opacity:.08;animation:floatUp linear infinite;}
+@keyframes floatUp{0%{transform:translateY(110vh) rotate(0deg);opacity:0}10%{opacity:.08}90%{opacity:.08}100%{transform:translateY(-10vh) rotate(360deg);opacity:0}}
 
-  /* NAME PICKER */
-  .name-screen { position:fixed; inset:0; z-index:100; display:flex; align-items:center; justify-content:center; background:radial-gradient(ellipse at 50% 50%, #fff0f5 0%, #fce4ec 100%); }
-  .name-box { background:white; border:2px solid var(--pink-soft); border-radius:28px; padding:2.5rem 2rem; text-align:center; max-width:360px; width:90%; box-shadow:0 8px 40px rgba(194,24,91,0.15); }
-  .name-box h2 { font-family:'Playfair Display',serif; font-size:24px; color:var(--pink-deep); font-style:italic; margin-bottom:0.5rem; }
-  .name-box p { font-size:13px; color:var(--text-soft); margin-bottom:1.5rem; line-height:1.6; }
-  .name-btns { display:flex; gap:12px; justify-content:center; flex-wrap:wrap; }
-  .name-btn { font-family:'Nunito',sans-serif; font-weight:700; font-size:16px; padding:14px 32px; border:none; border-radius:14px; cursor:pointer; transition:transform 0.15s; }
-  .name-btn-mia { background:linear-gradient(135deg,var(--pink-mid),var(--pink-deep)); color:white; box-shadow:0 3px 12px rgba(194,24,91,0.3); }
-  .name-btn-dad { background:var(--pink-light); color:var(--pink-deep); border:2px solid var(--pink-soft); }
-  .name-btn:hover { transform:translateY(-2px); }
+/* NAME SCREEN */
+.name-screen{position:fixed;inset:0;z-index:100;display:flex;align-items:center;justify-content:center;background:radial-gradient(ellipse at 50% 50%,#fff0f5 0%,#fce4ec 100%);}
+.name-box{background:#fff;border:2px solid var(--pink-soft);border-radius:28px;padding:2.5rem 2rem;text-align:center;max-width:360px;width:90%;box-shadow:0 8px 40px rgba(194,24,91,0.15);}
+.name-box h2{font-family:'Playfair Display',serif;font-size:24px;color:var(--pink-deep);font-style:italic;margin-bottom:.5rem;}
+.name-box p{font-size:13px;color:var(--text-soft);margin-bottom:1.5rem;line-height:1.6;}
+.name-btns{display:flex;gap:12px;justify-content:center;flex-wrap:wrap;}
+.name-btn{font-family:'Nunito',sans-serif;font-weight:700;font-size:16px;padding:14px 32px;border:none;border-radius:14px;cursor:pointer;transition:transform .15s;}
+.name-btn-mia{background:linear-gradient(135deg,var(--pink-mid),var(--pink-deep));color:#fff;box-shadow:0 3px 12px rgba(194,24,91,.3);}
+.name-btn-dad{background:var(--pink-light);color:var(--pink-deep);border:2px solid var(--pink-soft);}
+.name-btn:hover{transform:translateY(-2px);}
 
-  .wrapper { position:relative; z-index:1; max-width:760px; margin:0 auto; padding:2rem 1rem 4rem; }
+.wrapper{position:relative;z-index:1;max-width:760px;margin:0 auto;padding:2rem 1rem 4rem;}
 
-  .poster-bar { display:flex; align-items:center; justify-content:space-between; background:white; border:1.5px solid var(--pink-soft); border-radius:16px; padding:10px 16px; margin-bottom:1.5rem; box-shadow:var(--shadow); }
-  .poster-label { font-size:12px; color:var(--text-soft); }
-  .poster-name { font-size:15px; font-weight:700; color:var(--pink-deep); }
-  .bar-right { display:flex; align-items:center; gap:10px; }
-  .sync-status { display:flex; align-items:center; gap:5px; font-size:11px; color:var(--text-soft); }
-  .sync-dot { width:8px; height:8px; border-radius:50%; background:#ccc; flex-shrink:0; transition:background 0.4s; }
-  .sync-dot.live { background:#4caf50; }
-  .sync-dot.saving { background:#ff9800; animation:blink 0.6s ease-in-out infinite; }
-  @keyframes blink { 0%,100%{opacity:1} 50%{opacity:0.3} }
-  .switch-btn { font-family:'Nunito',sans-serif; font-size:12px; color:var(--text-soft); background:var(--pink-light); border:1px solid var(--pink-soft); border-radius:8px; padding:4px 10px; cursor:pointer; }
-  .switch-btn:hover { color:var(--pink-deep); }
+/* POSTER BAR */
+.poster-bar{display:flex;align-items:center;justify-content:space-between;background:#fff;border:1.5px solid var(--pink-soft);border-radius:16px;padding:10px 16px;margin-bottom:1.5rem;box-shadow:var(--shadow);}
+.poster-label{font-size:12px;color:var(--text-soft);}
+.poster-name{font-size:15px;font-weight:700;color:var(--pink-deep);}
+.bar-right{display:flex;align-items:center;gap:10px;}
+.sync-status{display:flex;align-items:center;gap:5px;font-size:11px;color:var(--text-soft);}
+.sync-dot{width:8px;height:8px;border-radius:50%;background:#ccc;flex-shrink:0;transition:background .4s;}
+.sync-dot.live{background:#4caf50;}
+.sync-dot.saving{background:#ff9800;animation:blink .6s ease-in-out infinite;}
+@keyframes blink{0%,100%{opacity:1}50%{opacity:.3}}
+.switch-btn{font-family:'Nunito',sans-serif;font-size:12px;color:var(--text-soft);background:var(--pink-light);border:1px solid var(--pink-soft);border-radius:8px;padding:4px 10px;cursor:pointer;}
+.switch-btn:hover{color:var(--pink-deep);}
 
-  .hero { text-align:center; margin-bottom:2rem; animation:fadeDown 0.8s ease both; }
-  @keyframes fadeDown { from{opacity:0;transform:translateY(-20px)} to{opacity:1;transform:translateY(0)} }
-  .hero-crown { font-size:36px; margin-bottom:0.5rem; display:block; animation:bounce 2s ease-in-out infinite; }
-  @keyframes bounce { 0%,100%{transform:translateY(0)} 50%{transform:translateY(-8px)} }
-  .hero h1 { font-family:'Playfair Display',serif; font-size:clamp(28px,6vw,44px); color:var(--pink-deep); font-style:italic; margin-bottom:0.25rem; text-shadow:0 2px 12px rgba(194,24,91,0.15); }
-  .hero-sub { font-size:14px; color:var(--text-soft); letter-spacing:0.05em; margin-bottom:2rem; }
+/* HERO */
+.hero{text-align:center;margin-bottom:2rem;animation:fadeDown .8s ease both;}
+@keyframes fadeDown{from{opacity:0;transform:translateY(-20px)}to{opacity:1;transform:translateY(0)}}
+.hero-crown{font-size:36px;margin-bottom:.5rem;display:block;animation:bounce 2s ease-in-out infinite;}
+@keyframes bounce{0%,100%{transform:translateY(0)}50%{transform:translateY(-8px)}}
+.hero h1{font-family:'Playfair Display',serif;font-size:clamp(28px,6vw,44px);color:var(--pink-deep);font-style:italic;margin-bottom:.25rem;text-shadow:0 2px 12px rgba(194,24,91,.15);}
+.hero-sub{font-size:14px;color:var(--text-soft);letter-spacing:.05em;margin-bottom:2rem;}
+.countdown-row{display:flex;justify-content:center;gap:12px;flex-wrap:wrap;margin-bottom:1.25rem;}
+.cbox{background:#fff;border:2px solid var(--pink-soft);border-radius:18px;padding:14px 18px;min-width:80px;text-align:center;box-shadow:var(--shadow);transition:transform .2s;}
+.cbox:hover{transform:translateY(-3px);}
+.cbox-num{font-family:'Playfair Display',serif;font-size:36px;font-weight:700;color:var(--pink-deep);line-height:1;display:block;}
+.cbox-label{font-size:10px;color:var(--text-soft);text-transform:uppercase;letter-spacing:1.5px;margin-top:4px;display:block;}
+.milestone{display:inline-block;background:linear-gradient(135deg,var(--pink-deep),#e91e8c);color:#fff;font-size:13px;font-weight:700;border-radius:30px;padding:6px 20px;margin-bottom:1.25rem;box-shadow:0 4px 16px rgba(194,24,91,.3);animation:pulse 3s ease-in-out infinite;}
+@keyframes pulse{0%,100%{box-shadow:0 4px 16px rgba(194,24,91,.3)}50%{box-shadow:0 4px 28px rgba(194,24,91,.55)}}
+.progress-section{padding:0 .5rem;}
+.progress-wrap{background:var(--pink-blush);border-radius:30px;height:16px;overflow:hidden;margin-bottom:6px;border:1px solid var(--pink-soft);}
+.progress-fill{height:100%;border-radius:30px;background:linear-gradient(90deg,#f48fb1,#e91e8c,#c2185b);background-size:200% 100%;animation:shimmer 2s linear infinite;transition:width 1.5s ease;position:relative;}
+.progress-fill::after{content:'✈';position:absolute;right:-2px;top:50%;transform:translateY(-50%);font-size:14px;}
+@keyframes shimmer{0%{background-position:100% 0}100%{background-position:-100% 0}}
+.progress-label{font-size:12px;color:var(--text-soft);text-align:right;}
+.day-fact-box{background:rgba(255,255,255,.7);border:1.5px solid var(--pink-soft);border-radius:16px;padding:12px 18px;display:flex;align-items:center;gap:10px;margin-top:1rem;text-align:left;}
+.day-fact-emoji{font-size:22px;flex-shrink:0;}
+.day-fact-text{font-size:13px;color:var(--text-dark);line-height:1.6;}
+.day-fact-text strong{color:var(--pink-deep);}
 
-  .countdown-row { display:flex; justify-content:center; gap:12px; flex-wrap:wrap; margin-bottom:1.25rem; }
-  .cbox { background:var(--white); border:2px solid var(--pink-soft); border-radius:18px; padding:14px 18px; min-width:80px; text-align:center; box-shadow:var(--shadow); transition:transform 0.2s; }
-  .cbox:hover { transform:translateY(-3px); }
-  .cbox-num { font-family:'Playfair Display',serif; font-size:36px; font-weight:700; color:var(--pink-deep); line-height:1; display:block; }
-  .cbox-label { font-size:10px; color:var(--text-soft); text-transform:uppercase; letter-spacing:1.5px; margin-top:4px; display:block; }
+/* CARDS */
+.card{background:var(--card-bg);backdrop-filter:blur(8px);border:1.5px solid rgba(244,143,177,.35);border-radius:24px;padding:1.5rem;margin-bottom:1.25rem;box-shadow:var(--shadow);}
+.card-header{display:flex;align-items:center;gap:10px;margin-bottom:1.1rem;padding-bottom:.75rem;border-bottom:1.5px dashed var(--pink-blush);}
+.card-icon{font-size:22px;}
+.card-title{font-family:'Playfair Display',serif;font-size:18px;color:var(--pink-deep);font-style:italic;}
 
-  .milestone { display:inline-block; background:linear-gradient(135deg,var(--pink-deep),#e91e8c); color:white; font-size:13px; font-weight:700; border-radius:30px; padding:6px 20px; margin-bottom:1.25rem; box-shadow:0 4px 16px rgba(194,24,91,0.3); animation:pulse 3s ease-in-out infinite; }
-  @keyframes pulse { 0%,100%{box-shadow:0 4px 16px rgba(194,24,91,0.3)} 50%{box-shadow:0 4px 28px rgba(194,24,91,0.55)} }
+/* INPUTS */
+.input-row{display:flex;gap:8px;flex-wrap:wrap;margin-bottom:.75rem;}
+input[type=text],select,textarea{font-family:'Nunito',sans-serif;font-size:13px;padding:9px 13px;border:1.5px solid var(--pink-soft);border-radius:12px;background:var(--pink-pale);color:var(--text-dark);outline:none;transition:border-color .2s,box-shadow .2s;}
+input[type=text]:focus,select:focus,textarea:focus{border-color:var(--pink-deep);box-shadow:0 0 0 3px rgba(194,24,91,.12);}
+input[type=text]{flex:1;min-width:140px;}
+select{min-width:130px;cursor:pointer;}
+textarea{width:100%;min-height:80px;resize:vertical;}
+.btn{font-family:'Nunito',sans-serif;font-weight:700;font-size:13px;padding:9px 18px;border:none;border-radius:12px;cursor:pointer;transition:transform .15s,box-shadow .15s;white-space:nowrap;}
+.btn-pink{background:linear-gradient(135deg,var(--pink-mid),var(--pink-deep));color:#fff;box-shadow:0 3px 12px rgba(194,24,91,.3);}
+.btn-pink:hover{transform:translateY(-2px);box-shadow:0 6px 18px rgba(194,24,91,.4);}
 
-  .progress-section { padding:0 0.5rem; }
-  .progress-wrap { background:var(--pink-blush); border-radius:30px; height:16px; overflow:hidden; margin-bottom:6px; border:1px solid var(--pink-soft); }
-  .progress-fill { height:100%; border-radius:30px; background:linear-gradient(90deg,#f48fb1,#e91e8c,#c2185b); background-size:200% 100%; animation:shimmer 2s linear infinite; transition:width 1.5s ease; position:relative; }
-  .progress-fill::after { content:'✈'; position:absolute; right:-2px; top:50%; transform:translateY(-50%); font-size:14px; }
-  @keyframes shimmer { 0%{background-position:100% 0} 100%{background-position:-100% 0} }
-  .progress-label { font-size:12px; color:var(--text-soft); text-align:right; }
+/* LISTS */
+.item-list{display:flex;flex-direction:column;gap:7px;}
+.item-chip{display:flex;align-items:flex-start;justify-content:space-between;background:var(--pink-light);border:1px solid rgba(244,143,177,.4);border-radius:12px;padding:9px 13px;font-size:13px;color:var(--text-dark);}
+.chip-left{display:flex;align-items:flex-start;gap:7px;flex:1;min-width:0;flex-wrap:wrap;}
+.chip-text{word-break:break-word;white-space:normal;flex:1;min-width:0;}
+.tag{font-size:10px;background:var(--pink-deep);color:#fff;border-radius:8px;padding:2px 8px;white-space:nowrap;flex-shrink:0;}
+.who-tag{font-size:10px;background:var(--pink-blush);color:var(--pink-deep);border:1px solid var(--pink-soft);border-radius:8px;padding:2px 8px;white-space:nowrap;flex-shrink:0;}
+.del-btn{background:none;border:none;color:var(--pink-soft);cursor:pointer;font-size:18px;line-height:1;padding:0 0 0 6px;flex-shrink:0;}
+.del-btn:hover{color:var(--pink-deep);}
+.note-entry{background:var(--pink-light);border:1px solid rgba(244,143,177,.4);border-radius:14px;padding:11px 14px;}
+.note-text{font-size:13px;color:var(--text-dark);line-height:1.6;white-space:pre-wrap;word-break:break-word;}
+.note-footer{display:flex;justify-content:space-between;align-items:center;margin-top:6px;flex-wrap:wrap;gap:4px;}
+.note-meta{font-size:11px;color:var(--text-soft);}
+.note-author{font-weight:700;color:var(--pink-deep);}
+.note-del{background:none;border:none;font-size:11px;color:var(--pink-soft);cursor:pointer;font-family:'Nunito',sans-serif;}
+.note-del:hover{color:var(--pink-deep);}
+.empty{font-size:13px;color:var(--text-soft);font-style:italic;text-align:center;padding:.5rem;}
+.loading-msg{font-size:13px;color:var(--pink-soft);text-align:center;padding:.5rem;}
+.show-more-btn{display:block;width:100%;margin-top:8px;background:var(--pink-pale);border:1.5px dashed var(--pink-soft);color:var(--pink-deep);font-family:'Nunito',sans-serif;font-weight:700;font-size:12px;padding:7px;border-radius:10px;cursor:pointer;text-align:center;}
+.show-more-btn:hover{background:var(--pink-blush);}
 
-  .card { background:var(--card-bg); backdrop-filter:blur(8px); border:1.5px solid rgba(244,143,177,0.35); border-radius:24px; padding:1.5rem; margin-bottom:1.25rem; box-shadow:var(--shadow); }
-  .card-header { display:flex; align-items:center; gap:10px; margin-bottom:1.1rem; padding-bottom:0.75rem; border-bottom:1.5px dashed var(--pink-blush); }
-  .card-icon { font-size:22px; }
-  .card-title { font-family:'Playfair Display',serif; font-size:18px; color:var(--pink-deep); font-style:italic; }
+/* FACT */
+.fact-box{background:linear-gradient(135deg,#fff0f5,#fce4ec);border:2px solid var(--pink-soft);border-radius:18px;padding:1.5rem;text-align:center;}
+.fact-emoji{font-size:36px;display:block;margin-bottom:.75rem;animation:wiggle 3s ease-in-out infinite;}
+@keyframes wiggle{0%,100%{transform:rotate(-5deg)}50%{transform:rotate(5deg)}}
+.fact-text{font-size:15px;color:var(--text-dark);line-height:1.7;font-weight:600;}
+.fact-day{font-size:11px;color:var(--text-soft);margin-top:8px;}
+.btn-refresh{margin-top:1rem;background:var(--pink-light);border:1.5px solid var(--pink-soft);color:var(--pink-deep);font-family:'Nunito',sans-serif;font-weight:700;font-size:13px;padding:8px 18px;border-radius:12px;cursor:pointer;}
+.btn-refresh:hover{background:var(--pink-blush);}
 
-  .input-row { display:flex; gap:8px; flex-wrap:wrap; margin-bottom:0.75rem; }
-  input[type="text"], select, textarea { font-family:'Nunito',sans-serif; font-size:13px; padding:9px 13px; border:1.5px solid var(--pink-soft); border-radius:12px; background:var(--pink-pale); color:var(--text-dark); outline:none; transition:border-color 0.2s,box-shadow 0.2s; }
-  input[type="text"]:focus, select:focus, textarea:focus { border-color:var(--pink-deep); box-shadow:0 0 0 3px rgba(194,24,91,0.12); }
-  input[type="text"] { flex:1; min-width:140px; }
-  select { min-width:130px; cursor:pointer; }
-  textarea { width:100%; min-height:80px; resize:vertical; margin-bottom:0.5rem; }
+/* WYR */
+.wyr-box{background:linear-gradient(135deg,#fff0f5,#fce4ec);border:2px solid var(--pink-soft);border-radius:18px;padding:1.25rem;text-align:center;}
+.wyr-question{font-family:'Playfair Display',serif;font-size:17px;color:var(--text-dark);font-style:italic;margin-bottom:1.25rem;line-height:1.5;}
+.wyr-buttons{display:flex;align-items:center;gap:10px;flex-wrap:wrap;justify-content:center;}
+.wyr-btn{flex:1;min-width:120px;max-width:220px;font-family:'Nunito',sans-serif;font-weight:700;font-size:13px;padding:12px 10px;border:2px solid var(--pink-soft);border-radius:14px;background:#fff;color:var(--pink-deep);cursor:pointer;transition:all .2s;line-height:1.4;}
+.wyr-btn:hover,.wyr-btn.voted{background:var(--pink-deep);color:#fff;border-color:var(--pink-deep);}
+.wyr-or{font-weight:700;font-size:13px;color:var(--text-soft);flex-shrink:0;}
+.wyr-bar-wrap{display:flex;border-radius:12px;overflow:hidden;height:28px;margin:1rem 0 .5rem;border:1px solid var(--pink-soft);}
+.wyr-bar-a{background:var(--pink-deep);height:100%;transition:width .6s ease;display:flex;align-items:center;justify-content:center;font-size:11px;font-weight:700;color:#fff;}
+.wyr-bar-b{background:var(--pink-soft);height:100%;transition:width .6s ease;display:flex;align-items:center;justify-content:center;font-size:11px;font-weight:700;color:#fff;}
+.wyr-votes{font-size:12px;color:var(--text-soft);margin-top:4px;}
 
-  .btn { font-family:'Nunito',sans-serif; font-weight:700; font-size:13px; padding:9px 18px; border:none; border-radius:12px; cursor:pointer; transition:transform 0.15s,box-shadow 0.15s; white-space:nowrap; }
-  .btn-pink { background:linear-gradient(135deg,var(--pink-mid),var(--pink-deep)); color:white; box-shadow:0 3px 12px rgba(194,24,91,0.3); }
-  .btn-pink:hover { transform:translateY(-2px); box-shadow:0 6px 18px rgba(194,24,91,0.4); }
+/* LETTERS */
+.letter-sealed{background:var(--pink-light);border:2px dashed var(--pink-soft);border-radius:16px;padding:14px 16px;}
+.letter-when-label{font-family:'Playfair Display',serif;font-size:15px;color:var(--pink-deep);font-style:italic;margin-bottom:8px;}
+.letter-from{font-size:11px;color:var(--text-soft);margin-bottom:10px;}
+.open-btn{font-family:'Nunito',sans-serif;font-weight:700;font-size:13px;padding:8px 18px;background:linear-gradient(135deg,var(--pink-mid),var(--pink-deep));color:#fff;border:none;border-radius:10px;cursor:pointer;box-shadow:0 3px 10px rgba(194,24,91,.25);transition:transform .15s;}
+.open-btn:hover{transform:translateY(-2px);}
+.letter-open{background:#fff;border:1.5px solid var(--pink-soft);border-radius:16px;padding:16px;}
+.letter-text{font-size:13px;color:var(--text-dark);line-height:1.8;white-space:pre-wrap;word-break:break-word;margin-bottom:10px;}
+.letter-footer{display:flex;justify-content:space-between;align-items:center;flex-wrap:wrap;gap:6px;}
+.letter-meta{font-size:11px;color:var(--text-soft);}
+.letter-del{background:none;border:none;font-size:11px;color:var(--pink-soft);cursor:pointer;font-family:'Nunito',sans-serif;}
+.letter-del:hover{color:var(--pink-deep);}
+.prompt-chip{font-size:12px;background:#fff;border:1.5px solid var(--pink-soft);color:var(--pink-deep);border-radius:20px;padding:5px 12px;cursor:pointer;font-family:'Nunito',sans-serif;font-weight:600;transition:all .15s;white-space:nowrap;}
+.prompt-chip:hover{background:var(--pink-deep);color:#fff;border-color:var(--pink-deep);}
 
-  .item-list { display:flex; flex-direction:column; gap:7px; }
-  .item-chip { display:flex; align-items:center; justify-content:space-between; background:var(--pink-light); border:1px solid rgba(244,143,177,0.4); border-radius:12px; padding:9px 13px; font-size:13px; color:var(--text-dark); }
-  .chip-left { display:flex; align-items:center; gap:7px; flex:1; min-width:0; flex-wrap:wrap; }
-  .chip-text { word-break:break-word; white-space:normal; flex:1; min-width:0; }
-  .show-more-btn { display:block; width:100%; margin-top:8px; background:var(--pink-pale); border:1.5px dashed var(--pink-soft); color:var(--pink-deep); font-family:'Nunito',sans-serif; font-weight:700; font-size:12px; padding:7px; border-radius:10px; cursor:pointer; text-align:center; transition:background 0.2s; }
-  .show-more-btn:hover { background:var(--pink-blush); }
-  .tag { font-size:10px; background:var(--pink-deep); color:white; border-radius:8px; padding:2px 8px; white-space:nowrap; flex-shrink:0; }
-  .who-tag { font-size:10px; background:var(--pink-blush); color:var(--pink-deep); border:1px solid var(--pink-soft); border-radius:8px; padding:2px 8px; white-space:nowrap; flex-shrink:0; }
-  .del-btn { background:none; border:none; color:var(--pink-soft); cursor:pointer; font-size:18px; line-height:1; padding:0 0 0 6px; flex-shrink:0; }
-  .del-btn:hover { color:var(--pink-deep); }
+.footer{text-align:center;font-size:12px;color:var(--text-soft);margin-top:2rem;font-style:italic;}
 
-  .note-entry { background:var(--pink-light); border:1px solid rgba(244,143,177,0.4); border-radius:14px; padding:11px 14px; }
-  .note-text { font-size:13px; color:var(--text-dark); line-height:1.6; white-space:pre-wrap; word-break:break-word; }
-  .note-footer { display:flex; justify-content:space-between; align-items:center; margin-top:6px; flex-wrap:wrap; gap:4px; }
-  .note-meta { font-size:11px; color:var(--text-soft); }
-  .note-author { font-weight:700; color:var(--pink-deep); }
-  .note-del { background:none; border:none; font-size:11px; color:var(--pink-soft); cursor:pointer; font-family:'Nunito',sans-serif; }
-  .note-del:hover { color:var(--pink-deep); }
-
-  .empty { font-size:13px; color:var(--text-soft); font-style:italic; text-align:center; padding:0.5rem; }
-  .loading-msg { font-size:13px; color:var(--pink-soft); text-align:center; padding:0.5rem; }
-
-  .setup-banner { background:#fff8e1; border:1.5px solid #ffe082; border-radius:14px; padding:14px 16px; margin-bottom:1.25rem; font-size:13px; color:#6d4c00; line-height:1.7; }
-  .setup-banner strong { display:block; font-size:14px; margin-bottom:4px; }
-
-  .fact-box { background:linear-gradient(135deg,#fff0f5,#fce4ec); border:2px solid var(--pink-soft); border-radius:18px; padding:1.5rem; text-align:center; }
-  .fact-emoji { font-size:36px; display:block; margin-bottom:0.75rem; animation:wiggle 3s ease-in-out infinite; }
-  @keyframes wiggle { 0%,100%{transform:rotate(-5deg)} 50%{transform:rotate(5deg)} }
-  .fact-text { font-size:15px; color:var(--text-dark); line-height:1.7; font-weight:600; }
-  .fact-day { font-size:11px; color:var(--text-soft); margin-top:8px; }
-  .btn-refresh { margin-top:1rem; background:var(--pink-light); border:1.5px solid var(--pink-soft); color:var(--pink-deep); font-family:'Nunito',sans-serif; font-weight:700; font-size:13px; padding:8px 18px; border-radius:12px; cursor:pointer; }
-  .btn-refresh:hover { background:var(--pink-blush); }
-
-
-
-  /* DAY FACT */
-  .day-fact-box { background:rgba(255,255,255,0.7); border:1.5px solid var(--pink-soft); border-radius:16px; padding:12px 18px; display:flex; align-items:center; gap:10px; text-align:left; }
-  .day-fact-emoji { font-size:22px; flex-shrink:0; }
-  .day-fact-text { font-size:13px; color:var(--text-dark); line-height:1.6; }
-  .day-fact-text strong { color:var(--pink-deep); }
-  /* WOULD YOU RATHER */
-  .wyr-box { background:linear-gradient(135deg,#fff0f5,#fce4ec); border:2px solid var(--pink-soft); border-radius:18px; padding:1.25rem; text-align:center; }
-  .wyr-question { font-family:'Playfair Display',serif; font-size:17px; color:var(--text-dark); font-style:italic; margin-bottom:1.25rem; line-height:1.5; }
-  .wyr-buttons { display:flex; align-items:center; gap:10px; flex-wrap:wrap; justify-content:center; }
-  .wyr-btn { flex:1; min-width:120px; max-width:220px; font-family:'Nunito',sans-serif; font-weight:700; font-size:13px; padding:12px 10px; border:2px solid var(--pink-soft); border-radius:14px; background:white; color:var(--pink-deep); cursor:pointer; transition:all 0.2s; line-height:1.4; }
-  .wyr-btn:hover { background:var(--pink-deep); color:white; border-color:var(--pink-deep); transform:translateY(-2px); }
-  .wyr-btn.voted { background:var(--pink-deep); color:white; border-color:var(--pink-deep); }
-  .wyr-or { font-weight:700; font-size:13px; color:var(--text-soft); flex-shrink:0; }
-  .wyr-bar-wrap { display:flex; border-radius:12px; overflow:hidden; height:28px; margin:1rem 0 0.5rem; border:1px solid var(--pink-soft); }
-  .wyr-bar-a { background:var(--pink-deep); height:100%; transition:width 0.6s ease; display:flex; align-items:center; justify-content:center; font-size:11px; font-weight:700; color:white; }
-  .wyr-bar-b { background:var(--pink-soft); height:100%; transition:width 0.6s ease; display:flex; align-items:center; justify-content:center; font-size:11px; font-weight:700; color:white; }
-  .wyr-votes { font-size:12px; color:var(--text-soft); margin-top:4px; }
-
-  /* LETTERS */
-  .letter-sealed { background:var(--pink-light); border:2px dashed var(--pink-soft); border-radius:16px; padding:14px 16px; }
-  .letter-when { font-family:'Playfair Display',serif; font-size:15px; color:var(--pink-deep); font-style:italic; margin-bottom:8px; }
-  .letter-from { font-size:11px; color:var(--text-soft); margin-bottom:10px; }
-  .open-btn { font-family:'Nunito',sans-serif; font-weight:700; font-size:13px; padding:8px 18px; background:linear-gradient(135deg,var(--pink-mid),var(--pink-deep)); color:white; border:none; border-radius:10px; cursor:pointer; box-shadow:0 3px 10px rgba(194,24,91,0.25); transition:transform 0.15s; }
-  .open-btn:hover { transform:translateY(-2px); }
-  .letter-open { background:white; border:1.5px solid var(--pink-soft); border-radius:16px; padding:16px; }
-  .letter-text { font-size:13px; color:var(--text-dark); line-height:1.8; white-space:pre-wrap; word-break:break-word; margin-bottom:10px; }
-  .letter-footer { display:flex; justify-content:space-between; align-items:center; flex-wrap:wrap; gap:6px; }
-  .letter-meta { font-size:11px; color:var(--text-soft); }
-  .letter-del { background:none; border:none; font-size:11px; color:var(--pink-soft); cursor:pointer; font-family:'Nunito',sans-serif; }
-  .letter-del:hover { color:var(--pink-deep); }
-  .prompt-chip { font-size:12px; background:white; border:1.5px solid var(--pink-soft); color:var(--pink-deep); border-radius:20px; padding:5px 12px; cursor:pointer; font-family:'Nunito',sans-serif; font-weight:600; transition:all 0.15s; white-space:nowrap; }
-  .prompt-chip:hover { background:var(--pink-deep); color:white; border-color:var(--pink-deep); }
-  .footer { text-align:center; font-size:12px; color:var(--text-soft); margin-top:2rem; font-style:italic; }
-
-  @media (max-width:480px) {
-    .cbox { min-width:68px; padding:10px 12px; } .cbox-num { font-size:28px; }
-    .input-row { flex-direction:column; } input[type="text"], select { min-width:100%; }
-  }
+@media(max-width:480px){
+  .cbox{min-width:68px;padding:10px 12px;} .cbox-num{font-size:28px;}
+  .input-row{flex-direction:column;} input[type=text],select{min-width:100%;}
+}
 </style>
 </head>
 <body>
 
 <div class="name-screen" id="name-screen">
   <div class="name-box">
-    <span style="font-size:40px;display:block;margin-bottom:0.75rem">💕</span>
+    <span style="font-size:40px;display:block;margin-bottom:.75rem">💕</span>
     <h2>Who's visiting today?</h2>
     <p>Your name will show on everything you post so you can see each other's messages 🩷</p>
     <div class="name-btns">
@@ -183,17 +182,9 @@
       <div class="poster-name" id="poster-name"></div>
     </div>
     <div class="bar-right">
-      <div class="sync-status">
-        <span class="sync-dot" id="sync-dot"></span>
-        <span id="sync-label">Connecting...</span>
-      </div>
+      <div class="sync-status"><span class="sync-dot live" id="sync-dot"></span><span id="sync-label">Live & synced 💕</span></div>
       <button class="switch-btn" onclick="switchUser()">Switch 🔄</button>
     </div>
-  </div>
-
-  <div class="setup-banner" id="setup-banner" style="display:none">
-    <strong>⚙️ One more step to connect Mia and Daddy!</strong>
-    Open this HTML file in a text editor (like Notepad or TextEdit). Find the section near the bottom of the page that says <em>PASTE YOUR FIREBASE CONFIG HERE</em> and replace the placeholder values with your real Firebase config. Full instructions are below the download! Until then, notes save locally on this device only.
   </div>
 
   <div class="hero">
@@ -211,7 +202,7 @@
       <div class="progress-wrap"><div class="progress-fill" id="prog-bar" style="width:0%"></div></div>
       <div class="progress-label" id="prog-label"></div>
     </div>
-    <div class="day-fact-box" id="day-fact-box" style="margin-top:1rem;display:none">
+    <div class="day-fact-box" id="day-fact-box" style="display:none">
       <span class="day-fact-emoji" id="day-fact-emoji">🎉</span>
       <p class="day-fact-text" id="day-fact-text"></p>
     </div>
@@ -220,10 +211,7 @@
   <div class="card">
     <div class="card-header"><span class="card-icon">🌸</span><span class="card-title">Things to do together</span></div>
     <div class="input-row">
-      <select id="wish-cat">
-        <option>Movie Night 🎬</option><option>Restaurant 🍕</option>
-        <option>Weekend Date 🎡</option><option>Activity 🎮</option><option>Other 💕</option>
-      </select>
+      <select id="wish-cat"><option>Movie Night 🎬</option><option>Restaurant 🍕</option><option>Weekend Date 🎡</option><option>Activity 🎮</option><option>Other 💕</option></select>
       <input type="text" id="wish-input" placeholder="e.g. watch Moana, go to Olive Garden..." />
       <button class="btn btn-pink" onclick="addWish()">Add ✨</button>
     </div>
@@ -233,8 +221,8 @@
   <div class="card">
     <div class="card-header"><span class="card-icon">💌</span><span class="card-title">Message vault — notes to each other</span></div>
     <textarea id="msg-input" placeholder="Mia or Daddy — write a note here for each other 💕"></textarea>
-    <div style="text-align:right"><button class="btn btn-pink" onclick="addMessage()">Save note 💕</button></div>
-    <div class="item-list" id="msg-list" style="margin-top:0.75rem"><div class="loading-msg">Loading... 💕</div></div>
+    <div style="text-align:right;margin-top:.5rem"><button class="btn btn-pink" onclick="addMessage()">Save note 💕</button></div>
+    <div class="item-list" id="msg-list" style="margin-top:.75rem"><div class="loading-msg">Loading... 💕</div></div>
   </div>
 
   <div class="card">
@@ -266,8 +254,6 @@
     </div>
   </div>
 
-
-  <!-- WOULD YOU RATHER -->
   <div class="card">
     <div class="card-header"><span class="card-icon">🤔</span><span class="card-title">Would you rather?</span></div>
     <p style="font-size:13px;color:var(--text-soft);margin-bottom:1rem;">A new question every day — see if you pick the same thing! 💕</p>
@@ -278,45 +264,35 @@
         <div class="wyr-or">OR</div>
         <button class="wyr-btn" id="wyr-b" onclick="voteWYR('b')"></button>
       </div>
-      <div class="wyr-result" id="wyr-result" style="display:none">
-        <div class="wyr-bar-wrap">
-          <div class="wyr-bar-a" id="wyr-bar-a"></div>
-          <div class="wyr-bar-b" id="wyr-bar-b"></div>
-        </div>
+      <div id="wyr-result" style="display:none">
+        <div class="wyr-bar-wrap"><div class="wyr-bar-a" id="wyr-bar-a"></div><div class="wyr-bar-b" id="wyr-bar-b"></div></div>
         <p class="wyr-votes" id="wyr-votes"></p>
       </div>
       <button class="btn-refresh" onclick="newWYR()" style="margin-top:1rem">New question 🎲</button>
     </div>
   </div>
 
-  <!-- LETTERS TO OPEN WHEN -->
   <div class="card">
     <div class="card-header"><span class="card-icon">💝</span><span class="card-title">Letters to open when...</span></div>
-
-    <!-- INBOX -->
     <div style="margin-bottom:1.25rem">
-      <div style="display:flex;align-items:center;gap:8px;margin-bottom:0.75rem">
+      <div style="display:flex;align-items:center;gap:8px;margin-bottom:.75rem">
         <span style="font-size:16px">📬</span>
         <span style="font-family:'Playfair Display',serif;font-size:15px;color:var(--pink-deep);font-style:italic">Letters waiting for you</span>
       </div>
       <div id="letter-list" style="display:flex;flex-direction:column;gap:10px"><div class="loading-msg">Loading... 💕</div></div>
     </div>
-
-    <!-- DIVIDER -->
     <div style="border-top:1.5px dashed var(--pink-blush);margin-bottom:1.25rem"></div>
-
-    <!-- COMPOSE -->
     <div>
-      <div style="display:flex;align-items:center;gap:8px;margin-bottom:0.75rem">
+      <div style="display:flex;align-items:center;gap:8px;margin-bottom:.75rem">
         <span style="font-size:16px">✍️</span>
         <span style="font-family:'Playfair Display',serif;font-size:15px;color:var(--pink-deep);font-style:italic">Write a new letter</span>
       </div>
-      <p style="font-size:13px;color:var(--text-soft);margin-bottom:0.75rem;">The other person taps to reveal it when the moment is right 💌</p>
+      <p style="font-size:13px;color:var(--text-soft);margin-bottom:.75rem">The other person taps to reveal it when the moment is right 💌</p>
       <p style="font-size:12px;color:var(--text-soft);margin-bottom:8px">Tap a prompt to get started:</p>
-      <div id="prompt-chips" style="display:flex;flex-wrap:wrap;gap:6px;margin-bottom:0.85rem"></div>
+      <div id="prompt-chips" style="display:flex;flex-wrap:wrap;gap:6px;margin-bottom:.85rem"></div>
       <div style="display:flex;flex-direction:column;gap:8px">
-        <input type="text" id="letter-when" placeholder='e.g. when you miss me most / when you need a laugh' />
-        <textarea id="letter-body" placeholder="Write your letter here... pour your heart out 💕" style="min-height:100px;width:100%;font-family:Nunito,sans-serif;font-size:13px;padding:9px 13px;border:1.5px solid var(--pink-soft);border-radius:12px;background:var(--pink-pale);color:var(--text-dark);outline:none;resize:vertical;margin-bottom:0"></textarea>
+        <input type="text" id="letter-when" placeholder="e.g. when you miss me most / when you need a laugh" />
+        <textarea id="letter-body" placeholder="Write your letter here... pour your heart out 💕" style="min-height:100px"></textarea>
         <div style="text-align:right"><button class="btn btn-pink" onclick="addLetter()">Seal this letter 💝</button></div>
       </div>
     </div>
@@ -326,30 +302,8 @@
 </div>
 
 <script>
-// Global bridge — makes module functions accessible from onclick attributes
-window.__bridge = {};
-function setUser(n) { window.__bridge.setUser && window.__bridge.setUser(n); }
-function switchUser() { window.__bridge.switchUser && window.__bridge.switchUser(); }
-function voteWYR(c) { window.__bridge.voteWYR && window.__bridge.voteWYR(c); }
-function newWYR() { window.__bridge.newWYR && window.__bridge.newWYR(); }
-function nextFact() { window.__bridge.nextFact && window.__bridge.nextFact(); }
-function addWish() { window.__bridge.addWish && window.__bridge.addWish(); }
-function addMessage() { window.__bridge.addMessage && window.__bridge.addMessage(); }
-function addSong() { window.__bridge.addSong && window.__bridge.addSong(); }
-function addMiss() { window.__bridge.addMiss && window.__bridge.addMiss(); }
-function addLetter() { window.__bridge.addLetter && window.__bridge.addLetter(); }
-function openLetter(k) { window.__bridge.openLetter && window.__bridge.openLetter(k); }
-function delLetter(k) { window.__bridge.delLetter && window.__bridge.delLetter(k); }
-function fbDel(p,k) { window.__bridge.fbDel && window.__bridge.fbDel(p,k); }
-function toggleList(p,e) { window.__bridge.toggleList && window.__bridge.toggleList(p,e); }
-</script>
-<script type="module">
-// ════════════════════════════════════════════
-//  PASTE YOUR FIREBASE CONFIG HERE
-//  Get this from Firebase Console →
-//  Project Settings → Your Apps → Config
-// ════════════════════════════════════════════
-const firebaseConfig = {
+// ── FIREBASE CONFIG ───────────────────────────
+firebase.initializeApp({
   apiKey:            "AIzaSyBNP7dr3BamIHF2QPLJnWauVohamX285Q0",
   authDomain:        "daddy-countdown.firebaseapp.com",
   databaseURL:       "https://daddy-countdown-default-rtdb.firebaseio.com",
@@ -357,532 +311,450 @@ const firebaseConfig = {
   storageBucket:     "daddy-countdown.firebasestorage.app",
   messagingSenderId: "594735941602",
   appId:             "1:594735941602:web:e6a5d027a88060bf695bbb"
-};
-// ════════════════════════════════════════════
+});
+var db = firebase.database();
 
-import { initializeApp }                          from "https://www.gstatic.com/firebasejs/10.12.0/firebase-app.js";
-import { getDatabase, ref, push, onValue, remove } from "https://www.gstatic.com/firebasejs/10.12.0/firebase-database.js";
-
-const IS_CONFIGURED = true;
-let db = null;
-
-if (IS_CONFIGURED) {
-  try {
-    const app = initializeApp(firebaseConfig);
-    db = getDatabase(app);
-    setSync('live', 'Live & synced 💕');
-  } catch(e) {
-    setSync('off', 'Error — local only');
-    document.getElementById('setup-banner').style.display = 'block';
-  }
-} else {
-  document.getElementById('setup-banner').style.display = 'block';
-  setSync('off', 'Local only');
+// ── FLOATING HEARTS ───────────────────────────
+var symbols = ['💕','💗','💖','💓','🌸','✨','💝','🩷'];
+var bgEl = document.getElementById('hearts-bg');
+for (var i = 0; i < 22; i++) {
+  var h = document.createElement('div');
+  h.className = 'hrt';
+  h.textContent = symbols[Math.floor(Math.random()*symbols.length)];
+  h.style.cssText = 'left:'+Math.random()*100+'vw;font-size:'+(14+Math.random()*20)+'px;animation-duration:'+(12+Math.random()*20)+'s;animation-delay:'+(-Math.random()*20)+'s';
+  bgEl.appendChild(h);
 }
 
-function setSync(state, label) {
-  const dot = document.getElementById('sync-dot');
-  dot.className = 'sync-dot' + (state === 'live' ? ' live' : state === 'saving' ? ' saving' : '');
-  document.getElementById('sync-label').textContent = label;
-}
+// ── USER ──────────────────────────────────────
+var currentUser = sessionStorage.getItem('dd_user') || '';
 
-// ── USER ─────────────────────────────────────
-let currentUser = sessionStorage.getItem('dd_user') || '';
-
-window.__bridge.setUser = function(name) {
+function setUser(name) {
   currentUser = name;
   sessionStorage.setItem('dd_user', name);
   document.getElementById('poster-name').textContent = name + (name === 'Mia' ? ' 🌸' : ' ✈️');
   document.getElementById('name-screen').style.display = 'none';
   document.getElementById('main-wrapper').style.display = 'block';
-  IS_CONFIGURED && db ? initListeners() : loadLocal();
-};
+  initListeners();
+}
 
-window.__bridge.switchUser = function() {
+function switchUser() {
   sessionStorage.removeItem('dd_user');
+  currentUser = '';
   document.getElementById('name-screen').style.display = 'flex';
   document.getElementById('main-wrapper').style.display = 'none';
-};
+}
 
 if (currentUser) {
   document.getElementById('poster-name').textContent = currentUser + (currentUser === 'Mia' ? ' 🌸' : ' ✈️');
   document.getElementById('name-screen').style.display = 'none';
   document.getElementById('main-wrapper').style.display = 'block';
-  IS_CONFIGURED && db ? initListeners() : loadLocal();
+  initListeners();
 }
 
-// ── FIREBASE ─────────────────────────────────
+// ── SYNC STATUS ───────────────────────────────
+function setSync(state, label) {
+  var dot = document.getElementById('sync-dot');
+  dot.className = 'sync-dot' + (state === 'live' ? ' live' : state === 'saving' ? ' saving' : '');
+  document.getElementById('sync-label').textContent = label;
+}
+
+// ── FIREBASE LISTENERS ────────────────────────
+var listCache = {};
+
 function initListeners() {
-  listenAndCache('dd_wishes',   'wish-list',  renderWish);
-  listenAndCache('dd_messages', 'msg-list',   renderMsg);
-  listenAndCache('dd_songs',    'song-list',  renderSong);
-  listenAndCache('dd_misses',   'miss-list',  renderMiss);
+  listenList('dd_wishes',   'wish-list',  renderWish);
+  listenList('dd_messages', 'msg-list',   renderMsg);
+  listenList('dd_songs',    'song-list',  renderSong);
+  listenList('dd_misses',   'miss-list',  renderMiss);
+  listenLetters();
+  listenWYR();
 }
 
-function listenAndCache(path, elId, renderer) {
-  onValue(ref(db, path), snap => {
-    const el = document.getElementById(elId);
-    const data = snap.val();
+function listenList(path, elId, renderer) {
+  db.ref(path).on('value', function(snap) {
+    var el = document.getElementById(elId);
+    var data = snap.val();
     if (!data) { el.innerHTML = '<div class="empty">Nothing yet — add something!</div>'; return; }
-    const items = Object.entries(data).sort((a,b)=>(b[1].ts||0)-(a[1].ts||0));
-    _listCache[path] = { items, renderer };
-    renderWithShowMore(el, items, renderer, path);
-  });
-}
-
-function listen(path, elId, renderer) {
-  onValue(ref(db, path), snap => {
-    const el = document.getElementById(elId);
-    const data = snap.val();
-    if (!data) { el.innerHTML = '<div class="empty">Nothing yet — add something!</div>'; return; }
-    const items = Object.entries(data).sort((a,b)=>(b[1].ts||0)-(a[1].ts||0));
+    var items = Object.entries(data).sort(function(a,b){ return (b[1].ts||0)-(a[1].ts||0); });
+    listCache[path] = { items: items, renderer: renderer };
     renderWithShowMore(el, items, renderer, path);
   });
 }
 
 function renderWithShowMore(el, items, renderer, path) {
-  const PREVIEW = 3;
-  const showing = el.dataset.expanded === 'true' ? items.length : Math.min(PREVIEW, items.length);
-  let html = items.slice(0, showing).map(([k,v]) => renderer(k, v)).join('');
+  var PREVIEW = 3;
+  var expanded = el.dataset.expanded === 'true';
+  var showing = expanded ? items.length : Math.min(PREVIEW, items.length);
+  var html = items.slice(0, showing).map(function(entry){ return renderer(entry[0], entry[1]); }).join('');
   if (items.length > PREVIEW) {
-    if (el.dataset.expanded === 'true') {
-      html += `<button class="show-more-btn" onclick="toggleList('${path}','${el.id}')">Show less ▲</button>`;
+    if (expanded) {
+      html += '<button class="show-more-btn" onclick="toggleList(\''+path+'\',\''+el.id+'\')">Show less ▲</button>';
     } else {
-      html += `<button class="show-more-btn" onclick="toggleList('${path}','${el.id}')">See all ${items.length} entries ▼</button>`;
+      html += '<button class="show-more-btn" onclick="toggleList(\''+path+'\',\''+el.id+'\')">See all '+items.length+' entries ▼</button>';
     }
   }
   el.innerHTML = html;
 }
 
-// store items per path for toggling
-const _listCache = {};
-window.__bridge.toggleList = function(path, elId) {
-  const el = document.getElementById(elId);
+function toggleList(path, elId) {
+  var el = document.getElementById(elId);
   el.dataset.expanded = el.dataset.expanded === 'true' ? 'false' : 'true';
-  if (_listCache[path]) renderWithShowMore(el, _listCache[path].items, _listCache[path].renderer, path);
-};
-
-function fbAdd(path, data) {
-  setSync('saving','Saving...');
-  push(ref(db, path), { ...data, ts: Date.now() }).then(() => setSync('live','Live & synced 💕'));
+  if (listCache[path]) renderWithShowMore(el, listCache[path].items, listCache[path].renderer, path);
 }
-
-_fbDelInternal = function(path, key) {
-  setSync('saving','Saving...');
-  remove(ref(db, path + '/' + key)).then(() => setSync('live','Live & synced 💕'));
-};
 
 // ── RENDERERS ─────────────────────────────────
 function renderWish(k, v) {
-  return `<div class="item-chip"><div class="chip-left"><span class="chip-text">${esc(v.val)}</span><span class="tag">${esc(v.cat)}</span><span class="who-tag">${esc(v.who)}</span></div><button class="del-btn" onclick="fbDel('dd_wishes','${k}')">×</button></div>`;
+  return '<div class="item-chip"><div class="chip-left"><span class="chip-text">'+esc(v.val)+'</span><span class="tag">'+esc(v.cat)+'</span><span class="who-tag">'+esc(v.who)+'</span></div><button class="del-btn" onclick="fbDel(\'dd_wishes\',\''+k+'\')">×</button></div>';
 }
 function renderMsg(k, v) {
-  return `<div class="note-entry"><p class="note-text">${esc(v.text)}</p><div class="note-footer"><div class="note-meta"><span class="note-author">${esc(v.who)}</span> · ${esc(v.date)}</div><button class="note-del" onclick="fbDel('dd_messages','${k}')">delete</button></div></div>`;
+  return '<div class="note-entry"><p class="note-text">'+esc(v.text)+'</p><div class="note-footer"><div class="note-meta"><span class="note-author">'+esc(v.who)+'</span> · '+esc(v.date)+'</div><button class="note-del" onclick="fbDel(\'dd_messages\',\''+k+'\')">delete</button></div></div>';
 }
 function renderSong(k, v) {
-  const query = encodeURIComponent(v.title + ' ' + v.artist);
-  const spotifyUrl = `https://open.spotify.com/search/${query}`;
-  return `<div class="item-chip"><div class="chip-left"><span>🎵</span><span class="chip-text"><strong>${esc(v.title)}</strong> — ${esc(v.artist)}</span><span class="who-tag">${esc(v.who)}</span><a href="${spotifyUrl}" target="_blank" style="font-size:11px;background:#1db954;color:white;border-radius:8px;padding:2px 8px;text-decoration:none;white-space:nowrap;flex-shrink:0;font-weight:700;">▶ Spotify</a></div><button class="del-btn" onclick="fbDel('dd_songs','${k}')">×</button></div>`;
+  var q = encodeURIComponent(v.title+' '+v.artist);
+  var url = 'https://open.spotify.com/search/'+q;
+  return '<div class="item-chip"><div class="chip-left"><span>🎵</span><span class="chip-text"><strong>'+esc(v.title)+'</strong> — '+esc(v.artist)+'</span><span class="who-tag">'+esc(v.who)+'</span><a href="'+url+'" target="_blank" style="font-size:11px;background:#1db954;color:#fff;border-radius:8px;padding:2px 8px;text-decoration:none;white-space:nowrap;font-weight:700;">▶ Spotify</a></div><button class="del-btn" onclick="fbDel(\'dd_songs\',\''+k+'\')">×</button></div>';
 }
 function renderMiss(k, v) {
-  return `<div class="item-chip"><div class="chip-left"><span>💗</span><span class="chip-text">${esc(v.text)}</span><span class="who-tag">${esc(v.who)}</span></div><button class="del-btn" onclick="fbDel('dd_misses','${k}')">×</button></div>`;
+  return '<div class="item-chip"><div class="chip-left"><span>💗</span><span class="chip-text">'+esc(v.text)+'</span><span class="who-tag">'+esc(v.who)+'</span></div><button class="del-btn" onclick="fbDel(\'dd_misses\',\''+k+'\')">×</button></div>';
 }
 
-// ── ADD FUNCTIONS ─────────────────────────────
-window.__bridge.addWish = function() {
-  const val = document.getElementById('wish-input').value.trim();
-  const cat = document.getElementById('wish-cat').value;
-  if (!val) return flash('wish-input');
-  const data = { val, cat, who: currentUser };
-  IS_CONFIGURED && db ? fbAdd('dd_wishes', data) : localAdd('dd_wishes', data, 'wish-list', renderWish);
+// ── ADD / DELETE ──────────────────────────────
+function fbAdd(path, data) {
+  setSync('saving','Saving...');
+  data.ts = Date.now();
+  db.ref(path).push(data).then(function(){ setSync('live','Live & synced 💕'); });
+}
+
+function fbDel(path, key) {
+  setSync('saving','Saving...');
+  db.ref(path+'/'+key).remove().then(function(){ setSync('live','Live & synced 💕'); });
+}
+
+function addWish() {
+  var val = document.getElementById('wish-input').value.trim();
+  var cat = document.getElementById('wish-cat').value;
+  if (!val) { flash('wish-input'); return; }
+  fbAdd('dd_wishes', { val:val, cat:cat, who:currentUser });
   document.getElementById('wish-input').value = '';
-};
-window.__bridge.addMessage = function() {
-  const text = document.getElementById('msg-input').value.trim();
-  if (!text) return flash('msg-input');
-  const date = new Date().toLocaleDateString('en-US',{month:'long',day:'numeric',year:'numeric'});
-  const data = { text, date, who: currentUser };
-  IS_CONFIGURED && db ? fbAdd('dd_messages', data) : localAdd('dd_messages', data, 'msg-list', renderMsg);
+}
+function addMessage() {
+  var text = document.getElementById('msg-input').value.trim();
+  if (!text) { flash('msg-input'); return; }
+  var date = new Date().toLocaleDateString('en-US',{month:'long',day:'numeric',year:'numeric'});
+  fbAdd('dd_messages', { text:text, date:date, who:currentUser });
   document.getElementById('msg-input').value = '';
-};
-window.__bridge.addSong = function() {
-  const artist = document.getElementById('song-artist').value.trim();
-  const title  = document.getElementById('song-title-input').value.trim();
+}
+function addSong() {
+  var artist = document.getElementById('song-artist').value.trim();
+  var title  = document.getElementById('song-title-input').value.trim();
   if (!artist || !title) return;
-  const data = { artist, title, who: currentUser };
-  IS_CONFIGURED && db ? fbAdd('dd_songs', data) : localAdd('dd_songs', data, 'song-list', renderSong);
+  fbAdd('dd_songs', { artist:artist, title:title, who:currentUser });
   document.getElementById('song-artist').value = '';
   document.getElementById('song-title-input').value = '';
-};
-window.__bridge.addMiss = function() {
-  const text = document.getElementById('miss-input').value.trim();
-  if (!text) return flash('miss-input');
-  const data = { text, who: currentUser };
-  IS_CONFIGURED && db ? fbAdd('dd_misses', data) : localAdd('dd_misses', data, 'miss-list', renderMiss);
+}
+function addMiss() {
+  var text = document.getElementById('miss-input').value.trim();
+  if (!text) { flash('miss-input'); return; }
+  fbAdd('dd_misses', { text:text, who:currentUser });
   document.getElementById('miss-input').value = '';
-};
-
-// ── LOCAL STORAGE FALLBACK ────────────────────
-function localAdd(key, data, elId, renderer) {
-  const list = JSON.parse(localStorage.getItem(key)||'[]');
-  list.unshift({ id: Date.now().toString(), ...data });
-  localStorage.setItem(key, JSON.stringify(list));
-  renderLocalList(key, elId, renderer);
-}
-function renderLocalList(key, elId, renderer) {
-  const el = document.getElementById(elId);
-  const list = JSON.parse(localStorage.getItem(key)||'[]');
-  if (!list.length) { el.innerHTML = '<div class="empty">Nothing yet — add something!</div>'; return; }
-  const items = list.map(item => [item.id, item]);
-  _listCache[key] = { items, renderer };
-  renderWithShowMore(el, items, renderer, key);
-}
-function loadLocal() {
-  renderLocalList('dd_wishes','wish-list',renderWish);
-  renderLocalList('dd_messages','msg-list',renderMsg);
-  renderLocalList('dd_songs','song-list',renderSong);
-  renderLocalList('dd_misses','miss-list',renderMiss);
 }
 
-// Override fbDel to also handle local
-const _fbDel = window.fbDel;
-window.__bridge.fbDel = function(path, key) {
-  if (IS_CONFIGURED && db) { _fbDelInternal(path, key); return; }
-  const list = JSON.parse(localStorage.getItem(path)||'[]').filter(i => i.id !== key);
-  localStorage.setItem(path, JSON.stringify(list));
-  const map = {dd_wishes:['wish-list',renderWish],dd_messages:['msg-list',renderMsg],dd_songs:['song-list',renderSong],dd_misses:['miss-list',renderMiss]};
-  if (map[path]) renderLocalList(path, map[path][0], map[path][1]);
-};
-
-// ── FLOATING HEARTS ───────────────────────────
-const symbols = ['💕','💗','💖','💓','🌸','✨','💝','🩷'];
-const bgEl = document.getElementById('hearts-bg');
-for (let i = 0; i < 22; i++) {
-  const h = document.createElement('div'); h.className = 'hrt';
-  h.textContent = symbols[Math.floor(Math.random()*symbols.length)];
-  h.style.cssText = `left:${Math.random()*100}vw;font-size:${14+Math.random()*20}px;animation-duration:${12+Math.random()*20}s;animation-delay:${-Math.random()*20}s`;
-  bgEl.appendChild(h);
-}
+// Enter key shortcuts
+document.getElementById('wish-input').addEventListener('keydown',function(e){if(e.key==='Enter')addWish();});
+document.getElementById('miss-input').addEventListener('keydown',function(e){if(e.key==='Enter')addMiss();});
+document.getElementById('song-title-input').addEventListener('keydown',function(e){if(e.key==='Enter')addSong();});
 
 // ── COUNTDOWN ─────────────────────────────────
-const START = new Date('2026-04-07T00:00:00'), END = new Date('2026-10-31T23:59:59');
-const TOTAL_MS = END - START;
-function pad(n){return String(n).padStart(2,'0')}
-function tick() {
-  const now=new Date(), diff=END-now;
-  if(diff<=0){['cd-days','cd-hours','cd-mins','cd-secs'].forEach(id=>document.getElementById(id).textContent='0');document.getElementById('milestone-msg').textContent='🎉 DADDY IS HOME! 🎉';document.getElementById('prog-bar').style.width='100%';return;}
-  document.getElementById('cd-days').textContent=Math.floor(diff/86400000);
-  document.getElementById('cd-hours').textContent=pad(Math.floor((diff%86400000)/3600000));
-  document.getElementById('cd-mins').textContent=pad(Math.floor((diff%3600000)/60000));
-  document.getElementById('cd-secs').textContent=pad(Math.floor((diff%60000)/1000));
-  const pct=Math.min(100,Math.max(0,((now-START)/TOTAL_MS)*100));
-  document.getElementById('prog-bar').style.width=pct.toFixed(1)+'%';
-  document.getElementById('prog-label').textContent=pct.toFixed(1)+'% of the way there 💕';
-  const days=Math.floor(diff/86400000);
-  let msg='💕 Only '+days+' more days until Daddy is home!';
-  if(pct<5)msg="🚀 The journey has just begun — you've totally got this!";
-  else if(Math.abs(pct-25)<2)msg='🎊 25% done — you\'re crushing it!';
-  else if(Math.abs(pct-50)<1.5)msg='🎉 HALFWAY THERE! You are incredible!';
-  else if(Math.abs(pct-75)<1.5)msg='✨ 75% done — the finish line is in sight!';
-  else if(days<=7)msg='🚨 ONE WEEK LEFT! Get the banner ready!';
-  else if(days<=14)msg='🌟 Less than 2 weeks — so close!';
-  else if(days<=30)msg='🌸 Less than one month left!';
-  else if(days<=60)msg='💫 Less than 2 months to go!';
-  else if(days<=100)msg='🎊 Less than 100 days!';
-  else if(days<=180)msg='🌻 Less than 6 months — getting so close!';
-  document.getElementById('milestone-msg').textContent=msg;
-  updateDayFact(days);
-}
-tick(); setInterval(tick,1000);
+var START = new Date('2026-04-07T00:00:00');
+var END   = new Date('2026-10-31T23:59:59');
+var TOTAL_MS = END - START;
 
-// ── FACTS ─────────────────────────────────────
-const facts=[{e:'🐙',t:"Octopuses have three hearts and blue blood — they're basically underwater aliens!"},{e:'😂',t:"Why don't scientists trust atoms? Because they make up everything!"},{e:'🌍',t:"A day on Venus is longer than a year on Venus. Time is genuinely weird out there."},{e:'🦷',t:"Why did the tooth go to school? It wanted to get a little filling!"},{e:'🐴',t:"Horses literally cannot burp. Imagine holding in every single burp — forever."},{e:'😆',t:"What do you call a fish without eyes? A fsh! (Say it out loud!)"},{e:'🦈',t:"Sharks are older than trees. The ocean really said 'I had this handled.'"},{e:'🤡',t:"Why did the scarecrow win an award? He was outstanding in his field!"},{e:'🐝',t:"Bees can recognize human faces. So next time you see one... wave hello!"},{e:'🌙',t:"The moon is drifting away from Earth at the same speed your fingernails grow. Slow goodbye!"},{e:'🦩',t:"A group of flamingos is called a flamboyance. Honestly, iconic."},{e:'🎤',t:"Why can't Elsa have a balloon? Because she'll let it go!"},{e:'🧲',t:"There are more possible chess games than atoms in the entire observable universe. Big brain!"},{e:'🐌',t:"Snails can sleep for up to 3 years. Wish we could use that excuse for homework."},{e:'🍕',t:"Why did the pizza go to therapy? It had too many issues with its crust."},{e:'🌊',t:"We've explored more of the surface of Mars than the bottom of our own oceans. Spooky!"},{e:'🐧',t:"Penguins propose with a pebble. Fancier than some humans, honestly."},{e:'🧬',t:"You share 50% of your DNA with a banana. Technically, you're half fruity."},{e:'😹',t:"What do you call a sleeping dinosaur? A dino-snore!"},{e:'🌈',t:"A group of cats is called a clowder. A group of kittens is a kindle. You're welcome."},{e:'🦋',t:"Butterflies taste with their feet. Every landing is basically a taste test."},{e:'😄',t:"Why did the teddy bear say no to dessert? She was already stuffed!"},{e:'🐳',t:"A blue whale's heart is so big, a small child could crawl through its arteries. Wild!"},{e:'🤣',t:"What do you call a pile of cats? A meow-ntain!"},{e:'🌺',t:"Cleopatra lived closer in time to the Moon landing than to the building of the Great Pyramid. Mind = blown."},{e:'🐠',t:"Clownfish can change gender. So Nemo's dad could technically become his mom. Pixar, we have notes."},{e:'🎈',t:"Hot air balloons were first tested on a sheep, a duck, and a rooster. The original test pilots!"},{e:'🦉',t:"A group of owls is called a parliament. They do look pretty wise."},{e:'😜',t:"Why did the math book look so sad? It had too many problems!"},{e:'🪐',t:"Saturn's rings are mostly ice and rock — only about as thick as a 10-story building."},{e:'🐨',t:"Koalas sleep up to 22 hours a day. Absolute legends."},{e:'😂',t:"Why did the bicycle fall over? Because it was two-tired!"},{e:'🦒',t:"Giraffes have the same number of neck bones as humans — just MUCH bigger ones."},{e:'🍦',t:"Why did the ice cream truck break down? Because of the rocky road!"},{e:'🐘',t:"Elephants are the only animals that can't jump. They make up for it by being absolutely massive."},{e:'🤓',t:"Why was the computer cold? Because it left its Windows open!"},{e:'🦜',t:"African grey parrots can learn over 1,000 words. Some can even understand what they mean."},{e:'😆',t:"What do you call a fake noodle? An impasta!"},{e:'🐢',t:"Some turtles can breathe through their butts in winter. Science is wild."},{e:'🍩',t:"Why did the donut go to the dentist? It needed a filling!"},{e:'🌵',t:"A saguaro cactus can live over 150 years and doesn't grow its first arm until it's 75. Late bloomer!"},{e:'😂',t:"What do you call a bear with no teeth? A gummy bear!"},{e:'🦑',t:"The giant squid has eyes the size of basketballs. It can see predators from really, really far away."},{e:'🧀',t:"Why didn't the cheese want to be sliced? It had grater plans!"},{e:'🐿️',t:"Squirrels forget where they hid about half their nuts. Those forgotten nuts often grow into trees. Accidental gardeners!"},{e:'😄',t:"What do elves learn in school? The elf-abet!"},{e:'🌸',t:"Japan has a whole season dedicated to celebrating cherry blossoms called hanami!"},{e:'🤣',t:"Why can't you trust stairs? They're always up to something!"},{e:'🐬',t:"Dolphins have names for each other — they use unique whistle signatures to call friends."},{e:'🍔',t:"Why did the hamburger go to the gym? To get better buns!"},{e:'🦊',t:"A fox's bushy tail is called a brush. Fancy name for a very fluffy tail."},{e:'😂',t:"What do you call a shoe made from a banana? A slipper!"},{e:'🐦',t:"Crows can recognize human faces and hold grudges. Be nice to crows."},{e:'🎃',t:"Pumpkins are technically a fruit. Halloween is basically a fruit festival."},{e:'🤡',t:"Why did the golfer bring extra pants? In case he got a hole in one!"},{e:'🦝',t:"Raccoons wash their food before eating. Little germaphobes, honestly."},{e:'🍭',t:"Why did the lollipop go to school? It wanted to be a smartie!"},{e:'🐻',t:"Polar bears have black skin under their white fur. Their fur is also transparent. Fashion AND function!"},{e:'😜',t:"What do you call a lazy kangaroo? A pouch potato!"},{e:'🌮',t:"Why did the taco go to the bank? To get some extra chips!"},{e:'🦘',t:"A baby kangaroo is only the size of a grape when it's born. Tiny!"},{e:'😂',t:"Why did the cookie go to the doctor? Because it was feeling crummy!"},{e:'🎵',t:"Why did the music teacher need a ladder? To reach the high notes!"},{e:'🐺',t:"Wolves can hear each other howling from up to 10 miles away. Long-distance communication done right."},{e:'🍎',t:"Apples float in water because 25% of their volume is air. Basically little fruit balloons."},{e:'😹',t:"What do you call a dog magician? A labra-cadabra-dor!"},{e:'🦔',t:"When hedgehogs are happy they make little purring sounds. Tiny, prickly, adorable purring machines."},{e:'🌟',t:"There are more stars in the universe than grains of sand on all of Earth's beaches."},{e:'😆',t:"Why did the tomato turn red? Because it saw the salad dressing!"},{e:'🦚',t:"A peacock's tail is called a train. When it fans out it can be over 6 feet wide. Showoff!"},{e:'😂',t:"What do you call a sleeping T-Rex? A dino-snore! (Yes, this one is too good to only use once.)"},{e:'🌙',t:"On the moon, your footprints will last millions of years because there's no wind or rain to erase them."},{e:'🤣',t:"Why did the girl put sugar under her pillow? So she could have sweet dreams!"},{e:'🦭',t:"Sea otters hold hands while sleeping so they don't drift apart. The sweetest thing in nature."},{e:'🎨',t:"Why did the artist go to jail? Because she was framed!"},{e:'😄',t:"What do you call a fish that wears a crown? King of the sea-bass!"},{e:'🤓',t:"Why did the student eat his homework? Because the teacher told him it was a piece of cake!"},{e:'🦋',t:"A monarch butterfly migrates up to 3,000 miles every year. Tiny wings, massive journey."},{e:'🍟',t:"Why did the french fry win the race? Because it was on a roll!"},{e:'🐊',t:"Crocodiles can't stick out their tongues. Rude, but also kind of impressive."},{e:'😂',t:"Why did the astronaut break up with his girlfriend? Because he needed some space!"},{e:'🤣',t:"What do you call a cold dog? A chilly dog!"},{e:'🦁',t:"Lions sleep up to 20 hours a day. King of the jungle? More like king of napping."},{e:'🍀',t:"Why did the gardener win an award? Because she was outstanding in her field!"},{e:'🐙',t:"An octopus can change its color AND texture in less than a second. Ultimate camouflage queen."},{e:'😜',t:"What do you call a cow that plays guitar? A moo-sician!"},{e:'🌍',t:"Russia spans 11 time zones. When it's Monday morning in one part, it's already Tuesday in another!"},{e:'😂',t:"Why did the skeleton go to the party alone? Because he had no body to go with!"},{e:'🦋',t:"Caterpillars completely dissolve into liquid inside their chrysalis before rebuilding as a butterfly."},{e:'🍫',t:"Why did the chocolate chip cookie go to the doctor? Because it was feeling crumbly!"},{e:'🐬',t:"Dolphins sleep with one eye open. Half their brain stays awake to keep them safe."},{e:'😆',t:"What do you call a pig that does karate? A pork chop!"},{e:'🤣',t:"Why did the music note go to school? To improve its score!"},{e:'🦀',t:"Crabs walk sideways because their legs bend that way. They didn't choose the sidewalk life — it chose them."},{e:'🐸',t:"A frog can jump up to 20 times its own body length. That's like you jumping the length of a school bus!"},{e:'😹',t:"What do you call a cat that gets everything it wants? Purrr-suasive!"},{e:'🌠',t:"Every atom in your body was forged inside a star that exploded billions of years ago. You are literally made of stardust."},{e:'😂',t:"Why was the broom late? It swept in!"},{e:'🦜',t:"A parrot named Alex could identify colors, shapes, and numbers up to 6. He said 'I love you' to his researcher every night."},{e:'🍩',t:"Why was the donut sad? Because it was feeling empty inside — ring any bells?"},{e:'🐋',t:"Humpback whales create the most complex songs in the animal kingdom, spreading across entire oceans."},{e:'🤡',t:"Why did the clown lose his job? Because he kept cracking up!"},{e:'🦩',t:"Flamingos are born gray — they turn pink from the shrimp and algae they eat. You literally are what you eat."},{e:'🐝',t:"Honey never goes bad. Archaeologists found 3,000-year-old honey in Egyptian tombs — still edible."},{e:'😜',t:"What do you call a ghost's true love? His ghoul-friend!"},{e:'🌋',t:"Hawaii is getting closer to Japan by about 4 inches every year. The plates keep moving!"},{e:'😂',t:"Why don't oysters share? Because they're shellfish!"},{e:'🦒',t:"Giraffes only sleep about 30 minutes a day — in short naps."},{e:'🍪',t:"What did the cookie say to the milk? 'You complete me.'"},{e:'🐼',t:"Baby pandas are born pink and about the size of a stick of butter. They grow up fast!"},{e:'😄',t:"Why did the calendar break up with the clock? Because its days were numbered!"},{e:'🌻',t:"Sunflowers turn to face each other on cloudy days. Teamwork!"},{e:'🤣',t:"What do you call a snowman with a six-pack? An abdominal snowman!"},{e:'🐦',t:"The bar-tailed godwit flies 7,500 miles nonstop from Alaska to New Zealand. Absolute legend."},{e:'😂',t:"What do you call a sad strawberry? A blueberry!"},{e:'🌈',t:"A rainbow is actually a full circle — you just can't see the bottom half from the ground."},{e:'🦕',t:"The T-Rex lived closer in time to us than it did to the Stegosaurus. Mind = blown."},{e:'🍉',t:"Why did the watermelon go to school? Because it wanted to be a little seedy!"},{e:'🐘',t:"Elephants can recognize themselves in mirrors and feel emotions like grief. Big hearts to match."},{e:'😆',t:"What do you call a sleeping computer? A hard drive!"},{e:'🤣',t:"Why did the orange stop rolling down the hill? Because it ran out of juice!"},{e:'🦈',t:"Great white sharks can detect a single drop of blood in 25 gallons of water. Best nose in the ocean."},{e:'🐳',t:"A narwhal's spiral tusk is actually a giant tooth that grows through its lip. Nature is wild."},{e:'😄',t:"Why did the girl bring a ladder to school? Because she wanted to go to high school!"},{e:'🌟',t:"Light from the sun takes 8 minutes to reach Earth. The sunlight you feel right now left the sun 8 minutes ago."},{e:'😂',t:"What do you call a bear in the rain? A drizzly bear!"},{e:'🍦',t:"Why did the ice cream go to school? To get a little smarter — it was already pretty cool!"},{e:'🤡',t:"Why did the silly kid throw a clock out the window? To see time fly!"},{e:'🦭',t:"Otters have a favorite rock they keep in a special pocket of skin under their arm. Their own rock collection!"},{e:'🌙',t:"If you could drive to the moon at highway speed it would take about 6 months. Worth it, probably."},{e:'😹',t:"What's a cat's favorite color? Purrr-ple!"},{e:'🐝',t:"A single honeybee makes only 1/12 of a teaspoon of honey in its entire lifetime. Appreciate every drop!"},{e:'😂',t:"Why did the student eat her pencil? Because the teacher told her to draw a conclusion!"},{e:'🦁',t:"A lion's roar can be heard from 5 miles away. Impressive. Also, do not test this."},{e:'🍿',t:"Why did the popcorn go to the movies? Because it wanted to see itself on the big screen!"},{e:'🤣',t:"Why don't eggs tell jokes? Because they'd crack up!"},{e:'😄',t:"What do you call a factory that makes okay products? A satisfactory!"},{e:'🦊',t:"Foxes use the Earth's magnetic field to hunt. They align north-south before pouncing. Built-in compass!"},{e:'🐻',t:"Bears can wake up during hibernation — don't count on them staying asleep!"},{e:'😂',t:"Why did the astronaut break up with gravity? Because she was tired of being pulled down!"},{e:'🌊',t:"There is a river under the Amazon River — underground, twice as wide, flowing the opposite direction."},{e:'🤓',t:"Why did the kid put her report card in the freezer? Because she wanted cool grades!"},{e:'🦀',t:"Lobsters taste with their legs and hear with their antennae. Basically built backwards compared to us."},{e:'🐺',t:"Wolf pups are born blind and deaf. They depend completely on their pack. Family first, always."},{e:'😜',t:"What do you call a fish that wears glasses? A see-fish!"},{e:'🌸',t:"Cherry blossom trees in Japan can live over 1,000 years. That's a lot of springs."},{e:'😂',t:"Why did the student take a ruler to bed? To see how long she slept!"},{e:'🐊',t:"Crocodiles have been around 200 million years. They survived whatever wiped out the dinosaurs. Respect."},{e:'😹',t:"What do you call a cat who loves swimming? A catfish!"},{e:'🦚',t:"Male peacocks actually scream — not just fan feathers. They can be heard a mile away."},{e:'🍫',t:"White chocolate isn't actually chocolate — it contains no cocoa solids. Delicious imposter!"},{e:'🐡',t:"A group of jellyfish is called a smack. Best collective noun in nature, hands down."},{e:'🌵',t:"Cactus spines are actually modified leaves. The cactus said 'leaves are overrated' and just went pointy."},{e:'🤡',t:"Why was the stadium so cool? Because it was full of fans!"},{e:'🦋',t:"The blue morpho butterfly's wings aren't actually blue — tiny scales reflect light to look blue. Optical illusion queen."},{e:'🍕',t:"In Italy it's considered very rude to add pineapple to pizza. Some hills are worth dying on."},{e:'🐣',t:"An ostrich's eye is bigger than its brain. It can outrun a horse though, so maybe that's fine."},{e:'😄',t:"What do you call a knight who is afraid of the dark? Sir Renders-a-lot!"},{e:'🌠',t:"The Milky Way galaxy takes 225 million years to complete one rotation. Earth is on lap... we don't even know."},{e:'😂',t:"Why did the lamp go to school? To get a little brighter!"}];
+function pad(n){ return String(n).padStart(2,'0'); }
 
-let offset=0;
-function getDailyFact(){const now=new Date();const day=Math.floor((now-new Date(now.getFullYear(),0,0))/86400000);return(day+offset)%facts.length;}
-function showFact(i){const f=facts[i];document.getElementById('fact-emoji').textContent=f.e;document.getElementById('fact-text').textContent=f.t;const d=['Sunday','Monday','Tuesday','Wednesday','Thursday','Friday','Saturday'];document.getElementById('fact-day').textContent='Your '+d[new Date().getDay()]+' laugh 💕';}
-window.__bridge.nextFact=function(){offset=(offset+1)%facts.length;showFact(getDailyFact());};
-showFact(getDailyFact());
-
-
-
-// ── DAY FACTS ─────────────────────────────────
-const dayFacts = {
-  198: {e:'🛋️', t:'<strong>198 days</strong> — that's 4,752 hours of cartoon-watching potential. Use them wisely!'},
-  197: {e:'🍕', t:'<strong>197 days</strong> — if you ate a slice of pizza every day until Daddy gets home, you'd eat 197 slices. That's a lot of pizza.'},
-  196: {e:'🦋', t:'<strong>196 days</strong> — a monarch butterfly's entire migration takes about 120 days. You're waiting longer than a butterfly migration!'},
-  195: {e:'🌙', t:'<strong>195 days</strong> — that's almost 6.5 full moons from now until Daddy's home.'},
-  194: {e:'🐢', t:'<strong>194 days</strong> — a sea turtle egg takes about 60 days to hatch. You could hatch 3 sea turtles in this time!'},
-  193: {e:'🎬', t:'<strong>193 days</strong> — if you watched a movie every day, you'd see 193 movies before Daddy gets home. Time for a list!'},
-  192: {e:'🌸', t:'<strong>192 days</strong> — that's 27 and a half weeks. You've totally got this! 💕'},
-  191: {e:'🏃', t:'<strong>191 days</strong> — if you ran a mile every day, you'd have run 191 miles by the time Daddy lands!'},
-  190: {e:'🎂', t:'<strong>190 days</strong> — that's 190 chances to do something kind, brave, or fun before the big reunion!'},
-  189: {e:'🦁', t:'<strong>189 days</strong> — a lion cub grows big enough to hunt in about 180 days. You're stronger than a lion cub!'},
-  188: {e:'📚', t:'<strong>188 days</strong> — if you read 10 pages a day you'd finish a 1,880-page book. Or like, 10 normal books!'},
-  187: {e:'🌊', t:'<strong>187 days</strong> — the average wave in the ocean crashes every 10 seconds. That's 1,616,800 waves until Daddy's home!'},
-  186: {e:'🐝', t:'<strong>186 days</strong> — a honeybee visits about 2,000 flowers a day. That's 372,000 flowers' worth of waiting!'},
-  185: {e:'🚀', t:'<strong>185 days</strong> — the Space Shuttle took only 8 minutes to reach orbit. In 185 days it could orbit Earth about 2,900 times!'},
-  184: {e:'🌻', t:'<strong>184 days</strong> — sunflowers grow from seed to full bloom in about 80 days. You could grow two whole sunflowers waiting for Daddy!'},
-  183: {e:'🎵', t:'<strong>183 days</strong> — if a song is 3 minutes long, you could listen to 87,840 songs before Daddy gets home. Better start that playlist!'},
-  182: {e:'🎊', t:'<strong>182 days</strong> — that's exactly 26 weeks, or half a year! You are HALFWAY through the calendar wait. Go Mia! 🌟'},
-  181: {e:'🐠', t:'<strong>181 days</strong> — clownfish like Nemo live about 6-10 years. Daddy's deployment is just a tiny blip of a clownfish's life!'},
-  180: {e:'🌈', t:'<strong>180 days</strong> — less than 6 months! In school terms, that's almost one whole semester. You're practically already there!'},
-  179: {e:'🦒', t:'<strong>179 days</strong> — a baby giraffe learns to walk within hours of being born and runs within days. You've been running this race for weeks already!'},
-  178: {e:'⭐', t:'<strong>178 days</strong> — light from some nearby stars takes about 4 years to reach us. Waiting 178 days is practically nothing compared to starlight!'},
-  177: {e:'🍦', t:'<strong>177 days</strong> — if you had a scoop of ice cream every day you'd eat 177 scoops before Daddy's home. Dessert goals!'},
-  176: {e:'🐧', t:'<strong>176 days</strong> — emperor penguin dads stand on eggs for 65 days in Antarctica with no food. Daddy's deployment has nothing on penguin dads!'},
-  175: {e:'🎈', t:'<strong>175 days</strong> — a helium balloon floats for about 10 hours. You'd need 420 balloons end-to-end to mark every hour until Daddy's home!'},
-  174: {e:'🌍', t:'<strong>174 days</strong> — the Earth travels 1.6 million miles around the sun every day. In 174 days, Earth will have gone 278 million miles — all while you wait!'},
-  173: {e:'🦅', t:'<strong>173 days</strong> — a bald eagle egg hatches in 35 days. You could hatch nearly 5 bald eagles in the time you're waiting!'},
-  172: {e:'🍓', t:'<strong>172 days</strong> — strawberries take about 90 days to grow from planting to picking. You could grow fruit twice before Daddy gets home!'},
-  171: {e:'🎯', t:'<strong>171 days</strong> — that's 24 weeks and 3 days. Every single day you wake up, you're one day closer. That's a win!'},
-  170: {e:'🐬', t:'<strong>170 days</strong> — dolphins sleep with half their brain awake. You've been wide awake and brave through 170 whole days!'},
-  169: {e:'🏆', t:'<strong>169 days</strong> — the Super Bowl is played once a year. You're waiting almost half a year for something WAY better than any Super Bowl!'},
-  168: {e:'⏰', t:'<strong>168 days</strong> — that's exactly 24 weeks, or 4,032 hours. But who's counting? (We are. Obviously!)'},
-  167: {e:'🌺', t:'<strong>167 days</strong> — some orchids bloom for up to 4 months and then wait patiently. You're basically a rare orchid!'},
-  166: {e:'🦋', t:'<strong>166 days</strong> — a caterpillar spends about 2 weeks in its chrysalis before becoming a butterfly. You've been becoming more amazing every single day!'},
-  165: {e:'🎪', t:'<strong>165 days</strong> — that's 23 weeks and 4 days. Less than 6 months. The countdown is getting realer every day!'},
-  164: {e:'🐘', t:'<strong>164 days</strong> — elephants are pregnant for 22 months. You're only waiting 7ish months — way shorter than an elephant pregnancy!'},
-  163: {e:'🌙', t:'<strong>163 days</strong> — the moon completes a full cycle every 29.5 days. That's still about 5.5 more moon cycles until the big day!'},
-  162: {e:'🍩', t:'<strong>162 days</strong> — if each day were a donut, you'd have enough to fill 8 dozen donut boxes. That's a lot of sweet days ahead!'},
-  161: {e:'🎸', t:'<strong>161 days</strong> — Beethoven wrote his 9th Symphony while completely deaf. If he could do THAT, you can absolutely do 161 more days!'},
-  160: {e:'🚂', t:'<strong>160 days</strong> — a cross-country train takes about 3 days. In 160 days you could theoretically ride back and forth across America 26 times!'},
-  159: {e:'🌟', t:'<strong>159 days</strong> — you've already waited so many days. Every single one made you braver, stronger, and more ready for that hug!'},
-  158: {e:'🦜', t:'<strong>158 days</strong> — parrots can live for 80 years. This deployment is just 0.5% of a parrot's lifetime. Puts it in perspective!'},
-  157: {e:'🏖️', t:'<strong>157 days</strong> — there are about 372,000 miles of coastline on Earth. That's a lot of beach — but no beach is as good as the one you'll celebrate on when Daddy's home!'},
-  156: {e:'🍪', t:'<strong>156 days</strong> — that's 22 weeks. If you baked cookies every weekend until Daddy's home, you'd make 22 batches. Save him some!'},
-  155: {e:'🐼', t:'<strong>155 days</strong> — a baby panda is born the size of a stick of butter and grows into a 200-pound bear. You're growing stronger every day too!'},
-  154: {e:'🌊', t:'<strong>154 days</strong> — that's 22 weeks exactly. Every week that passes is another week you crushed it!'},
-  153: {e:'🎭', t:'<strong>153 days</strong> — Shakespeare wrote an average of 1.5 plays per year. In 153 days he'd have written about half a play. You're writing a whole story!'},
-  152: {e:'🚁', t:'<strong>152 days</strong> — a helicopter can fly about 150 mph. At that speed it would take just 20 hours to cross the US. Daddy feels closer every day!'},
-  151: {e:'🌸', t:'<strong>151 days</strong> — cherry blossoms only bloom for about 2 weeks a year. By the time they bloom again, Daddy might already be home!'},
-  150: {e:'🎊', t:'<strong>150 days</strong> — that's a big milestone! Less than 5 months. You are absolutely crushing this! 🌟'},
-  149: {e:'🦁', t:'<strong>149 days</strong> — lions in the wild roam up to 10 miles a day. In 149 days, a lion would cover 1,490 miles — all while you wait like a champ!'},
-  148: {e:'🍋', t:'<strong>148 days</strong> — a lemon tree takes 6-9 months to produce fruit. You're waiting less time than it takes to grow a lemon. And you're way sweeter!'},
-  147: {e:'🌙', t:'<strong>147 days</strong> — that's 21 weeks exactly! Three weeks away from being just 4 months out. The number keeps shrinking!'},
-  146: {e:'🐙', t:'<strong>146 days</strong> — an octopus guards her eggs for up to 4.5 years without eating. Your wait is nothing compared to mama octopus!'},
-  145: {e:'🎵', t:'<strong>145 days</strong> — the Beatles released their first album in 1963. It took them years to get there. Good things take time — and Daddy coming home is the best thing!'},
-  144: {e:'🌻', t:'<strong>144 days</strong> — that's 144 sunrises, 144 sunsets, and 144 nights of knowing Daddy loves you from wherever he is! 💕'},
-  143: {e:'💕', t:'<strong>143 days</strong> — 143 means "I Love You" (1 letter, 4 letters, 3 letters). How perfect is that?!'},
-  142: {e:'🏄', t:'<strong>142 days</strong> — the average wave takes 10 days to travel across the Pacific Ocean. In 142 days, 14 waves could cross the whole ocean!'},
-  141: {e:'🦊', t:'<strong>141 days</strong> — a fox kit grows up in about 6 months. By the time Daddy's home, a fox kit born today would be basically a grown fox!'},
-  140: {e:'🎯', t:'<strong>140 days</strong> — exactly 20 weeks! One third of a year. You've got this completely under control!'},
-  139: {e:'🍕', t:'<strong>139 days</strong> — Americans eat approximately 3 billion pizzas a year. That's about 8.2 million pizzas today alone. Someone is definitely having pizza right now!'},
-  138: {e:'🌈', t:'<strong>138 days</strong> — a rainbow requires both rain AND sunshine. You're getting through the rain — the sunshine is coming! ☀️'},
-  137: {e:'🐸', t:'<strong>137 days</strong> — tadpoles become frogs in 6-12 weeks. You could've watched a tadpole become a frog twice over while waiting!'},
-  136: {e:'🚀', t:'<strong>136 days</strong> — the Apollo 11 mission took only 8 days to get to the moon and back. In 136 days, you could do that journey 17 times!'},
-  135: {e:'🌺', t:'<strong>135 days</strong> — less than 20 weeks! You are in the single-digit weeks-away-from-under-100-days zone. Try saying that 5 times fast!'},
-  134: {e:'🎸', t:'<strong>134 days</strong> — Elvis Presley recorded his first song at 18. Whatever age you are, you're already braver than most!'},
-  133: {e:'🦋', t:'<strong>133 days</strong> — monarch butterflies travel up to 100 miles a day during migration. In 133 days they could go 13,300 miles. Daddy's never that far in your heart!'},
-  132: {e:'🍓', t:'<strong>132 days</strong> — that's 19 weeks exactly. Under 20 weeks. The numbers just keep getting better!'},
-  131: {e:'🌙', t:'<strong>131 days</strong> — there are 131 days left and 131 reasons you're amazing. We could list them all but we'd run out of room!'},
-  130: {e:'🐳', t:'<strong>130 days</strong> — blue whales can hold their breath for about 90 minutes. You've been holding it together for way longer than any whale!'},
-  129: {e:'⭐', t:'<strong>129 days</strong> — the North Star has guided sailors home for centuries. It's still up there, still pointing the way home. Just like you're pointing to October 31st!'},
-  128: {e:'🎂', t:'<strong>128 days</strong> — that's 18 weeks and 2 days. Under 130 days. You should absolutely celebrate this!'},
-  127: {e:'🐝', t:'<strong>127 days</strong> — a queen bee can live for 5 years and lays up to 2,000 eggs a day. You are the queen of this countdown!'},
-  126: {e:'🌊', t:'<strong>126 days</strong> — exactly 18 weeks! Less than 5 months. This is officially feeling very close!'},
-  125: {e:'🏆', t:'<strong>125 days</strong> — the original Olympic games in ancient Greece lasted 5 days. You've been competing in the patience Olympics for way longer — and you're winning!'},
-  124: {e:'🦒', t:'<strong>124 days</strong> — a giraffe's tongue is 18-20 inches long. That's a fun fact that has nothing to do with the countdown, but it cheered us up!'},
-  123: {e:'🎬', t:'<strong>123 days</strong> — 1, 2, 3 — easy as can be! 123 days and counting down!'},
-  122: {e:'🌸', t:'<strong>122 days</strong> — that's just over 17 weeks. Every week is a victory lap!'},
-  121: {e:'🍩', t:'<strong>121 days</strong> — 121 is 11 × 11. Mia is almost 12 — almost as perfect as this number!'},
-  120: {e:'🎊', t:'<strong>120 days</strong> — FOUR MONTHS from today! You can do four months standing on your head! 🌟'},
-  119: {e:'🌻', t:'<strong>119 days</strong> — under 120! The numbers are tumbling down so fast now!'},
-  118: {e:'🐬', t:'<strong>118 days</strong> — dolphins can swim 25 mph. At that speed, they'd circle the Earth in about 42 days. Daddy's heart has circled back to you every single day!'},
-  117: {e:'🎵', t:'<strong>117 days</strong> — that's 16 weeks and 5 days. Under 17 weeks. The playlist is growing and so is the excitement!'},
-  116: {e:'🦅', t:'<strong>116 days</strong> — bald eagles can live 20-30 years in the wild. This deployment is just a tiny chapter in a very long, very wonderful story!'},
-  115: {e:'🌙', t:'<strong>115 days</strong> — almost 4 months exactly. The moon will be full about 4 more times before Daddy's home!'},
-  114: {e:'🍪', t:'<strong>114 days</strong> — if counting days were cookies, you'd have eaten through a LOT of the jar. The sweet ones at the bottom are getting closer!'},
-  113: {e:'🚂', t:'<strong>113 days</strong> — the Trans-Siberian Railway is the world's longest train journey at about 6 days. In 113 days you could ride it nearly 19 times!'},
-  112: {e:'🌈', t:'<strong>112 days</strong> — exactly 16 weeks! Four months of Sundays. You have been SO strong!'},
-  111: {e:'🎯', t:'<strong>111 days</strong> — 111 looks the same upside down. Kind of like how Daddy's love for you never changes no matter how you look at it! 💕'},
-  110: {e:'🐧', t:'<strong>110 days</strong> — emperor penguins walk 70 miles to their breeding grounds. You've been on your own journey and you're doing amazing!'},
-  109: {e:'🌺', t:'<strong>109 days</strong> — just 9 days away from the big 100! The triple digits are almost behind you!'},
-  108: {e:'☀️', t:'<strong>108 days</strong> — the sun is 108 times the diameter of Earth. And Daddy's love for you is at least that big — probably bigger!'},
-  107: {e:'🦁', t:'<strong>107 days</strong> — a week away from 100! You can almost taste the double digits!'},
-  106: {e:'🎸', t:'<strong>106 days</strong> — just 6 days from triple digits to double digits! Get ready to celebrate!'},
-  105: {e:'🌟', t:'<strong>105 days</strong> — exactly 15 weeks! Five away from 100. The home stretch is getting very real!'},
-  104: {e:'🍦', t:'<strong>104 days</strong> — four days from 100! Can you feel it?!'},
-  103: {e:'🎊', t:'<strong>103 days</strong> — THREE days from 100! Almost there! 🎉'},
-  102: {e:'🎈', t:'<strong>102 days</strong> — TWO days from 100! Get your confetti ready!'},
-  101: {e:'🥁', t:'<strong>101 days</strong> — tomorrow you hit DOUBLE DIGITS! This is huge! 🥁🥁🥁'},
-  100: {e:'🎉', t:'<strong>100 DAYS!</strong> — YOU HIT THE TRIPLE DIGIT MILESTONE! Less than 100 days until Daddy is HOME! This is HUGE! 🎉🎊💕'},
-  99:  {e:'🌟', t:'<strong>99 days</strong> — DOUBLE DIGITS BABY! Under 100! This deserves a happy dance! 💃'},
-  98:  {e:'🎊', t:'<strong>98 days</strong> — 98 days is only 14 weeks. FOURTEEN! You've got this completely in the bag!'},
-  97:  {e:'🍕', t:'<strong>97 days</strong> — just over 3 months. Start planning the welcome home dinner menu! 🍽️'},
-  96:  {e:'🌸', t:'<strong>96 days</strong> — exactly 13 weeks and 5 days. Under 100 and shrinking fast!'},
-  95:  {e:'🚀', t:'<strong>95 days</strong> — a trip to the moon takes 3 days. In 95 days you could go to the moon and back 15 times. But you'd rather have Daddy home!'},
-  94:  {e:'🐼', t:'<strong>94 days</strong> — a baby panda opens its eyes for the first time at about 45 days old. Your eyes are wide open and fixed on October 31st!'},
-  93:  {e:'🌻', t:'<strong>93 days</strong> — just over 13 weeks. Every week the excitement gets one level higher!'},
-  92:  {e:'🎵', t:'<strong>92 days</strong> — if each day were a beat, you'd have a 92-beat drum solo. And the grand finale is coming! 🥁'},
-  91:  {e:'🎯', t:'<strong>91 days</strong> — exactly 13 weeks! Three more months-ish. The countdown clock is moving SO fast now!'},
-  90:  {e:'🎊', t:'<strong>90 days</strong> — THREE MONTHS! Just 90 sleeps! You could count them on your fingers... if you had 9 hands!'},
-  89:  {e:'🌙', t:'<strong>89 days</strong> — 89 is a prime number. Just like this moment in time — totally unique and unrepeatable!'},
-  88:  {e:'🎹', t:'<strong>88 days</strong> — a piano has 88 keys. Each day left is like one key — and together they're making the most beautiful song!'},
-  87:  {e:'🌊', t:'<strong>87 days</strong> — the Pacific Ocean is about 12,000 miles wide. Daddy's love crosses every mile every single day!'},
-  86:  {e:'☀️', t:'<strong>86 days</strong> — there are 86,400 seconds in a day. Every single second you're a little bit closer!'},
-  85:  {e:'🦋', t:'<strong>85 days</strong> — just 5 days from 80! The big numbers are disappearing fast!'},
-  84:  {e:'🍩', t:'<strong>84 days</strong> — exactly 12 weeks! THREE MONTHS from tomorrow! You are SO close!'},
-  83:  {e:'🌺', t:'<strong>83 days</strong> — under 12 weeks! The single-digit weeks are coming for you!'},
-  82:  {e:'🐬', t:'<strong>82 days</strong> — dolphins live in tight family groups called pods. Your family pod is about to be complete again! 💕'},
-  81:  {e:'🎸', t:'<strong>81 days</strong> — 81 = 9 × 9. You're basically at a perfect square of days left. Math is on your side!'},
-  80:  {e:'🎊', t:'<strong>80 days</strong> — Around the World in 80 Days is a whole novel! Daddy's coming home in the same number of days. This calls for a celebration! 🌍'},
-  79:  {e:'🌟', t:'<strong>79 days</strong> — under 80! Just 11 weeks and 2 days. The weeks are single digit territory soon!'},
-  78:  {e:'🎈', t:'<strong>78 days</strong> — just over 11 weeks. You can count the weeks on both hands now!'},
-  77:  {e:'🍀', t:'<strong>77 days</strong> — exactly 11 weeks! Lucky number 11! Eleven weeks until the best Halloween ever! 🎃'},
-  76:  {e:'🌙', t:'<strong>76 days</strong> — in Norway, the sun doesn't set for 76 days in summer. You've been shining just as bright every single day!'},
-  75:  {e:'🏆', t:'<strong>75 days</strong> — that's just 10 weeks and 5 days. You are IN the final quarter now! 🏆'},
-  74:  {e:'🦁', t:'<strong>74 days</strong> — under 75! You're lion-hearted and getting so close!'},
-  73:  {e:'🌸', t:'<strong>73 days</strong> — just over 10 weeks. Can you even believe you've made it this far?! Because we can! 💕'},
-  72:  {e:'⭐', t:'<strong>72 days</strong> — there are 72 hours in 3 days. And in 72 days there are 1,728 hours until Daddy's home. Still sounds like a lot but it's SO not!'},
-  71:  {e:'🎵', t:'<strong>71 days</strong> — under 72! Single-digit weeks are right around the corner!'},
-  70:  {e:'🎊', t:'<strong>70 days</strong> — TEN WEEKS from today! One hand of weeks and you run out of fingers!'},
-  69:  {e:'🌻', t:'<strong>69 days</strong> — under 70! The numbers are falling like dominoes now! 💕'},
-  68:  {e:'🚀', t:'<strong>68 days</strong> — less than 10 weeks exactly. SINGLE DIGIT WEEKS ARE COMING!'},
-  67:  {e:'🍕', t:'<strong>67 days</strong> — 9 weeks and 4 days. You are officially in the NINE WEEK ZONE!'},
-  66:  {e:'🎯', t:'<strong>66 days</strong> — it takes 66 days to form a new habit. By the time Daddy gets home, your new habit will be counting down!'},
-  65:  {e:'🐧', t:'<strong>65 days</strong> — emperor penguin dads stand on eggs for 65 days without eating. Today you match a penguin dad's patience! Respect! 🐧'},
-  64:  {e:'🎮', t:'<strong>64 days</strong> — the Nintendo 64 had 64-bit graphics. This countdown is way more high-definition than that!'},
-  63:  {e:'🌙', t:'<strong>63 days</strong> — exactly 9 weeks! NINE WEEKS! You're counting in single digits now! 🎉'},
-  62:  {e:'🌊', t:'<strong>62 days</strong> — under 9 weeks! The ocean between you and this moment is getting smaller every tide!'},
-  61:  {e:'🌟', t:'<strong>61 days</strong> — TWO MONTHS from tomorrow! You are SO incredibly close!'},
-  60:  {e:'🎊', t:'<strong>60 days</strong> — TWO MONTHS! Just 60 sleeps! You could count every single one on your fingers and toes twice! 🎉💕'},
-  59:  {e:'🎈', t:'<strong>59 days</strong> — under 60! Under two months! THIS IS HAPPENING! 🎊'},
-  58:  {e:'🦋', t:'<strong>58 days</strong> — 8 weeks and 2 days. You've transformed like a butterfly through this whole journey!'},
-  57:  {e:'🌺', t:'<strong>57 days</strong> — exactly 8 weeks and 1 day. The single-digit weeks feel SO close!'},
-  56:  {e:'🍩', t:'<strong>56 days</strong> — exactly 8 weeks! EIGHT WEEKS! You're counting weeks on one hand! 🙌'},
-  55:  {e:'🎵', t:'<strong>55 days</strong> — 7 weeks and 6 days — the last day of the 8-week club! Tomorrow: 7 weeks!'},
-  54:  {e:'🌸', t:'<strong>54 days</strong> — under 8 weeks officially. SEVEN WEEKS AND COUNTING! 💕'},
-  53:  {e:'🌙', t:'<strong>53 days</strong> — 7 weeks and 4 days. Start planning the welcome home party — for real this time!'},
-  52:  {e:'🎯', t:'<strong>52 days</strong> — there are 52 weeks in a year. You're counting in weeks and there are fewer weeks left than in a whole year! 🎊'},
-  51:  {e:'🌟', t:'<strong>51 days</strong> — 7 weeks and 2 days. Every morning you wake up it's one less sleep until the biggest hug! 💕'},
-  50:  {e:'🎊', t:'<strong>50 days</strong> — FIFTY DAYS! That's 7 weeks and 1 day! You are so incredibly close to the finish line! 🎉🎊💕'},
-  49:  {e:'🎉', t:'<strong>49 days</strong> — SEVEN WEEKS EXACTLY! You could count every remaining week on one hand! 🙌'},
-  48:  {e:'🌺', t:'<strong>48 days</strong> — under 7 weeks! That's 1,152 hours. But who's counting hours when weeks is SO much better?!'},
-  47:  {e:'🦁', t:'<strong>47 days</strong> — 6 weeks and 5 days! Almost in the SIX WEEK CLUB! You are a lion and you are ALMOST THERE!'},
-  46:  {e:'🌊', t:'<strong>46 days</strong> — 6 weeks and 4 days! The wave is building and it's about to crash in the best way! 🌊'},
-  45:  {e:'⭐', t:'<strong>45 days</strong> — six weeks and three days. Less than 7 weeks. The stars are aligning! ⭐'},
-  44:  {e:'🎸', t:'<strong>44 days</strong> — 6 weeks and 2 days. The reunion playlist is ready. The countdown is almost done! 🎵'},
-  43:  {e:'🌻', t:'<strong>43 days</strong> — 6 weeks and 1 day. A sunflower could grow from seed to bloom in this time! You're blooming too! 🌻'},
-  42:  {e:'🎊', t:'<strong>42 days</strong> — SIX WEEKS EXACTLY! The answer to life, the universe, and everything — and also the number of days until Daddy's home! 🎉'},
-  41:  {e:'🍕', t:'<strong>41 days</strong> — under 6 weeks! Start thinking about what you want for your welcome home dinner! 🍕'},
-  40:  {e:'🌟', t:'<strong>40 days</strong> — FIVE WEEKS AND FIVE DAYS! Under 6 weeks and under 40 days tomorrow! You are SO CLOSE! 💕'},
-  39:  {e:'🎈', t:'<strong>39 days</strong> — under 40! Five weeks and 4 days! Get the streamers ready! 🎊'},
-  38:  {e:'🌙', t:'<strong>38 days</strong> — 5 weeks and 3 days! The moon will only be full ONE more time before Daddy's home! 🌕'},
-  37:  {e:'🎉', t:'<strong>37 days</strong> — 5 weeks and 2 days! Can you even stand it?! IT'S SO CLOSE! 🎉'},
-  36:  {e:'🐬', t:'<strong>36 days</strong> — five weeks and 1 day. Dolphins would do about 36 acrobatic jumps in the time it takes to read this. You're flipping with excitement!'},
-  35:  {e:'🎊', t:'<strong>35 days</strong> — FIVE WEEKS EXACTLY! One hand of weeks! FIVE! Start making that welcome home banner! 🎊💕'},
-  34:  {e:'🌺', t:'<strong>34 days</strong> — under 5 weeks! 4 weeks and 6 days! The single-digit weeks are HERE! 🌟'},
-  33:  {e:'🦋', t:'<strong>33 days</strong> — 4 weeks and 5 days! Like a butterfly about to emerge — the big moment is SO close!'},
-  32:  {e:'🚀', t:'<strong>32 days</strong> — 4 weeks and 4 days! We are in the FINAL MONTH! This is actually happening! 🚀'},
-  31:  {e:'📅', t:'<strong>31 days</strong> — ONE MONTH FROM TODAY! 31 sleeps! One calendar page! You made it to the final month! 🎉🎊💕'},
-  30:  {e:'🎊', t:'<strong>30 days</strong> — THIRTY DAYS! ONE MONTH! 4 weeks and 2 days! START THE WELCOME HOME PLANNING! 🎉'},
-  29:  {e:'🌙', t:'<strong>29 days</strong> — less than 30 days! The moon completes a full cycle in 29.5 days — this is literally ONE moon cycle away! 🌕'},
-  28:  {e:'🌟', t:'<strong>28 days</strong> — FOUR WEEKS EXACTLY! Count them on one hand — four whole fingers! 🙌 IT'S SO CLOSE!'},
-  27:  {e:'🎈', t:'<strong>27 days</strong> — under 4 weeks! 3 weeks and 6 days! The last week of the 4-week era!'},
-  26:  {e:'🌸', t:'<strong>26 days</strong> — 3 weeks and 5 days! Start making your list of everything you want to say when you see Daddy! 💕'},
-  25:  {e:'🎉', t:'<strong>25 days</strong> — A QUARTER OF 100 DAYS LEFT! Just 3 weeks and 4 days! THIS IS WILD! 🎉'},
-  24:  {e:'⏰', t:'<strong>24 days</strong> — 24 hours in a day, 24 days to go! Every hour counts now! ⏰💕'},
-  23:  {e:'🌟', t:'<strong>23 days</strong> — 3 weeks and 2 days! The welcome home party is almost a TODAY thing! 🌟'},
-  22:  {e:'🎊', t:'<strong>22 days</strong> — THREE WEEKS AND ONE DAY! You can count the remaining weeks on THREE FINGERS! 🙌'},
-  21:  {e:'🎉', t:'<strong>21 days</strong> — THREE WEEKS EXACTLY! 21 sleeps! THREE! You could sleep through this on your hands! 🎉💕'},
-  20:  {e:'🚀', t:'<strong>20 days</strong> — TWENTY DAYS! TWO WEEKS AND SIX DAYS! We are in LAUNCH SEQUENCE territory! 🚀🎊'},
-  19:  {e:'🌺', t:'<strong>19 days</strong> — under 20! Less than 3 weeks! Are you READY?! 🌺💕'},
-  18:  {e:'💕', t:'<strong>18 days</strong> — TWO AND A HALF WEEKS! The excitement is UNCONTAINABLE! 💕🎊'},
-  17:  {e:'🌙', t:'<strong>17 days</strong> — 2 weeks and 3 days! Start picking out your outfit for homecoming day! 👗✨'},
-  16:  {e:'🎈', t:'<strong>16 days</strong> — TWO WEEKS AND TWO DAYS! Buy the balloons. Blow them up. Leave them deflated for now. The time is COMING! 🎈'},
-  15:  {e:'🌟', t:'<strong>15 days</strong> — TWO WEEKS AND ONE DAY! Half a month! You are SO incredibly close! 🌟💕'},
-  14:  {e:'🎊', t:'<strong>14 days</strong> — TWO WEEKS EXACTLY! 14 sleeps! Count them on your fingers — you have enough fingers! 🙌🎉'},
-  13:  {e:'🍀', t:'<strong>13 days</strong> — under two weeks! 1 week and 6 days! Lucky 13 — and you are SO lucky this day is almost here! 🍀'},
-  12:  {e:'🎉', t:'<strong>12 days</strong> — ONE WEEK AND FIVE DAYS! Like the 12 days of Christmas but SO much better! 🎉💕'},
-  11:  {e:'🌸', t:'<strong>11 days</strong> — ONE WEEK AND FOUR DAYS! The final countdown is HERE! You did it! You almost made it! 🌸💕'},
-  10:  {e:'🚀', t:'<strong>10 days</strong> — TEN DAYS! ONE WEEK AND THREE DAYS! T-MINUS TEN AND COUNTING! 🚀🎊'},
-  9:   {e:'🎊', t:'<strong>9 days</strong> — SINGLE DIGITS BABY! 9 DAYS! ONE WEEK AND TWO DAYS! This is ACTUALLY happening! 🎉'},
-  8:   {e:'🌟', t:'<strong>8 days</strong> — EIGHT DAYS! ONE WEEK AND ONE DAY! You can count every remaining day on your fingers! 🙌💕'},
-  7:   {e:'🎉', t:'<strong>7 days</strong> — ONE WEEK! SEVEN SLEEPS! The last week before the BEST DAY EVER! 🎉🎊💕'},
-  6:   {e:'💕', t:'<strong>6 days</strong> — SIX DAYS! Less than one week! Count them: 1, 2, 3, 4, 5, 6 — THAT'S IT! 💕🎊'},
-  5:   {e:'🌟', t:'<strong>5 days</strong> — FIVE DAYS! ONE HAND! YOU CAN COUNT THE DAYS ON ONE HAND! 🙌🎉💕'},
-  4:   {e:'🎊', t:'<strong>4 days</strong> — FOUR DAYS! Pull out the welcome home banner! 🎊🎉💕'},
-  3:   {e:'🎉', t:'<strong>3 days</strong> — THREE DAYS! THREE! The day after tomorrow's tomorrow! IT'S SO CLOSE! 🎉💕'},
-  2:   {e:'🚀', t:'<strong>2 days</strong> — TWO DAYS! TOMORROW'S TOMORROW! Get some sleep — the best day is almost here! 🚀💕'},
-  1:   {e:'💕', t:'<strong>1 day</strong> — TOMORROW IS THE DAY! ONE SLEEP! ONE SINGLE SLEEP! DADDY IS ALMOST HOME! 💕🎉🎊'},
-  0:   {e:'🎉', t:'<strong>TODAY IS THE DAY!</strong> — Daddy is HOME! 🎉💕🎊'},
+var dayFacts = {
+  198:{e:'🛋️',t:'<strong>198 days</strong> — that\'s 4,752 hours of cartoon-watching potential. Use them wisely!'},
+  197:{e:'🍕',t:'<strong>197 days</strong> — if you ate a slice of pizza every day until Daddy gets home, you\'d eat 197 slices. That\'s a lot of pizza.'},
+  196:{e:'🦋',t:'<strong>196 days</strong> — a monarch butterfly\'s migration takes about 120 days. You\'re waiting longer than a butterfly migration!'},
+  195:{e:'🌙',t:'<strong>195 days</strong> — that\'s almost 6.5 full moons from now until Daddy\'s home.'},
+  194:{e:'🐢',t:'<strong>194 days</strong> — a sea turtle egg takes 60 days to hatch. You could hatch 3 sea turtles in this time!'},
+  193:{e:'🎬',t:'<strong>193 days</strong> — if you watched a movie every day you\'d see 193 movies before Daddy gets home. Time for a list!'},
+  192:{e:'🌸',t:'<strong>192 days</strong> — that\'s 27 and a half weeks. You\'ve totally got this! 💕'},
+  191:{e:'🏃',t:'<strong>191 days</strong> — if you ran a mile every day you\'d have run 191 miles by the time Daddy lands!'},
+  190:{e:'🎂',t:'<strong>190 days</strong> — that\'s 190 chances to do something kind, brave, or fun before the big reunion!'},
+  189:{e:'🦁',t:'<strong>189 days</strong> — a lion cub grows big enough to hunt in about 180 days. You\'re stronger than a lion cub!'},
+  188:{e:'📚',t:'<strong>188 days</strong> — if you read 10 pages a day you\'d finish a 1,880-page book. Or like, 10 normal books!'},
+  187:{e:'🌊',t:'<strong>187 days</strong> — the average wave crashes every 10 seconds. That\'s 1,616,800 waves until Daddy\'s home!'},
+  186:{e:'🐝',t:'<strong>186 days</strong> — a honeybee visits about 2,000 flowers a day. That\'s 372,000 flowers worth of waiting!'},
+  185:{e:'🚀',t:'<strong>185 days</strong> — the Space Shuttle took 8 minutes to reach orbit. In 185 days it could orbit Earth 2,900 times!'},
+  184:{e:'🌻',t:'<strong>184 days</strong> — sunflowers grow from seed to bloom in about 80 days. You could grow two whole sunflowers waiting for Daddy!'},
+  183:{e:'🎵',t:'<strong>183 days</strong> — if a song is 3 minutes long, you could listen to 87,840 songs before Daddy gets home. Better start that playlist!'},
+  182:{e:'🎊',t:'<strong>182 days</strong> — exactly 26 weeks, or half a year! You are HALFWAY through the calendar wait. Go Mia! 🌟'},
+  181:{e:'🐠',t:'<strong>181 days</strong> — clownfish live 6-10 years. Daddy\'s deployment is just a tiny blip of a clownfish\'s life!'},
+  180:{e:'🌈',t:'<strong>180 days</strong> — less than 6 months! In school terms, that\'s almost one whole semester!'},
+  179:{e:'🦒',t:'<strong>179 days</strong> — a baby giraffe learns to walk within hours of being born. You\'ve been running this race for weeks already!'},
+  178:{e:'⭐',t:'<strong>178 days</strong> — light from nearby stars takes years to reach us. Waiting 178 days is nothing compared to starlight!'},
+  177:{e:'🍦',t:'<strong>177 days</strong> — if you had a scoop of ice cream every day you\'d eat 177 scoops before Daddy\'s home. Dessert goals!'},
+  176:{e:'🐧',t:'<strong>176 days</strong> — emperor penguin dads stand on eggs for 65 days in Antarctica with no food. Daddy\'s deployment has nothing on penguin dads!'},
+  175:{e:'🎈',t:'<strong>175 days</strong> — a helium balloon floats for about 10 hours. You\'d need 420 balloons to mark every hour until Daddy\'s home!'},
+  174:{e:'🌍',t:'<strong>174 days</strong> — Earth travels 1.6 million miles around the sun every day. In 174 days, Earth goes 278 million miles — all while you wait!'},
+  173:{e:'🦅',t:'<strong>173 days</strong> — a bald eagle egg hatches in 35 days. You could hatch nearly 5 bald eagles in the time you\'re waiting!'},
+  172:{e:'🍓',t:'<strong>172 days</strong> — strawberries take about 90 days from planting to picking. You could grow fruit twice before Daddy gets home!'},
+  171:{e:'🎯',t:'<strong>171 days</strong> — that\'s 24 weeks and 3 days. Every single day you wake up, you\'re one day closer. That\'s a win!'},
+  170:{e:'🐬',t:'<strong>170 days</strong> — dolphins sleep with half their brain awake. You\'ve been wide awake and brave through 170 whole days!'},
+  169:{e:'🏆',t:'<strong>169 days</strong> — the Super Bowl is played once a year. You\'re waiting almost half a year for something WAY better than any Super Bowl!'},
+  168:{e:'⏰',t:'<strong>168 days</strong> — that\'s exactly 24 weeks, or 4,032 hours. But who\'s counting? (We are. Obviously!)'},
+  167:{e:'🌺',t:'<strong>167 days</strong> — some orchids bloom for up to 4 months then wait patiently. You\'re basically a rare orchid!'},
+  166:{e:'🦋',t:'<strong>166 days</strong> — a caterpillar spends about 2 weeks in its chrysalis before becoming a butterfly. You\'ve been becoming more amazing every day!'},
+  165:{e:'🎪',t:'<strong>165 days</strong> — that\'s 23 weeks and 4 days. Less than 6 months. The countdown is getting realer every day!'},
+  164:{e:'🐘',t:'<strong>164 days</strong> — elephants are pregnant for 22 months. You\'re only waiting 7ish months — way shorter than an elephant pregnancy!'},
+  163:{e:'🌙',t:'<strong>163 days</strong> — the moon completes a full cycle every 29.5 days. That\'s about 5.5 more moon cycles until the big day!'},
+  162:{e:'🍩',t:'<strong>162 days</strong> — if each day were a donut you\'d have enough to fill 8 dozen donut boxes. That\'s a lot of sweet days ahead!'},
+  161:{e:'🎸',t:'<strong>161 days</strong> — Beethoven wrote his 9th Symphony while completely deaf. If he could do THAT you can absolutely do 161 more days!'},
+  160:{e:'🚂',t:'<strong>160 days</strong> — a cross-country train takes about 3 days. In 160 days you could theoretically ride back and forth across America 26 times!'},
+  159:{e:'🌟',t:'<strong>159 days</strong> — you\'ve already waited so many days. Every single one made you braver, stronger, and more ready for that hug!'},
+  158:{e:'🦜',t:'<strong>158 days</strong> — parrots can live for 80 years. This deployment is just 0.5% of a parrot\'s lifetime. Puts it in perspective!'},
+  157:{e:'🏖️',t:'<strong>157 days</strong> — no beach is as good as the one you\'ll celebrate on when Daddy\'s home!'},
+  156:{e:'🍪',t:'<strong>156 days</strong> — that\'s 22 weeks. If you baked cookies every weekend until Daddy\'s home you\'d make 22 batches. Save him some!'},
+  155:{e:'🐼',t:'<strong>155 days</strong> — a baby panda is born the size of a stick of butter. You\'re growing stronger every day too!'},
+  154:{e:'🌊',t:'<strong>154 days</strong> — that\'s 22 weeks exactly. Every week that passes is another week you crushed it!'},
+  153:{e:'🎭',t:'<strong>153 days</strong> — Shakespeare wrote an average of 1.5 plays per year. In 153 days he\'d have written about half a play. You\'re writing a whole story!'},
+  152:{e:'🚁',t:'<strong>152 days</strong> — a helicopter can fly about 150 mph. At that speed it would take just 20 hours to cross the US. Daddy feels closer every day!'},
+  151:{e:'🌸',t:'<strong>151 days</strong> — cherry blossoms only bloom for about 2 weeks a year. By the time they bloom again Daddy might already be home!'},
+  150:{e:'🎊',t:'<strong>150 days</strong> — that\'s a big milestone! Less than 5 months. You are absolutely crushing this! 🌟'},
+  149:{e:'🦁',t:'<strong>149 days</strong> — lions in the wild roam up to 10 miles a day. In 149 days a lion covers 1,490 miles — all while you wait like a champ!'},
+  148:{e:'🍋',t:'<strong>148 days</strong> — a lemon tree takes 6-9 months to produce fruit. You\'re waiting less time than it takes to grow a lemon. And you\'re way sweeter!'},
+  147:{e:'🌙',t:'<strong>147 days</strong> — that\'s 21 weeks exactly! The number keeps shrinking!'},
+  146:{e:'🐙',t:'<strong>146 days</strong> — a mama octopus guards her eggs for up to 4.5 years without eating. Your wait is nothing compared to that!'},
+  145:{e:'🎵',t:'<strong>145 days</strong> — good things take time — and Daddy coming home is the best thing!'},
+  144:{e:'🌻',t:'<strong>144 days</strong> — that\'s 144 sunrises, 144 sunsets, and 144 nights of knowing Daddy loves you! 💕'},
+  143:{e:'💕',t:'<strong>143 days</strong> — 143 means "I Love You" (1 letter, 4 letters, 3 letters). How perfect is that?!'},
+  142:{e:'🏄',t:'<strong>142 days</strong> — the average wave takes 10 days to travel across the Pacific. In 142 days 14 waves could cross the whole ocean!'},
+  141:{e:'🦊',t:'<strong>141 days</strong> — a fox kit grows up in about 6 months. By the time Daddy\'s home a fox kit born today would be basically grown!'},
+  140:{e:'🎯',t:'<strong>140 days</strong> — exactly 20 weeks! One third of a year. You\'ve got this completely under control!'},
+  139:{e:'🍕',t:'<strong>139 days</strong> — Americans eat approximately 3 billion pizzas a year. Someone is definitely having pizza right now!'},
+  138:{e:'🌈',t:'<strong>138 days</strong> — a rainbow requires both rain AND sunshine. You\'re getting through the rain — the sunshine is coming! ☀️'},
+  137:{e:'🐸',t:'<strong>137 days</strong> — tadpoles become frogs in 6-12 weeks. You could\'ve watched a tadpole become a frog twice over while waiting!'},
+  136:{e:'🚀',t:'<strong>136 days</strong> — the Apollo 11 mission took only 8 days. In 136 days you could do that journey 17 times!'},
+  135:{e:'🌺',t:'<strong>135 days</strong> — less than 20 weeks! The numbers keep shrinking!'},
+  134:{e:'🎸',t:'<strong>134 days</strong> — whatever age you are you\'re already braver than most!'},
+  133:{e:'🦋',t:'<strong>133 days</strong> — monarch butterflies travel up to 100 miles a day. Daddy\'s never far in your heart!'},
+  132:{e:'🍓',t:'<strong>132 days</strong> — that\'s 19 weeks exactly. Under 20 weeks. The numbers just keep getting better!'},
+  131:{e:'🌙',t:'<strong>131 days</strong> — there are 131 days left and 131 reasons you\'re amazing!'},
+  130:{e:'🐳',t:'<strong>130 days</strong> — blue whales can hold their breath for about 90 minutes. You\'ve been holding it together way longer than any whale!'},
+  129:{e:'⭐',t:'<strong>129 days</strong> — the North Star has guided sailors home for centuries. You\'re pointing straight to October 31st!'},
+  128:{e:'🎂',t:'<strong>128 days</strong> — that\'s 18 weeks and 2 days. Under 130 days. You should absolutely celebrate this!'},
+  127:{e:'🐝',t:'<strong>127 days</strong> — a queen bee can live for 5 years. You are the queen of this countdown!'},
+  126:{e:'🌊',t:'<strong>126 days</strong> — exactly 18 weeks! Less than 5 months. This is officially feeling very close!'},
+  125:{e:'🏆',t:'<strong>125 days</strong> — you\'ve been competing in the patience Olympics for so long — and you\'re winning!'},
+  124:{e:'🦒',t:'<strong>124 days</strong> — a giraffe\'s tongue is 18-20 inches long. That\'s a fun fact that has nothing to do with the countdown but it cheered us up!'},
+  123:{e:'🎬',t:'<strong>123 days</strong> — 1, 2, 3 — easy as can be! 123 days and counting down!'},
+  122:{e:'🌸',t:'<strong>122 days</strong> — that\'s just over 17 weeks. Every week is a victory lap!'},
+  121:{e:'🍩',t:'<strong>121 days</strong> — 121 is 11 × 11. Mia is almost 12 — almost as perfect as this number!'},
+  120:{e:'🎊',t:'<strong>120 days</strong> — FOUR MONTHS from today! You can do four months standing on your head! 🌟'},
+  119:{e:'🌻',t:'<strong>119 days</strong> — under 120! The numbers are tumbling down so fast now!'},
+  118:{e:'🐬',t:'<strong>118 days</strong> — dolphins can swim 25 mph. Daddy\'s heart has circled back to you every single day!'},
+  117:{e:'🎵',t:'<strong>117 days</strong> — that\'s 16 weeks and 5 days. Under 17 weeks. The playlist is growing and so is the excitement!'},
+  116:{e:'🦅',t:'<strong>116 days</strong> — bald eagles can live 20-30 years. This deployment is just a tiny chapter in a very long wonderful story!'},
+  115:{e:'🌙',t:'<strong>115 days</strong> — almost 4 months exactly. The moon will be full about 4 more times before Daddy\'s home!'},
+  114:{e:'🍪',t:'<strong>114 days</strong> — the sweet ones at the bottom of the jar are getting closer!'},
+  113:{e:'🚂',t:'<strong>113 days</strong> — in 113 days you could ride the world\'s longest train journey nearly 19 times!'},
+  112:{e:'🌈',t:'<strong>112 days</strong> — exactly 16 weeks! Four months of Sundays. You have been SO strong!'},
+  111:{e:'🎯',t:'<strong>111 days</strong> — 111 looks the same upside down. Kind of like how Daddy\'s love for you never changes! 💕'},
+  110:{e:'🐧',t:'<strong>110 days</strong> — emperor penguins walk 70 miles to their breeding grounds. You\'ve been on your own journey and you\'re doing amazing!'},
+  109:{e:'🌺',t:'<strong>109 days</strong> — just 9 days away from the big 100! Almost there!'},
+  108:{e:'☀️',t:'<strong>108 days</strong> — the sun is 108 times the diameter of Earth. Daddy\'s love for you is at least that big!'},
+  107:{e:'🦁',t:'<strong>107 days</strong> — a week away from 100! You can almost taste the double digits!'},
+  106:{e:'🎸',t:'<strong>106 days</strong> — just 6 days from triple digits to double digits! Get ready to celebrate!'},
+  105:{e:'🌟',t:'<strong>105 days</strong> — exactly 15 weeks! Five away from 100. The home stretch is getting very real!'},
+  104:{e:'🍦',t:'<strong>104 days</strong> — four days from 100! Can you feel it?!'},
+  103:{e:'🎊',t:'<strong>103 days</strong> — THREE days from 100! Almost there! 🎉'},
+  102:{e:'🎈',t:'<strong>102 days</strong> — TWO days from 100! Get your confetti ready!'},
+  101:{e:'🥁',t:'<strong>101 days</strong> — tomorrow you hit DOUBLE DIGITS! This is huge! 🥁🥁🥁'},
+  100:{e:'🎉',t:'<strong>100 DAYS!</strong> — YOU HIT THE TRIPLE DIGIT MILESTONE! Less than 100 days until Daddy is HOME! THIS IS HUGE! 🎉🎊💕'},
+  99:{e:'🌟',t:'<strong>99 days</strong> — DOUBLE DIGITS BABY! Under 100! This deserves a happy dance! 💃'},
+  98:{e:'🎊',t:'<strong>98 days</strong> — 98 days is only 14 weeks. FOURTEEN! You\'ve got this completely in the bag!'},
+  97:{e:'🍕',t:'<strong>97 days</strong> — just over 3 months. Start planning the welcome home dinner menu! 🍽️'},
+  96:{e:'🌸',t:'<strong>96 days</strong> — exactly 13 weeks and 5 days. Under 100 and shrinking fast!'},
+  95:{e:'🚀',t:'<strong>95 days</strong> — in 95 days you could go to the moon and back 15 times. But you\'d rather have Daddy home!'},
+  94:{e:'🐼',t:'<strong>94 days</strong> — your eyes are wide open and fixed on October 31st!'},
+  93:{e:'🌻',t:'<strong>93 days</strong> — just over 13 weeks. Every week the excitement gets one level higher!'},
+  92:{e:'🎵',t:'<strong>92 days</strong> — if each day were a beat you\'d have a 92-beat drum solo. The grand finale is coming! 🥁'},
+  91:{e:'🎯',t:'<strong>91 days</strong> — exactly 13 weeks! The countdown clock is moving SO fast now!'},
+  90:{e:'🎊',t:'<strong>90 days</strong> — THREE MONTHS! Just 90 sleeps! You could count them on your fingers... if you had 9 hands!'},
+  89:{e:'🌙',t:'<strong>89 days</strong> — 89 is a prime number. Just like this moment in time — totally unique and unrepeatable!'},
+  88:{e:'🎹',t:'<strong>88 days</strong> — a piano has 88 keys. Each day left is like one key — and together they\'re making the most beautiful song!'},
+  87:{e:'🌊',t:'<strong>87 days</strong> — Daddy\'s love crosses every mile every single day!'},
+  86:{e:'☀️',t:'<strong>86 days</strong> — there are 86,400 seconds in a day. Every single second you\'re a little bit closer!'},
+  85:{e:'🦋',t:'<strong>85 days</strong> — just 5 days from 80! The big numbers are disappearing fast!'},
+  84:{e:'🍩',t:'<strong>84 days</strong> — exactly 12 weeks! THREE MONTHS from tomorrow! You are SO close!'},
+  83:{e:'🌺',t:'<strong>83 days</strong> — under 12 weeks! The single-digit weeks are coming for you!'},
+  82:{e:'🐬',t:'<strong>82 days</strong> — your family pod is about to be complete again! 💕'},
+  81:{e:'🎸',t:'<strong>81 days</strong> — 81 = 9 × 9. You\'re basically at a perfect square of days left. Math is on your side!'},
+  80:{e:'🎊',t:'<strong>80 days</strong> — Around the World in 80 Days is a whole novel! Daddy\'s coming home in the same number of days! 🌍'},
+  79:{e:'🌟',t:'<strong>79 days</strong> — under 80! Just 11 weeks and 2 days. Single digit weeks territory soon!'},
+  78:{e:'🎈',t:'<strong>78 days</strong> — just over 11 weeks. You can count the weeks on both hands now!'},
+  77:{e:'🍀',t:'<strong>77 days</strong> — exactly 11 weeks! Lucky number 11! Eleven weeks until the best Halloween ever! 🎃'},
+  76:{e:'🌙',t:'<strong>76 days</strong> — in Norway the sun doesn\'t set for 76 days in summer. You\'ve been shining just as bright every single day!'},
+  75:{e:'🏆',t:'<strong>75 days</strong> — just 10 weeks and 5 days. You are IN the final quarter now! 🏆'},
+  74:{e:'🦁',t:'<strong>74 days</strong> — under 75! You\'re lion-hearted and getting so close!'},
+  73:{e:'🌸',t:'<strong>73 days</strong> — just over 10 weeks. Can you even believe you\'ve made it this far?! 💕'},
+  72:{e:'⭐',t:'<strong>72 days</strong> — in 72 days there are 1,728 hours until Daddy\'s home. Sounds like a lot but it\'s SO not!'},
+  71:{e:'🎵',t:'<strong>71 days</strong> — under 72! Single-digit weeks are right around the corner!'},
+  70:{e:'🎊',t:'<strong>70 days</strong> — TEN WEEKS from today! One hand of weeks and you run out of fingers!'},
+  69:{e:'🌻',t:'<strong>69 days</strong> — under 70! The numbers are falling like dominoes now! 💕'},
+  68:{e:'🚀',t:'<strong>68 days</strong> — less than 10 weeks exactly. SINGLE DIGIT WEEKS ARE COMING!'},
+  67:{e:'🍕',t:'<strong>67 days</strong> — 9 weeks and 4 days. You are officially in the NINE WEEK ZONE!'},
+  66:{e:'🎯',t:'<strong>66 days</strong> — it takes 66 days to form a new habit. By the time Daddy gets home your new habit will be counting down!'},
+  65:{e:'🐧',t:'<strong>65 days</strong> — emperor penguin dads stand on eggs for 65 days without eating. Today you match a penguin dad\'s patience! Respect! 🐧'},
+  64:{e:'🎮',t:'<strong>64 days</strong> — the Nintendo 64 had 64-bit graphics. This countdown is way more high-definition than that!'},
+  63:{e:'🌙',t:'<strong>63 days</strong> — exactly 9 weeks! NINE WEEKS! You\'re counting in single digits now! 🎉'},
+  62:{e:'🌊',t:'<strong>62 days</strong> — under 9 weeks! The ocean between you and this moment is getting smaller every tide!'},
+  61:{e:'🌟',t:'<strong>61 days</strong> — TWO MONTHS from tomorrow! You are SO incredibly close!'},
+  60:{e:'🎊',t:'<strong>60 days</strong> — TWO MONTHS! Just 60 sleeps! You could count every one on your fingers and toes twice! 🎉💕'},
+  59:{e:'🎈',t:'<strong>59 days</strong> — under 60! Under two months! THIS IS HAPPENING! 🎊'},
+  58:{e:'🦋',t:'<strong>58 days</strong> — 8 weeks and 2 days. You\'ve transformed like a butterfly through this whole journey!'},
+  57:{e:'🌺',t:'<strong>57 days</strong> — exactly 8 weeks and 1 day. The single-digit weeks feel SO close!'},
+  56:{e:'🍩',t:'<strong>56 days</strong> — exactly 8 weeks! EIGHT WEEKS! You\'re counting weeks on one hand! 🙌'},
+  55:{e:'🎵',t:'<strong>55 days</strong> — 7 weeks and 6 days — the last day of the 8-week club! Tomorrow: 7 weeks!'},
+  54:{e:'🌸',t:'<strong>54 days</strong> — under 8 weeks officially. SEVEN WEEKS AND COUNTING! 💕'},
+  53:{e:'🌙',t:'<strong>53 days</strong> — 7 weeks and 4 days. Start planning the welcome home party — for real this time!'},
+  52:{e:'🎯',t:'<strong>52 days</strong> — there are 52 weeks in a year. You\'re counting weeks and there are fewer weeks left than in a whole year! 🎊'},
+  51:{e:'🌟',t:'<strong>51 days</strong> — 7 weeks and 2 days. Every morning you wake up it\'s one less sleep until the biggest hug! 💕'},
+  50:{e:'🎊',t:'<strong>50 days</strong> — FIFTY DAYS! That\'s 7 weeks and 1 day! You are so incredibly close to the finish line! 🎉🎊💕'},
+  49:{e:'🎉',t:'<strong>49 days</strong> — SEVEN WEEKS EXACTLY! You could count every remaining week on one hand! 🙌'},
+  48:{e:'🌺',t:'<strong>48 days</strong> — under 7 weeks! That\'s 1,152 hours. But who\'s counting hours when weeks is SO much better?!'},
+  47:{e:'🦁',t:'<strong>47 days</strong> — 6 weeks and 5 days! Almost in the SIX WEEK CLUB! You are a lion and you are ALMOST THERE!'},
+  46:{e:'🌊',t:'<strong>46 days</strong> — 6 weeks and 4 days! The wave is building and it\'s about to crash in the best way! 🌊'},
+  45:{e:'⭐',t:'<strong>45 days</strong> — six weeks and three days. Less than 7 weeks. The stars are aligning! ⭐'},
+  44:{e:'🎸',t:'<strong>44 days</strong> — 6 weeks and 2 days. The reunion playlist is ready. The countdown is almost done! 🎵'},
+  43:{e:'🌻',t:'<strong>43 days</strong> — 6 weeks and 1 day. A sunflower could grow from seed to bloom in this time! You\'re blooming too! 🌻'},
+  42:{e:'🎊',t:'<strong>42 days</strong> — SIX WEEKS EXACTLY! The answer to life, the universe, and everything — and also the number of days until Daddy\'s home! 🎉'},
+  41:{e:'🍕',t:'<strong>41 days</strong> — under 6 weeks! Start thinking about what you want for your welcome home dinner! 🍕'},
+  40:{e:'🌟',t:'<strong>40 days</strong> — FIVE WEEKS AND FIVE DAYS! Under 6 weeks! You are SO CLOSE! 💕'},
+  39:{e:'🎈',t:'<strong>39 days</strong> — under 40! Five weeks and 4 days! Get the streamers ready! 🎊'},
+  38:{e:'🌙',t:'<strong>38 days</strong> — 5 weeks and 3 days! The moon will only be full ONE more time before Daddy\'s home! 🌕'},
+  37:{e:'🎉',t:'<strong>37 days</strong> — 5 weeks and 2 days! Can you even stand it?! IT\'S SO CLOSE! 🎉'},
+  36:{e:'🐬',t:'<strong>36 days</strong> — five weeks and 1 day. You\'re flipping with excitement!'},
+  35:{e:'🎊',t:'<strong>35 days</strong> — FIVE WEEKS EXACTLY! One hand of weeks! FIVE! Start making that welcome home banner! 🎊💕'},
+  34:{e:'🌺',t:'<strong>34 days</strong> — under 5 weeks! 4 weeks and 6 days! The single-digit weeks are HERE! 🌟'},
+  33:{e:'🦋',t:'<strong>33 days</strong> — 4 weeks and 5 days! Like a butterfly about to emerge — the big moment is SO close!'},
+  32:{e:'🚀',t:'<strong>32 days</strong> — 4 weeks and 4 days! We are in the FINAL MONTH! This is actually happening! 🚀'},
+  31:{e:'📅',t:'<strong>31 days</strong> — ONE MONTH FROM TODAY! 31 sleeps! One calendar page! You made it to the final month! 🎉🎊💕'},
+  30:{e:'🎊',t:'<strong>30 days</strong> — THIRTY DAYS! ONE MONTH! START THE WELCOME HOME PLANNING! 🎉'},
+  29:{e:'🌙',t:'<strong>29 days</strong> — less than 30 days! This is literally ONE moon cycle away! 🌕'},
+  28:{e:'🌟',t:'<strong>28 days</strong> — FOUR WEEKS EXACTLY! Count them on one hand — four whole fingers! 🙌 IT\'S SO CLOSE!'},
+  27:{e:'🎈',t:'<strong>27 days</strong> — under 4 weeks! 3 weeks and 6 days! The last week of the 4-week era!'},
+  26:{e:'🌸',t:'<strong>26 days</strong> — 3 weeks and 5 days! Start making your list of everything you want to say when you see Daddy! 💕'},
+  25:{e:'🎉',t:'<strong>25 days</strong> — A QUARTER OF 100 DAYS LEFT! Just 3 weeks and 4 days! THIS IS WILD! 🎉'},
+  24:{e:'⏰',t:'<strong>24 days</strong> — 24 hours in a day, 24 days to go! Every hour counts now! ⏰💕'},
+  23:{e:'🌟',t:'<strong>23 days</strong> — 3 weeks and 2 days! The welcome home party is almost a TODAY thing! 🌟'},
+  22:{e:'🎊',t:'<strong>22 days</strong> — THREE WEEKS AND ONE DAY! You can count the remaining weeks on THREE FINGERS! 🙌'},
+  21:{e:'🎉',t:'<strong>21 days</strong> — THREE WEEKS EXACTLY! 21 sleeps! THREE! 🎉💕'},
+  20:{e:'🚀',t:'<strong>20 days</strong> — TWENTY DAYS! TWO WEEKS AND SIX DAYS! LAUNCH SEQUENCE! 🚀🎊'},
+  19:{e:'🌺',t:'<strong>19 days</strong> — under 20! Less than 3 weeks! Are you READY?! 🌺💕'},
+  18:{e:'💕',t:'<strong>18 days</strong> — TWO AND A HALF WEEKS! The excitement is UNCONTAINABLE! 💕🎊'},
+  17:{e:'🌙',t:'<strong>17 days</strong> — 2 weeks and 3 days! Start picking out your outfit for homecoming day! ✨'},
+  16:{e:'🎈',t:'<strong>16 days</strong> — TWO WEEKS AND TWO DAYS! Buy the balloons. The time is COMING! 🎈'},
+  15:{e:'🌟',t:'<strong>15 days</strong> — TWO WEEKS AND ONE DAY! Half a month! You are SO incredibly close! 🌟💕'},
+  14:{e:'🎊',t:'<strong>14 days</strong> — TWO WEEKS EXACTLY! 14 sleeps! Count them on your fingers! 🙌🎉'},
+  13:{e:'🍀',t:'<strong>13 days</strong> — under two weeks! Lucky 13 — and you are SO lucky this day is almost here! 🍀'},
+  12:{e:'🎉',t:'<strong>12 days</strong> — ONE WEEK AND FIVE DAYS! Like the 12 days of Christmas but SO much better! 🎉💕'},
+  11:{e:'🌸',t:'<strong>11 days</strong> — ONE WEEK AND FOUR DAYS! The final countdown is HERE! You almost made it! 🌸💕'},
+  10:{e:'🚀',t:'<strong>10 days</strong> — TEN DAYS! T-MINUS TEN AND COUNTING! 🚀🎊'},
+  9:{e:'🎊',t:'<strong>9 days</strong> — SINGLE DIGITS BABY! 9 DAYS! This is ACTUALLY happening! 🎉'},
+  8:{e:'🌟',t:'<strong>8 days</strong> — EIGHT DAYS! You can count every remaining day on your fingers! 🙌💕'},
+  7:{e:'🎉',t:'<strong>7 days</strong> — ONE WEEK! SEVEN SLEEPS! The last week before the BEST DAY EVER! 🎉🎊💕'},
+  6:{e:'💕',t:'<strong>6 days</strong> — SIX DAYS! Less than one week! Count them: 1, 2, 3, 4, 5, 6 — THAT\'S IT! 💕🎊'},
+  5:{e:'🌟',t:'<strong>5 days</strong> — FIVE DAYS! ONE HAND! YOU CAN COUNT THE DAYS ON ONE HAND! 🙌🎉💕'},
+  4:{e:'🎊',t:'<strong>4 days</strong> — FOUR DAYS! Pull out the welcome home banner! 🎊🎉💕'},
+  3:{e:'🎉',t:'<strong>3 days</strong> — THREE DAYS! THREE! The day after tomorrow\'s tomorrow! IT\'S SO CLOSE! 🎉💕'},
+  2:{e:'🚀',t:'<strong>2 days</strong> — TWO DAYS! TOMORROW\'S TOMORROW! Get some sleep — the best day is almost here! 🚀💕'},
+  1:{e:'💕',t:'<strong>1 day</strong> — TOMORROW IS THE DAY! ONE SINGLE SLEEP! DADDY IS ALMOST HOME! 💕🎉🎊'},
+  0:{e:'🎉',t:'<strong>TODAY IS THE DAY!</strong> — Daddy is HOME! 🎉💕🎊'}
 };
 
-function updateDayFact(days) {
-  const box = document.getElementById('day-fact-box');
-  const fact = dayFacts[days] || dayFacts[Math.min(198, days)];
-  if (!fact) { box.style.display = 'none'; return; }
+function tick() {
+  var now = new Date(), diff = END - now;
+  if (diff <= 0) {
+    ['cd-days','cd-hours','cd-mins','cd-secs'].forEach(function(id){document.getElementById(id).textContent='0';});
+    document.getElementById('milestone-msg').textContent = '🎉 DADDY IS HOME! 🎉';
+    document.getElementById('prog-bar').style.width = '100%';
+    document.getElementById('prog-label').textContent = '100% — Welcome home!';
+    showDayFact(0);
+    return;
+  }
+  var days  = Math.floor(diff/86400000);
+  var hours = Math.floor((diff%86400000)/3600000);
+  var mins  = Math.floor((diff%3600000)/60000);
+  var secs  = Math.floor((diff%60000)/1000);
+  document.getElementById('cd-days').textContent  = days;
+  document.getElementById('cd-hours').textContent = pad(hours);
+  document.getElementById('cd-mins').textContent  = pad(mins);
+  document.getElementById('cd-secs').textContent  = pad(secs);
+  var pct = Math.min(100,Math.max(0,((now-START)/TOTAL_MS)*100));
+  document.getElementById('prog-bar').style.width = pct.toFixed(1)+'%';
+  document.getElementById('prog-label').textContent = pct.toFixed(1)+'% of the way there 💕';
+  var msg = '💕 Only '+days+' more days until Daddy is home!';
+  if(pct<5) msg="🚀 The journey has just begun — you've totally got this!";
+  else if(Math.abs(pct-25)<2) msg='🎊 25% done — you\'re crushing it!';
+  else if(Math.abs(pct-50)<1.5) msg='🎉 HALFWAY THERE! You are incredible!';
+  else if(Math.abs(pct-75)<1.5) msg='✨ 75% done — the finish line is in sight!';
+  else if(days<=7) msg='🚨 ONE WEEK LEFT! Get the banner ready!';
+  else if(days<=14) msg='🌟 Less than 2 weeks — so close!';
+  else if(days<=30) msg='🌸 Less than one month left!';
+  else if(days<=60) msg='💫 Less than 2 months to go!';
+  else if(days<=100) msg='🎊 Less than 100 days!';
+  else if(days<=180) msg='🌻 Less than 6 months — getting so close!';
+  document.getElementById('milestone-msg').textContent = msg;
+  showDayFact(days);
+}
+
+function showDayFact(days) {
+  var box = document.getElementById('day-fact-box');
+  var fact = dayFacts[days];
+  if (!fact) { box.style.display='none'; return; }
   document.getElementById('day-fact-emoji').textContent = fact.e;
   document.getElementById('day-fact-text').innerHTML = fact.t;
   box.style.display = 'flex';
 }
-// ── WOULD YOU RATHER ─────────────────────────
-const wyrQuestions = [
-  {a:"Always have to sing instead of speak", b:"Always have to dance instead of walk"},
-  {a:"Eat pizza every day for a year", b:"Eat tacos every day for a year"},
-  {a:"Have a pet dragon", b:"Have a pet unicorn"},
-  {a:"Be able to fly", b:"Be able to breathe underwater"},
-  {a:"Live in a treehouse", b:"Live on a houseboat"},
-  {a:"Only eat sweet foods forever", b:"Only eat salty foods forever"},
-  {a:"Have super speed", b:"Have super strength"},
-  {a:"Go back in time", b:"Travel to the future"},
-  {a:"Be invisible for a day", b:"Be able to read minds for a day"},
-  {a:"Never have to sleep", b:"Never have to eat"},
-  {a:"Meet your favorite celebrity", b:"Be famous for something you love"},
-  {a:"It always be summer", b:"It always be winter"},
-  {a:"Have unlimited money", b:"Have unlimited free time"},
-  {a:"Be the funniest person in the room", b:"Be the smartest person in the room"},
-  {a:"Live without music", b:"Live without movies"},
-  {a:"Have a rewind button for your life", b:"Have a pause button for your life"},
-  {a:"Know every language in the world", b:"Be able to talk to animals"},
-  {a:"Never be cold again", b:"Never be hot again"},
-  {a:"Eat your favorite meal every day", b:"Try a new food every day"},
-  {a:"Have a robot do all your chores", b:"Have a robot do all your homework"},
-  {a:"Be able to teleport anywhere", b:"Be able to stop time"},
-  {a:"Win an Olympic gold medal", b:"Win a Grammy Award"},
-  {a:"Have a personal chef", b:"Have a personal chauffeur"},
-  {a:"Only be able to whisper", b:"Only be able to shout"},
-  {a:"Have no social media ever again", b:"Have no video games ever again"},
-  {a:"Be the first person on Mars", b:"Discover treasure at the bottom of the ocean"},
-  {a:"Have a photographic memory", b:"Be able to learn any skill in one day"},
-  {a:"Always know what time it is", b:"Always know where everything is"},
-  {a:"Never have bad hair again", b:"Never have a bad outfit again"},
-  {a:"Find out the ending of every story before you start", b:"Never be able to reread or rewatch anything"},
-  {a:"Be able to talk to your past self", b:"Be able to send a message to your future self"},
-  {a:"Have an extra hour every day", b:"Never need more than 4 hours of sleep"},
-  {a:"Always have perfect weather wherever you go", b:"Always find a perfect parking spot"},
-  {a:"Never be stuck in traffic again", b:"Never wait in a line again"},
-  {a:"Be able to see 10 minutes into the future", b:"Change one decision from your past"},
-  {a:"Be an amazing singer", b:"Be an amazing dancer"},
-  {a:"Only eat breakfast foods forever", b:"Only eat dessert foods forever"},
-  {a:"Explore outer space", b:"Explore the deep ocean"},
-  {a:"Have a talking cat", b:"Have a talking dog"},
-  {a:"Be in your favorite movie", b:"Be in your favorite book"},
-  {a:"Have hiccups for the rest of your life", b:"Always feel like you need to sneeze but can't"},
-  {a:"Know every answer on every test", b:"Win every game you ever play"},
-  {a:"Live with no internet for a month", b:"Live with no TV for a year"},
-  {a:"Always be early", b:"Always be exactly on time"},
-  {a:"Have a pool in your backyard", b:"Have a movie theater in your house"},
-  {a:"Be able to run as fast as a cheetah", b:"Be able to jump as high as a kangaroo"},
-  {a:"Only wear one color forever", b:"Have to wear a different crazy outfit every day"},
-  {a:"Have a lifetime supply of your favorite snack", b:"Never have to pay for food at restaurants again"},
-  {a:"Be the best in the world at something no one cares about", b:"Be average at the most admired thing in the world"},
-  {a:"Know the exact day you'll be happiest", b:"Know the exact day your biggest dream comes true"},
-];
 
-let wyrIndex = 0;
-let wyrVoted = false;
+tick();
+setInterval(tick, 1000);
 
-function getWyrIndex() {
-  const now = new Date();
-  const day = Math.floor((now - new Date(now.getFullYear(), 0, 0)) / 86400000);
-  return (day + wyrIndex) % wyrQuestions.length;
+// ── DAILY FACT / JOKE ─────────────────────────
+var facts=[{e:'🐙',t:"Octopuses have three hearts and blue blood — they're basically underwater aliens!"},{e:'😂',t:"Why don't scientists trust atoms? Because they make up everything!"},{e:'🌍',t:"A day on Venus is longer than a year on Venus. Time is genuinely weird out there."},{e:'🦷',t:"Why did the tooth go to school? It wanted to get a little filling!"},{e:'🐴',t:"Horses literally cannot burp. Imagine holding in every single burp — forever."},{e:'😆',t:"What do you call a fish without eyes? A fsh! (Say it out loud!)"},{e:'🦈',t:"Sharks are older than trees. The ocean really said 'I had this handled.'"},{e:'🤡',t:"Why did the scarecrow win an award? He was outstanding in his field!"},{e:'🐝',t:"Bees can recognize human faces. So next time you see one... wave hello!"},{e:'🌙',t:"The moon is drifting away from Earth at the same speed your fingernails grow. Slow goodbye!"},{e:'🦩',t:"A group of flamingos is called a flamboyance. Honestly, iconic."},{e:'🎤',t:"Why can't Elsa have a balloon? Because she'll let it go!"},{e:'🧲',t:"There are more possible chess games than atoms in the entire observable universe. Big brain!"},{e:'🐌',t:"Snails can sleep for up to 3 years. Wish we could use that excuse for homework."},{e:'🍕',t:"Why did the pizza go to therapy? It had too many issues with its crust."},{e:'🌊',t:"We've explored more of the surface of Mars than the bottom of our own oceans. Spooky!"},{e:'🐧',t:"Penguins propose with a pebble. Fancier than some humans, honestly."},{e:'🧬',t:"You share 50% of your DNA with a banana. Technically, you're half fruity."},{e:'😹',t:"What do you call a sleeping dinosaur? A dino-snore!"},{e:'🌈',t:"A group of cats is called a clowder. A group of kittens is a kindle. You're welcome."},{e:'🦋',t:"Butterflies taste with their feet. Every landing is basically a taste test."},{e:'😄',t:"Why did the teddy bear say no to dessert? She was already stuffed!"},{e:'🐳',t:"A blue whale's heart is so big a small child could crawl through its arteries. Wild!"},{e:'🤣',t:"What do you call a pile of cats? A meow-ntain!"},{e:'🌺',t:"Cleopatra lived closer in time to the Moon landing than to the building of the Great Pyramid. Mind = blown."},{e:'🐠',t:"Clownfish can change gender. So Nemo's dad could technically become his mom. Pixar, we have notes."},{e:'🎈',t:"Hot air balloons were first tested on a sheep, a duck, and a rooster. The original test pilots!"},{e:'🦉',t:"A group of owls is called a parliament. They do look pretty wise."},{e:'😜',t:"Why did the math book look so sad? It had too many problems!"},{e:'🪐',t:"Saturn's rings are mostly ice and rock — only about as thick as a 10-story building."},{e:'🐨',t:"Koalas sleep up to 22 hours a day. Absolute legends."},{e:'😂',t:"Why did the bicycle fall over? Because it was two-tired!"},{e:'🦒',t:"Giraffes have the same number of neck bones as humans — just MUCH bigger ones."},{e:'🍦',t:"Why did the ice cream truck break down? Because of the rocky road!"},{e:'🐘',t:"Elephants are the only animals that can't jump. They make up for it by being absolutely massive."},{e:'🤓',t:"Why was the computer cold? Because it left its Windows open!"},{e:'😆',t:"What do you call a fake noodle? An impasta!"},{e:'🐢',t:"Some turtles can breathe through their butts in winter. Science is wild."},{e:'🍩',t:"Why did the donut go to the dentist? It needed a filling!"},{e:'😂',t:"What do you call a bear with no teeth? A gummy bear!"},{e:'😄',t:"What do elves learn in school? The elf-abet!"},{e:'🤣',t:"Why can't you trust stairs? They're always up to something!"},{e:'🐬',t:"Dolphins have names for each other — they use unique whistle signatures to call friends."},{e:'🍔',t:"Why did the hamburger go to the gym? To get better buns!"},{e:'😂',t:"What do you call a shoe made from a banana? A slipper!"},{e:'🐦',t:"Crows can recognize human faces and hold grudges. Be nice to crows."},{e:'🎃',t:"Pumpkins are technically a fruit. Halloween is basically a fruit festival."},{e:'🤡',t:"Why did the golfer bring extra pants? In case he got a hole in one!"},{e:'🍭',t:"Why did the lollipop go to school? It wanted to be a smartie!"},{e:'😜',t:"What do you call a lazy kangaroo? A pouch potato!"},{e:'😂',t:"Why did the cookie go to the doctor? Because it was feeling crummy!"},{e:'🎵',t:"Why did the music teacher need a ladder? To reach the high notes!"},{e:'🍎',t:"Apples float in water because 25% of their volume is air. Basically little fruit balloons."},{e:'😹',t:"What do you call a dog magician? A labra-cadabra-dor!"},{e:'🌟',t:"There are more stars in the universe than grains of sand on all of Earth's beaches."},{e:'😆',t:"Why did the tomato turn red? Because it saw the salad dressing!"},{e:'😂',t:"What do you call a sleeping T-Rex? A dino-snore! (Yes, this one is too good to only use once.)"},{e:'🌙',t:"On the moon your footprints will last millions of years because there's no wind or rain to erase them."},{e:'🤣',t:"Why did the girl put sugar under her pillow? So she could have sweet dreams!"},{e:'🦭',t:"Sea otters hold hands while sleeping so they don't drift apart. The sweetest thing in nature."},{e:'🎨',t:"Why did the artist go to jail? Because she was framed!"},{e:'😄',t:"What do you call a fish that wears a crown? King of the sea-bass!"},{e:'🍟',t:"Why did the french fry win the race? Because it was on a roll!"},{e:'🐊',t:"Crocodiles can't stick out their tongues. Rude, but also kind of impressive."},{e:'😂',t:"Why did the astronaut break up with his girlfriend? Because he needed some space!"},{e:'🤣',t:"What do you call a cold dog? A chilly dog!"},{e:'🦁',t:"Lions sleep up to 20 hours a day. King of the jungle? More like king of napping."},{e:'🐙',t:"An octopus can change its color AND texture in less than a second. Ultimate camouflage queen."},{e:'😜',t:"What do you call a cow that plays guitar? A moo-sician!"},{e:'😂',t:"Why did the skeleton go to the party alone? Because he had no body to go with!"},{e:'😆',t:"What do you call a pig that does karate? A pork chop!"},{e:'🐸',t:"A frog can jump up to 20 times its own body length. That's like you jumping the length of a school bus!"},{e:'😹',t:"What do you call a cat that gets everything it wants? Purrr-suasive!"},{e:'🌠',t:"Every atom in your body was forged inside a star that exploded billions of years ago. You are literally made of stardust."},{e:'😂',t:"Why was the broom late? It swept in!"},{e:'🍩',t:"Why was the donut sad? Because it was feeling empty inside — ring any bells?"},{e:'🤡',t:"Why did the clown lose his job? Because he kept cracking up!"},{e:'🦩',t:"Flamingos are born gray — they turn pink from the shrimp and algae they eat. You literally are what you eat."},{e:'🐝',t:"Honey never goes bad. Archaeologists found 3,000-year-old honey in Egyptian tombs — still edible."},{e:'😜',t:"What do you call a ghost's true love? His ghoul-friend!"},{e:'😂',t:"Why don't oysters share? Because they're shellfish!"},{e:'🍪',t:"What did the cookie say to the milk? 'You complete me.'"},{e:'🌻',t:"Sunflowers turn to face each other on cloudy days. Teamwork!"},{e:'🤣',t:"What do you call a snowman with a six-pack? An abdominal snowman!"},{e:'😂',t:"What do you call a sad strawberry? A blueberry!"},{e:'🌈',t:"A rainbow is actually a full circle — you just can't see the bottom half from the ground."},{e:'🍉',t:"Why did the watermelon go to school? Because it wanted to be a little seedy!"},{e:'😆',t:"What do you call a sleeping computer? A hard drive!"},{e:'🤣',t:"Why did the orange stop rolling down the hill? Because it ran out of juice!"},{e:'🐳',t:"A narwhal's spiral tusk is actually a giant tooth that grows through its lip. Nature is wild."},{e:'😄',t:"Why did the girl bring a ladder to school? Because she wanted to go to high school!"},{e:'🌟',t:"Light from the sun takes 8 minutes to reach Earth. The sunlight you feel right now left the sun 8 minutes ago."},{e:'😂',t:"What do you call a bear in the rain? A drizzly bear!"},{e:'🤡',t:"Why did the silly kid throw a clock out the window? To see time fly!"},{e:'😹',t:"What's a cat's favorite color? Purrr-ple!"},{e:'😂',t:"Why did the student eat her pencil? Because the teacher told her to draw a conclusion!"},{e:'🍿',t:"Why did the popcorn go to the movies? Because it wanted to see itself on the big screen!"},{e:'🤣',t:"Why don't eggs tell jokes? Because they'd crack up!"},{e:'😄',t:"What do you call a factory that makes okay products? A satisfactory!"},{e:'😂',t:"Why did the lamp go to school? To get a little brighter!"}];
+
+var factOffset = 0;
+function getDailyFactIdx() {
+  var now = new Date();
+  var day = Math.floor((now - new Date(now.getFullYear(),0,0))/86400000);
+  return (day + factOffset) % facts.length;
+}
+function showFact(idx) {
+  var f = facts[idx];
+  document.getElementById('fact-emoji').textContent = f.e;
+  document.getElementById('fact-text').textContent  = f.t;
+  var days = ['Sunday','Monday','Tuesday','Wednesday','Thursday','Friday','Saturday'];
+  document.getElementById('fact-day').textContent = 'Your '+days[new Date().getDay()]+' laugh 💕';
+}
+function nextFact() { factOffset=(factOffset+1)%facts.length; showFact(getDailyFactIdx()); }
+showFact(getDailyFactIdx());
+
+// ── WOULD YOU RATHER ──────────────────────────
+var wyrQuestions=[{a:"Always have to sing instead of speak",b:"Always have to dance instead of walk"},{a:"Eat pizza every day for a year",b:"Eat tacos every day for a year"},{a:"Have a pet dragon",b:"Have a pet unicorn"},{a:"Be able to fly",b:"Be able to breathe underwater"},{a:"Live in a treehouse",b:"Live on a houseboat"},{a:"Only eat sweet foods forever",b:"Only eat salty foods forever"},{a:"Have super speed",b:"Have super strength"},{a:"Go back in time",b:"Travel to the future"},{a:"Be invisible for a day",b:"Be able to read minds for a day"},{a:"Never have to sleep",b:"Never have to eat"},{a:"Meet your favorite celebrity",b:"Be famous for something you love"},{a:"It always be summer",b:"It always be winter"},{a:"Have unlimited money",b:"Have unlimited free time"},{a:"Be the funniest person in the room",b:"Be the smartest person in the room"},{a:"Live without music",b:"Live without movies"},{a:"Have a rewind button for your life",b:"Have a pause button for your life"},{a:"Know every language in the world",b:"Be able to talk to animals"},{a:"Never be cold again",b:"Never be hot again"},{a:"Eat your favorite meal every day",b:"Try a new food every day"},{a:"Have a robot do all your chores",b:"Have a robot do all your homework"},{a:"Be able to teleport anywhere",b:"Be able to stop time"},{a:"Win an Olympic gold medal",b:"Win a Grammy Award"},{a:"Have a personal chef",b:"Have a personal chauffeur"},{a:"Only be able to whisper",b:"Only be able to shout"},{a:"Have no social media ever again",b:"Have no video games ever again"},{a:"Be the first person on Mars",b:"Discover treasure at the bottom of the ocean"},{a:"Have a photographic memory",b:"Be able to learn any skill in one day"},{a:"Always know what time it is",b:"Always know where everything is"},{a:"Never have bad hair again",b:"Never have a bad outfit again"},{a:"Find out the ending of every story before you start",b:"Never be able to reread or rewatch anything"},{a:"Be able to talk to your past self",b:"Be able to send a message to your future self"},{a:"Have an extra hour every day",b:"Never need more than 4 hours of sleep"},{a:"Always have perfect weather wherever you go",b:"Always find a perfect parking spot"},{a:"Never be stuck in traffic again",b:"Never wait in a line again"},{a:"Be able to see 10 minutes into the future",b:"Change one decision from your past"},{a:"Be an amazing singer",b:"Be an amazing dancer"},{a:"Only eat breakfast foods forever",b:"Only eat dessert foods forever"},{a:"Explore outer space",b:"Explore the deep ocean"},{a:"Have a talking cat",b:"Have a talking dog"},{a:"Be in your favorite movie",b:"Be in your favorite book"},{a:"Have hiccups for the rest of your life",b:"Always feel like you need to sneeze but can't"},{a:"Know every answer on every test",b:"Win every game you ever play"},{a:"Live with no internet for a month",b:"Live with no TV for a year"},{a:"Always be early",b:"Always be exactly on time"},{a:"Have a pool in your backyard",b:"Have a movie theater in your house"},{a:"Be able to run as fast as a cheetah",b:"Be able to jump as high as a kangaroo"},{a:"Only wear one color forever",b:"Have to wear a different crazy outfit every day"},{a:"Have a lifetime supply of your favorite snack",b:"Never have to pay for food at restaurants again"},{a:"Be the best in the world at something no one cares about",b:"Be average at the most admired thing in the world"},{a:"Know the exact day you'll be happiest",b:"Know the exact day your biggest dream comes true"}];
+
+var wyrOffset = 0;
+var wyrVoted  = false;
+
+function getWyrIdx() {
+  var now = new Date();
+  var day = Math.floor((now - new Date(now.getFullYear(),0,0))/86400000);
+  return (day + wyrOffset) % wyrQuestions.length;
 }
 
 function loadWYR() {
-  const idx = getWyrIndex();
-  const q = wyrQuestions[idx];
+  var idx = getWyrIdx();
+  var q   = wyrQuestions[idx];
   document.getElementById('wyr-question').textContent = 'Would you rather...';
   document.getElementById('wyr-a').textContent = q.a;
   document.getElementById('wyr-b').textContent = q.b;
@@ -890,179 +762,104 @@ function loadWYR() {
   document.getElementById('wyr-a').classList.remove('voted');
   document.getElementById('wyr-b').classList.remove('voted');
   wyrVoted = false;
-
-  // load existing votes
-  if (IS_CONFIGURED && db) {
-    onValue(ref(db, 'dd_wyr/' + idx), snap => {
-      const data = snap.val() || {a:0,b:0};
-      if ((data.a + data.b) > 0) showWyrResult(data.a, data.b);
-    }, {onlyOnce: false});
-  }
+  db.ref('dd_wyr/'+idx).on('value', function(snap){
+    var data = snap.val() || {a:0,b:0};
+    if((data.a||0)+(data.b||0) > 0) showWyrResult(data.a||0, data.b||0);
+  });
 }
 
-window.__bridge.voteWYR = function(choice) {
+function voteWYR(choice) {
   if (wyrVoted) return;
   wyrVoted = true;
-  document.getElementById('wyr-' + choice).classList.add('voted');
-  const idx = getWyrIndex();
-  if (IS_CONFIGURED && db) {
-    // read then increment
-    import("https://www.gstatic.com/firebasejs/10.12.0/firebase-database.js").then(({get, ref: dbRef, set}) => {
-      const vRef = ref(db, 'dd_wyr/' + idx);
-      get(vRef).then(snap => {
-        const data = snap.val() || {a:0, b:0};
-        data[choice] = (data[choice] || 0) + 1;
-        set(vRef, data);
-      });
-    });
-  } else {
-    showWyrResult(choice === 'a' ? 1 : 0, choice === 'b' ? 1 : 0);
-  }
-};
+  document.getElementById('wyr-'+choice).classList.add('voted');
+  var idx = getWyrIdx();
+  db.ref('dd_wyr/'+idx).transaction(function(data){
+    if (!data) data = {a:0,b:0};
+    data[choice] = (data[choice]||0) + 1;
+    return data;
+  });
+}
 
 function showWyrResult(aVotes, bVotes) {
-  const total = aVotes + bVotes;
-  if (total === 0) return;
-  const aPct = Math.round((aVotes / total) * 100);
-  const bPct = 100 - aPct;
-  document.getElementById('wyr-bar-a').style.width = aPct + '%';
-  document.getElementById('wyr-bar-a').textContent = aPct > 10 ? aPct + '%' : '';
-  document.getElementById('wyr-bar-b').style.width = bPct + '%';
-  document.getElementById('wyr-bar-b').textContent = bPct > 10 ? bPct + '%' : '';
-  const msg = aVotes === bVotes ? "You both picked the same! 💕" :
-    aVotes > bVotes ? `Option A is winning! (${aVotes} vs ${bVotes})` :
-    `Option B is winning! (${bVotes} vs ${aVotes})`;
+  var total = aVotes + bVotes;
+  if(!total) return;
+  var aPct = Math.round((aVotes/total)*100);
+  var bPct = 100-aPct;
+  document.getElementById('wyr-bar-a').style.width = aPct+'%';
+  document.getElementById('wyr-bar-a').textContent = aPct>10 ? aPct+'%' : '';
+  document.getElementById('wyr-bar-b').style.width = bPct+'%';
+  document.getElementById('wyr-bar-b').textContent = bPct>10 ? bPct+'%' : '';
+  var msg = aVotes===bVotes ? "You both picked the same! 💕" : aVotes>bVotes ? "Option A is winning! ("+aVotes+" vs "+bVotes+")" : "Option B is winning! ("+bVotes+" vs "+aVotes+")";
   document.getElementById('wyr-votes').textContent = msg;
   document.getElementById('wyr-result').style.display = 'block';
 }
 
-window.__bridge.newWYR = function() { wyrIndex = (wyrIndex + 1) % wyrQuestions.length; loadWYR(); };
-loadWYR();
+function newWYR() { wyrOffset=(wyrOffset+1)%wyrQuestions.length; loadWYR(); }
 
-// ── LETTERS TO OPEN WHEN ──────────────────────
-const letterPrompts = [
-  "when you miss me most",
-  "when you're having a bad day",
-  "when you need a laugh",
-  "when you're proud of yourself",
-  "when you feel lonely",
-  "when you need a pep talk",
-  "when you can't sleep",
-  "when you're angry",
-  "when you accomplish something big",
-  "when you need to feel loved",
-  "when it's your birthday",
-  "when the countdown hits halfway",
-  "when you're bored",
-  "when you need courage",
-];
+// ── LETTERS ───────────────────────────────────
+var letterPrompts=["when you miss me most","when you're having a bad day","when you need a laugh","when you're proud of yourself","when you feel lonely","when you need a pep talk","when you can't sleep","when you're angry","when you accomplish something big","when you need to feel loved","when it's your birthday","when the countdown hits halfway","when you're bored","when you need courage"];
 
-// Render prompt chips
-const chipContainer = document.getElementById('prompt-chips');
-letterPrompts.forEach(p => {
-  const chip = document.createElement('button');
+var chipContainer = document.getElementById('prompt-chips');
+letterPrompts.forEach(function(p){
+  var chip = document.createElement('button');
   chip.className = 'prompt-chip';
   chip.textContent = p;
-  chip.onclick = () => { document.getElementById('letter-when').value = p; document.getElementById('letter-body').focus(); };
+  chip.onclick = function(){ document.getElementById('letter-when').value = p; document.getElementById('letter-body').focus(); };
   chipContainer.appendChild(chip);
 });
 
-window.__bridge.addLetter = function() {
-  const when = document.getElementById('letter-when').value.trim();
-  const body = document.getElementById('letter-body').value.trim();
-  if (!when || !body) { if (!when) flash('letter-when'); if (!body) flash('letter-body'); return; }
-  const date = new Date().toLocaleDateString('en-US',{month:'long',day:'numeric',year:'numeric'});
-  const data = { when, body, who: currentUser, date, sealed: true };
-  if (IS_CONFIGURED && db) {
-    setSync('saving','Saving...');
-    push(ref(db, 'dd_letters'), { ...data, ts: Date.now() }).then(() => setSync('live','Live & synced 💕'));
-  } else {
-    const list = JSON.parse(localStorage.getItem('dd_letters')||'[]');
-    list.unshift({ id: Date.now().toString(), ...data });
-    localStorage.setItem('dd_letters', JSON.stringify(list));
-    renderLettersLocal();
-  }
-  document.getElementById('letter-when').value = '';
-  document.getElementById('letter-body').value = '';
-};
+var openedLetters = {};
 
-function renderLetterItem(k, v, isOpen) {
-  if (!isOpen) {
-    return `<div class="letter-sealed" id="lenv-${k}">
-      <p class="letter-when">Open when... ${esc(v.when)}</p>
-      <p class="letter-from">From ${esc(v.who)} · ${esc(v.date)}</p>
-      <button class="open-btn" onclick="openLetter('${k}')">Open this letter 💌</button>
-    </div>`;
-  } else {
-    return `<div class="letter-open" id="lenv-${k}">
-      <p class="letter-when" style="font-family:'Playfair Display',serif;font-size:15px;color:var(--pink-deep);font-style:italic;margin-bottom:8px;">Open when... ${esc(v.when)}</p>
-      <p class="letter-text">${esc(v.body)}</p>
-      <div class="letter-footer">
-        <span class="letter-meta">From <strong style="color:var(--pink-deep)">${esc(v.who)}</strong> · ${esc(v.date)}</span>
-        <button class="letter-del" onclick="delLetter('${k}')">delete</button>
-      </div>
-    </div>`;
-  }
-}
-
-const openedLetters = new Set();
-
-window.__bridge.openLetter = function(k) {
-  openedLetters.add(k);
-  // re-render just that letter
-  if (IS_CONFIGURED && db) {
-    import("https://www.gstatic.com/firebasejs/10.12.0/firebase-database.js").then(({get, ref: dbRef}) => {
-      get(ref(db, 'dd_letters/' + k)).then(snap => {
-        const el = document.getElementById('lenv-' + k);
-        if (el && snap.val()) el.outerHTML = renderLetterItem(k, snap.val(), true);
-      });
-    });
-  } else {
-    const list = JSON.parse(localStorage.getItem('dd_letters')||'[]');
-    const item = list.find(i => i.id === k);
-    const el = document.getElementById('lenv-' + k);
-    if (el && item) el.outerHTML = renderLetterItem(k, item, true);
-  }
-};
-
-window.__bridge.delLetter = function(k) {
-  if (IS_CONFIGURED && db) {
-    setSync('saving','Saving...');
-    remove(ref(db, 'dd_letters/' + k)).then(() => setSync('live','Live & synced 💕'));
-  } else {
-    const list = JSON.parse(localStorage.getItem('dd_letters')||'[]').filter(i => i.id !== k);
-    localStorage.setItem('dd_letters', JSON.stringify(list));
-    renderLettersLocal();
-  }
-};
-
-function renderLettersLocal() {
-  const el = document.getElementById('letter-list');
-  const list = JSON.parse(localStorage.getItem('dd_letters')||'[]');
-  if (!list.length) { el.innerHTML = '<div class="empty">No letters yet — write the first one! 💝</div>'; return; }
-  el.innerHTML = list.map(item => renderLetterItem(item.id, item, openedLetters.has(item.id))).join('');
-}
-
-// Firebase letters listener
-if (IS_CONFIGURED && db) {
-  onValue(ref(db, 'dd_letters'), snap => {
-    const el = document.getElementById('letter-list');
-    const data = snap.val();
+function listenLetters() {
+  db.ref('dd_letters').on('value', function(snap){
+    var el = document.getElementById('letter-list');
+    var data = snap.val();
     if (!data) { el.innerHTML = '<div class="empty">No letters yet — write the first one! 💝</div>'; return; }
-    const items = Object.entries(data).sort((a,b)=>(b[1].ts||0)-(a[1].ts||0));
-    el.innerHTML = items.map(([k,v]) => renderLetterItem(k, v, openedLetters.has(k))).join('');
+    var items = Object.entries(data).sort(function(a,b){ return (b[1].ts||0)-(a[1].ts||0); });
+    el.innerHTML = items.map(function(entry){ return renderLetter(entry[0],entry[1]); }).join('');
   });
-} else {
-  renderLettersLocal();
+}
+
+function renderLetter(k, v) {
+  if (openedLetters[k]) {
+    return '<div class="letter-open" id="lenv-'+k+'"><p class="letter-when-label">Open when... '+esc(v.when)+'</p><p class="letter-text">'+esc(v.body)+'</p><div class="letter-footer"><span class="letter-meta">From <strong style="color:var(--pink-deep)">'+esc(v.who)+'</strong> · '+esc(v.date)+'</span><button class="letter-del" onclick="delLetter(\''+k+'\')">delete</button></div></div>';
+  }
+  return '<div class="letter-sealed" id="lenv-'+k+'"><p class="letter-when-label">Open when... '+esc(v.when)+'</p><p class="letter-from">From '+esc(v.who)+' · '+esc(v.date)+'</p><button class="open-btn" onclick="openLetter(\''+k+'\')">Open this letter 💌</button></div>';
+}
+
+function openLetter(k) {
+  openedLetters[k] = true;
+  db.ref('dd_letters/'+k).once('value', function(snap){
+    var el = document.getElementById('lenv-'+k);
+    if(el && snap.val()) el.outerHTML = renderLetter(k, snap.val());
+  });
+}
+
+function addLetter() {
+  var when = document.getElementById('letter-when').value.trim();
+  var body = document.getElementById('letter-body').value.trim();
+  if(!when){ flash('letter-when'); return; }
+  if(!body){ flash('letter-body'); return; }
+  var date = new Date().toLocaleDateString('en-US',{month:'long',day:'numeric',year:'numeric'});
+  setSync('saving','Saving...');
+  db.ref('dd_letters').push({when:when,body:body,who:currentUser,date:date,ts:Date.now()}).then(function(){ setSync('live','Live & synced 💕'); });
+  document.getElementById('letter-when').value='';
+  document.getElementById('letter-body').value='';
+}
+
+function delLetter(k) {
+  setSync('saving','Saving...');
+  db.ref('dd_letters/'+k).remove().then(function(){ setSync('live','Live & synced 💕'); });
 }
 
 // ── HELPERS ───────────────────────────────────
 function esc(s){return String(s).replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;');}
-function flash(id){const el=document.getElementById(id);el.style.borderColor='#e91e8c';el.style.boxShadow='0 0 0 3px rgba(233,30,140,0.25)';setTimeout(()=>{el.style.borderColor='';el.style.boxShadow='';},800);}
+function flash(id){var el=document.getElementById(id);el.style.borderColor='#e91e8c';el.style.boxShadow='0 0 0 3px rgba(233,30,140,0.25)';setTimeout(function(){el.style.borderColor='';el.style.boxShadow='';},800);}
 
-document.getElementById('wish-input').addEventListener('keydown',e=>{if(e.key==='Enter')window.addWish();});
-document.getElementById('miss-input').addEventListener('keydown',e=>{if(e.key==='Enter')window.addMiss();});
-document.getElementById('song-title-input').addEventListener('keydown',e=>{if(e.key==='Enter')window.addSong();});
+// Auto-init if returning user
+window.addEventListener('load', function(){
+  if(currentUser) loadWYR();
+});
 </script>
 </body>
 </html>
