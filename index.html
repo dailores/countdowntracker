@@ -372,31 +372,37 @@ function initListeners() {
 
 function listenList(path, elId, renderer) {
   db.ref(path).on('value', function(snap) {
-    var el = document.getElementById(elId);
-    if (!el) return;
-    var data = snap.val();
-    if (!data) { el.innerHTML = '<div class="empty">Nothing yet — add something!</div>'; return; }
-    var items = Object.entries(data).sort(function(a,b){ return (b[1].ts||0)-(a[1].ts||0); });
-    listCache[path] = { items: items, renderer: renderer };
-    renderWithShowMore(el, items, renderer, path);
+    try {
+      var el = document.getElementById(elId);
+      if (!el) return;
+      var data = snap.val();
+      if (!data) { el.innerHTML = '<div class="empty">Nothing yet — add something!</div>'; return; }
+      var items = Object.entries(data).sort(function(a,b){ return (b[1].ts||0)-(a[1].ts||0); });
+      if (!listCache) listCache = {};
+      listCache[path] = { items: items, renderer: renderer };
+      renderWithShowMore(el, items, renderer, path);
+    } catch(e) { console.log('listenList error:', e); }
   });
 }
 
 function renderWithShowMore(el, items, renderer, path) {
+  if (!el || !items) return;
   var PREVIEW = 3;
-  var expanded = el.dataset.expanded === 'true';
+  var expanded = el.dataset && el.dataset.expanded === 'true';
   var showing = expanded ? items.length : Math.min(PREVIEW, items.length);
-  var html = items.slice(0, showing).map(function(entry){ return renderer(entry[0], entry[1]); }).join('');
+  var html = '';
+  try {
+    html = items.slice(0, showing).map(function(entry){ return renderer(entry[0], entry[1]); }).join('');
+  } catch(e) { html = '<div class="empty">Nothing yet!</div>'; }
   if (items.length > PREVIEW) {
     if (expanded) {
-      html += '<button class="show-more-btn" onclick="toggleList(\''+path+'\',\''+el.id+'\')">Show less ▲</button>';
+      html += '<button class="show-more-btn" onclick="toggleList(\'' + path + '\',\'' + el.id + '\')">Show less ▲</button>';
     } else {
-      html += '<button class="show-more-btn" onclick="toggleList(\''+path+'\',\''+el.id+'\')">See all '+items.length+' entries ▼</button>';
+      html += '<button class="show-more-btn" onclick="toggleList(\'' + path + '\',\'' + el.id + '\')">See all ' + items.length + ' entries ▼</button>';
     }
   }
   el.innerHTML = html;
 }
-
 function toggleList(path, elId) {
   var el = document.getElementById(elId);
   el.dataset.expanded = el.dataset.expanded === 'true' ? 'false' : 'true';
@@ -748,25 +754,34 @@ var wyrOffset = 0;
 var wyrVoted  = false;
 
 function getWyrIdx() {
+  if (!wyrQuestions || !wyrQuestions.length) return 0;
   var now = new Date();
   var day = Math.floor((now - new Date(now.getFullYear(),0,0))/86400000);
   return (day + wyrOffset) % wyrQuestions.length;
 }
 
 function loadWYR() {
-  var idx = getWyrIdx();
-  var q   = wyrQuestions[idx];
-  document.getElementById('wyr-question').textContent = 'Would you rather...';
-  document.getElementById('wyr-a').textContent = q.a;
-  document.getElementById('wyr-b').textContent = q.b;
-  document.getElementById('wyr-result').style.display = 'none';
-  document.getElementById('wyr-a').classList.remove('voted');
-  document.getElementById('wyr-b').classList.remove('voted');
-  wyrVoted = false;
-  db.ref('dd_wyr/'+idx).on('value', function(snap){
-    var data = snap.val() || {a:0,b:0};
-    if((data.a||0)+(data.b||0) > 0) showWyrResult(data.a||0, data.b||0);
-  });
+  try {
+    var idx = getWyrIdx();
+    var q   = wyrQuestions[idx];
+    if (!q) return;
+    var qEl = document.getElementById('wyr-question');
+    var aEl = document.getElementById('wyr-a');
+    var bEl = document.getElementById('wyr-b');
+    var rEl = document.getElementById('wyr-result');
+    if (!qEl || !aEl || !bEl) return;
+    qEl.textContent = 'Would you rather...';
+    aEl.textContent = q.a;
+    bEl.textContent = q.b;
+    if (rEl) rEl.style.display = 'none';
+    aEl.classList.remove('voted');
+    bEl.classList.remove('voted');
+    wyrVoted = false;
+    db.ref('dd_wyr/'+idx).on('value', function(snap){
+      var data = snap.val() || {a:0,b:0};
+      if((data.a||0)+(data.b||0) > 0) showWyrResult(data.a||0, data.b||0);
+    });
+  } catch(e) { console.log('loadWYR error:', e); }
 }
 
 function voteWYR(choice) {
@@ -813,12 +828,15 @@ var openedLetters = {};
 
 function listenLetters() {
   db.ref('dd_letters').on('value', function(snap){
-    var el = document.getElementById('letter-list');
-    if (!el) return;
-    var data = snap.val();
-    if (!data) { el.innerHTML = '<div class="empty">No letters yet — write the first one! 💝</div>'; return; }
-    var items = Object.entries(data).sort(function(a,b){ return (b[1].ts||0)-(a[1].ts||0); });
-    el.innerHTML = items.filter(function(e){ return e[1] && e[1].when; }).map(function(entry){ return renderLetter(entry[0],entry[1]); }).join('');
+    try {
+      var el = document.getElementById('letter-list');
+      if (!el) return;
+      var data = snap.val();
+      if (!data) { el.innerHTML = '<div class="empty">No letters yet — write the first one! 💝</div>'; return; }
+      var items = Object.entries(data).sort(function(a,b){ return (b[1].ts||0)-(a[1].ts||0); });
+      var html = items.filter(function(e){ return e[1] && e[1].when; }).map(function(entry){ return renderLetter(entry[0],entry[1]); }).join('');
+      el.innerHTML = html || '<div class="empty">No letters yet — write the first one! 💝</div>';
+    } catch(e) { console.log('listenLetters error:', e); }
   });
 }
 
