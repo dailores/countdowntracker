@@ -467,7 +467,7 @@ function fbAdd(path, data) {
   push(ref(db, path), { ...data, ts: Date.now() }).then(() => setSync('live','Live & synced 💕'));
 }
 
-window.__bridge.fbDel = function(path, key) {
+_fbDelInternal = function(path, key) {
   setSync('saving','Saving...');
   remove(ref(db, path + '/' + key)).then(() => setSync('live','Live & synced 💕'));
 };
@@ -547,7 +547,7 @@ function loadLocal() {
 // Override fbDel to also handle local
 const _fbDel = window.fbDel;
 window.__bridge.fbDel = function(path, key) {
-  if (IS_CONFIGURED && db) { _fbDel(path, key); return; }
+  if (IS_CONFIGURED && db) { _fbDelInternal(path, key); return; }
   const list = JSON.parse(localStorage.getItem(path)||'[]').filter(i => i.id !== key);
   localStorage.setItem(path, JSON.stringify(list));
   const map = {dd_wishes:['wish-list',renderWish],dd_messages:['msg-list',renderMsg],dd_songs:['song-list',renderSong],dd_misses:['miss-list',renderMiss]};
@@ -601,7 +601,7 @@ const facts=[{e:'🐙',t:"Octopuses have three hearts and blue blood — they're
 let offset=0;
 function getDailyFact(){const now=new Date();const day=Math.floor((now-new Date(now.getFullYear(),0,0))/86400000);return(day+offset)%facts.length;}
 function showFact(i){const f=facts[i];document.getElementById('fact-emoji').textContent=f.e;document.getElementById('fact-text').textContent=f.t;const d=['Sunday','Monday','Tuesday','Wednesday','Thursday','Friday','Saturday'];document.getElementById('fact-day').textContent='Your '+d[new Date().getDay()]+' laugh 💕';}
-window.nextFact=function(){offset=(offset+1)%facts.length;showFact(getDailyFact());};
+window.__bridge.nextFact=function(){offset=(offset+1)%facts.length;showFact(getDailyFact());};
 showFact(getDailyFact());
 
 
